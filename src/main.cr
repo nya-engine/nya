@@ -88,14 +88,14 @@ begin
   running = true
 
   while running
-    while SDL2.poll_event(out evt)
-      case evt.type
-      when SDL2::EventType::QUIT
-        running = false
-      when SDL2::EventType::KEYDOWN
-        running = false if evt.key.keysym == '\033'
-      end
+    SDL2.poll_event(out evt)
+    case evt.type
+    when SDL2::EventType::QUIT
+      running = false
+    when SDL2::EventType::KEYDOWN
+      running = false if evt.key.keysym == '\033'
     end
+    
     x -= 0.5
     y -= 0.5
     z -= 0.5
