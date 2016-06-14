@@ -4,4 +4,8 @@ version: 0.1.0
 authors:
   -  <>
 
+dependencies:
+  crystaledge:
+    github: unn4m3d/crystaledge
+
 license: MIT
