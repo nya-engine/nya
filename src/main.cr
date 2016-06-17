@@ -1,6 +1,7 @@
-require "sdl2"
-require "gl"
-require "glu"
+require "./sdl2"
+require "./gl"
+require "./glu"
+require "crystaledge"
 
 width = 640
 height = 480
@@ -21,41 +22,69 @@ class Plane
     end
   end
 end
+
+def draw(mode : UInt16=GL::QUADS,&block : -> Void)
+  GL.begin_(mode)
+  block.call
+  GL.end_
+end
+
+class Transform
+  property position,rotation
+  @position : CrystalEdge::Vector3
+  @rotation : CrystalEdge::Vector3
+  def initialize(@position,@rotation)
+
+  end
+end
+
+def at(t : Transform = Transform.new(CrystalEdge::Vector3.zero,CrystalEdge::Vector3.zero),&block)
+  GL.translatef(t.position.x,t.position.y,t.position.z)
+  #puts "P #{t.position.to_s} R #{t.rotation.to_s}"
+  #puts t.position.z
+  GL.rotatef(t.rotation.x,1.0,0.0,0.0)
+  GL.rotatef(t.rotation.y,0.0,1.0,0.0)
+  GL.rotatef(t.rotation.z,0.0,0.0,1.0)
+  block.call
+end
+
+def at(p : CrystalEdge::Vector3,r : CrystalEdge::Vector3,&b)
+  at(Transform.new(p,r),&b)
+end
+
 def draw_cube(x,y,z)
   GL.clear(GL::COLOR_BUFFER_BIT|GL::DEPTH_BUFFER_BIT)
   GL.load_identity
 
-  GL.translatef(0.0,0.0,-7.0)
-  GL.rotatef(x,1.0,0.0,0.0)
-  GL.rotatef(y,0.0,1.0,0.0)
-  GL.rotatef(z,0.0,0.0,1.0)
+  at(CrystalEdge::Vector3.new(0.0,0.0,-7.0),CrystalEdge::Vector3.new(x,y,z)) do
 
-  GL.begin_(GL::QUADS)
+    draw do
+      #puts "Drawing..."
+      planes = [
+        Plane.new(
+          [
+            {1.0,1.0,-1.0},
+            {-1.0,1.0,-1.0},
+            {-1.0,1.0,1.0},
+            {1.0,1.0,1.0}
+          ],
+          {0.0,1.0,0.0}
+        ),
+        Plane.new(
+          [
+            {1.0,-1.0,1.0},
+            {-1.0,-1.0,1.0},
+            {-1.0,-1.0,-1.0},
+            {1.0,-1.0,-1.0}
+          ],
+          {1.0,0.5,0.0}
+        )
+      ]
 
-  planes = [
-    Plane.new(
-      [
-        {1.0,1.0,-1.0},
-        {-1.0,1.0,-1.0},
-        {-1.0,1.0,1.0},
-        {1.0,1.0,1.0}
-      ],
-      {0.0,1.0,0.0}
-    ),
-    Plane.new(
-      [
-        {1.0,-1.0,1.0},
-        {-1.0,-1.0,1.0},
-        {-1.0,-1.0,-1.0},
-        {1.0,-1.0,-1.0}
-      ],
-      {1.0,0.5,0.0}
-    )
-  ]
+      planes.each{|p|p.draw}
 
-  planes.each{|p|p.draw}
-
-  GL.end_
+    end
+  end
 end
 
 begin
@@ -86,15 +115,14 @@ begin
   y = 0.0
   z = 0.0
   running = true
+  i = 0u8
 
   while running
+    i+=1
+    i%=128
     SDL2.poll_event(out evt)
-    case evt.type
-    when SDL2::EventType::QUIT
-      raise "Terminated"
-    when SDL2::EventType::KEYDOWN
-      raise "Terminated" if evt.key.keysym == '\033'
-    end
+    puts evt.type if i == 0
+    raise "Terminated" if evt.type.to_s == "256" #Terminate program when window is closed
     x -= 0.5
     y -= 0.5
     z -= 0.5

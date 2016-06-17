@@ -53,3 +53,16 @@ FFIGen.generate(
   cflags:      ['-msse','-mmmx','-msse2','-msse3','-I/usr/lib/gcc/x86_64-linux-gnu/4.8/include'],
   output:      "cbind/glu.cr"
 )
+
+
+FFIGen.generate(
+  module_name: "FT",
+  ffi_lib:     "freetype",
+  headers:     %w[
+    ft2build.h
+    freetype.h
+  ],
+  prefixes:    ["FT"],
+  cflags:      ["-I/usr/include/freetype2"],
+  output:      "cbind/ft.cr"
+)
