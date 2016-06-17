@@ -4,8 +4,8 @@ module Nya
     DEAD
   end
 
-  class Event(T)
-    @@events = Hash(Symbol,Array(EventHandler))
+  class Event
+    @@events = Hash(Symbol,Array(EventHandler)).new
     @@id = 0i64
 
     @status = EventStatus::ACTIVE
@@ -42,6 +42,14 @@ module Nya
       end
     end
 
+
+    def self.send(name : Symbol, event : Event)
+      if @@events.has_key? name
+        @@events[name].each do |h|
+          h.call event
+        end
+      end
+    end
   end
 
   class EventHandler
