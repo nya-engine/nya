@@ -1,5 +1,6 @@
 require "../ft"
 require "../gl"
+require "crystaledge"
 
 module Nya
   class FTException < RuntimeError
@@ -19,6 +20,10 @@ module Nya
     @size : UInt16
     @chars : Hash(Char,UInt16)
     def initialize(@size,@chars)
+
+    end
+
+    def write_to_screen(position : CrystalEdge::Vector2,text : String)
 
     end
   end
@@ -59,5 +64,15 @@ module Nya
       GL::tex_parameteri(GL::TEXTURE_2D,GL::TEXTURE_MAG_FILTER,GL::LINEAR)
       return texture
     end
+
+    def gen_font(symbols : Array(Char),size : UInt16)
+      h = Hash(Char,UInt16).new
+      symbols.each do |s|
+        h[s] = gen_texture(s,size)
+      end
+      Font.new(size,h)
+    end
   end
+
+
 end
