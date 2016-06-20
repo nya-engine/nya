@@ -1,20 +1,22 @@
-module Nya
-  alias Matrix = -> _
+require "../gl"
 
-  @matrix : Array(Matrix)
-  @current_matrix : Matrix
+module Nya
+  alias Matrix = -> Void
 
   def set_matrix(&m : Matrix)
-    @current_matrix = m
     m.call
   end
 
   def pop_matrix
-    set_matrix @matrix.pop
+    GL.pop_matrix
+  end
+
+  def push_matrix
+    GL.push_matrix
   end
 
   def push_matrix(&m : Matrix)
-    @matrix.push @current_matrix
-    set_matrix m
+    push_matrix
+    set_matrix &m
   end
 end

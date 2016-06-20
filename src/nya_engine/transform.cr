@@ -8,7 +8,7 @@ module Nya
     def initialize(@position,@euler_angles)
     end
 
-    def zero
+    def self.zero
       Transform.new(CrystalEdge::Vector3.zero,CrystalEdge::Vector3.zero)
     end
   end

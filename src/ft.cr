@@ -6,6 +6,7 @@ lib FT
   OPEN_DRIVER = 0x8
   OPEN_PARAMS = 0x10
   LOAD_DEFAULT = 0x0
+  LOAD_RENDER = 0x4
   SUBGLYPH_FLAG_ARGS_ARE_WORDS = 1
   SUBGLYPH_FLAG_ARGS_ARE_XY_VALUES = 2
   SUBGLYPH_FLAG_ROUND_XY_TO_GRID = 4
@@ -38,7 +39,7 @@ lib FT
     ENCODINGOLDLATIN2 = 12
     ENCODINGAPPLEROMAN = 13
   end
-  
+
   enum SizeRequestType
     SIZEREQUESTTYPENOMINAL = 0
     SIZEREQUESTTYPEREALDIM = 1
@@ -47,7 +48,7 @@ lib FT
     SIZEREQUESTTYPESCALES = 4
     SIZEREQUESTTYPEMAX = 5
   end
-  
+
   enum RenderMode
     RENDERMODENORMAL = 0
     RENDERMODELIGHT = 1
@@ -56,67 +57,26 @@ lib FT
     RENDERMODELCDV = 4
     RENDERMODEMAX = 5
   end
-  
+
   enum KerningMode
     KERNINGDEFAULT = 0
     KERNINGUNFITTED = 1
     KERNINGUNSCALED = 2
   end
-  
-  struct GlyphMetrics
-  end
-  
-  struct BitmapSize
-  end
-  
-  struct LibraryRec
-  end
-  
-  struct ModuleRec
-  end
-  
-  struct DriverRec
-  end
-  
-  struct RendererRec
-  end
-  
-  struct CharMapRec
-  end
-  
-  struct FaceInternalRec
-  end
-  
-  struct FaceRec
-  end
-  
-  struct SizeInternalRec
-  end
-  
-  struct SizeMetrics
-  end
-  
-  struct SizeRec
-  end
-  
-  struct SubGlyphRec
-  end
-  
-  struct SlotInternalRec
-  end
-  
-  struct GlyphSlotRec
-  end
-  
-  struct Parameter
-  end
-  
-  struct OpenArgs
-  end
-  
-  struct SizeRequestRec
-  end
-  
+
+  alias LibraryRec = UInt64
+
+  alias ModuleRec = Void
+
+  alias DriverRec = Void
+
+  alias RendererRec = Void
+
+  alias FaceInternalRec = Void
+
+  alias SizeInternalRec = Void
+
+
   struct GlyphMetrics
     width: Int32
     height: Int32
@@ -127,7 +87,7 @@ lib FT
     vert_bearing_y: Int32
     vert_advance: Int32
   end
-  
+
   struct BitmapSize
     height: Int16
     width: Int16
@@ -135,29 +95,16 @@ lib FT
     x_ppem: Int32
     y_ppem: Int32
   end
-  
-  struct LibraryRec
-  end
-  
-  struct ModuleRec
-  end
-  
-  struct DriverRec
-  end
-  
-  struct RendererRec
-  end
-  
+
+
+
   struct CharMapRec
     face: FaceRec*
     encoding: Encoding
     platform_id: UInt16
     encoding_id: UInt16
   end
-  
-  struct FaceInternalRec
-  end
-  
+
   struct FaceRec
     num_faces: Int32
     face_index: Int32
@@ -191,10 +138,7 @@ lib FT
     extensions: Void*
     internal: FaceInternalRec*
   end
-  
-  struct SizeInternalRec
-  end
-  
+
   struct SizeMetrics
     x_ppem: UInt16
     y_ppem: UInt16
@@ -205,20 +149,27 @@ lib FT
     height: Int32
     max_advance: Int32
   end
-  
+
   struct SizeRec
     face: FaceRec*
     generic: Int32
     metrics: SizeMetrics
     internal: SizeInternalRec*
   end
-  
-  struct SubGlyphRec
+
+  alias SubGlyphRec = Void
+
+  alias SlotInternalRec = Void
+
+  struct Bitmap
+    rows,width : UInt32
+    pitch : Int32
+    buffer : UInt8*
+    num_grays : UInt16
+    pixel_mode,palette_mode : UInt8
+    palette : Void*
   end
-  
-  struct SlotInternalRec
-  end
-  
+
   struct GlyphSlotRec
     library: LibraryRec*
     face: FaceRec*
@@ -230,7 +181,7 @@ lib FT
     linear_vert_advance: Int32
     advance: Int32
     format: Int32
-    bitmap: Int32
+    bitmap: Bitmap
     bitmap_left: Int16
     bitmap_top: Int16
     outline: Int32
@@ -243,12 +194,12 @@ lib FT
     other: Void*
     internal: SlotInternalRec*
   end
-  
+
   struct Parameter
     tag: UInt32
-    data: Void
+    data: Void*
   end
-  
+
   struct OpenArgs
     flags: UInt16
     memory_base: Void*
@@ -259,7 +210,7 @@ lib FT
     num_params: Int16
     params: Parameter*
   end
-  
+
   struct SizeRequestRec
     type: SizeRequestType
     width: Int32
@@ -267,7 +218,7 @@ lib FT
     hori_resolution: UInt16
     vert_resolution: UInt16
   end
-  
+
   fun init_free_type = "FT_Init_FreeType"(alibrary : Void*) : Int16
   fun done_free_type = "FT_Done_FreeType"(library : LibraryRec*) : Int16
   fun new_face = "FT_New_Face"(library : LibraryRec*, filepathname : UInt8*, face_index : Int32, aface : Void*) : Int16
@@ -287,7 +238,7 @@ lib FT
   fun render_glyph = "FT_Render_Glyph"(slot : GlyphSlotRec*, render_mode : RenderMode) : Int16
   fun get_kerning = "FT_Get_Kerning"(face : FaceRec*, left_glyph : UInt16, right_glyph : UInt16, kern_mode : UInt16, akerning : Void*) : Int16
   fun get_track_kerning = "FT_Get_Track_Kerning"(face : FaceRec*, point_size : Int32, degree : Int16, akerning : Void*) : Int16
-  fun get_glyph_name = "FT_Get_Glyph_Name"(face : FaceRec*, glyph_index : UInt16, buffer : Void, buffer_max : UInt16) : Int16
+  fun get_glyph_name = "FT_Get_Glyph_Name"(face : FaceRec*, glyph_index : UInt16, buffer : Void*, buffer_max : UInt16) : Int16
   fun get_postscript_name = "FT_Get_Postscript_Name"(face : FaceRec*) : UInt8*
   fun select_charmap = "FT_Select_Charmap"(face : FaceRec*, encoding : Encoding) : Int16
   fun set_charmap = "FT_Set_Charmap"(face : FaceRec*, charmap : CharMapRec*) : Int16

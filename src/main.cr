@@ -1,8 +1,7 @@
 require "./sdl2"
 require "./gl"
 require "./glu"
-require "./nya_engine/time"
-require "./nya_engine/event"
+require "./nya_engine/**"
 require "crystaledge"
 
 width = 640
@@ -12,6 +11,39 @@ WP_CENTERED = 0x2FFF0000
 
 def update_loop
   Nya::Time.update
+end
+
+def p2(i : Int)
+  j = 1i64
+  while j<i
+    j <<= 1
+  end
+  j
+end
+
+def render_loop
+  puts __FILE__ + __LINE__.to_s
+  GL.clear_color(0.0,0.0,0.0,1.0)
+  GL.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT)
+
+  GL.raster_pos2i(0,0)
+
+  puts __FILE__ + __LINE__.to_s
+  font = Nya::Freetype.new("res/Ubuntu-R.ttf").gen_font(
+    [
+      'F','P','S','H','e','l','o','w','r','d',
+      '1','2','3','4','5','6','7','8','9','0',
+      ':',',','.','!',' '
+    ],
+    32u16
+  )
+  puts __FILE__ + __LINE__.to_s
+  x = 0
+  y = 0
+  puts __FILE__ + __LINE__.to_s
+  str = "FPS : #{(1/Nya::Time.delta_time).round(2)}\nHello OpenGL!"
+  font.draw_string CrystalEdge::Vector2.zero, str
+  puts __FILE__ + __LINE__.to_s
 end
 
 begin
@@ -58,9 +90,10 @@ begin
 
     Nya::Event.send(:update,Nya::Event.new)
     update_loop
-
-    puts (1/Nya::Time.delta_time).round(2).to_s if i == 0
-
+    puts __FILE__ + __LINE__.to_s
+    puts "FPS : " + (1/Nya::Time.delta_time).round(2).to_s if i == 0
+    render_loop
+    puts __FILE__ + __LINE__.to_s
     GL.flush
     SDL2.gl_swap_window(window)
   end
