@@ -1,7 +1,10 @@
 require "./transform"
+require "./drawutils"
 
 module Nya
   abstract class Object
+    #include DrawUtils
+
     abstract def update
     abstract def render
     @transform = Transform.zero
@@ -9,16 +12,30 @@ module Nya
   end
 
   class Container < Object
-    @objects : Array(Object)
-    def initialize(@objects)
+    @children : Array(Object)
+    def initialize(@children)
     end
 
     def update
-      @objects.each{|e|e.update}
+      @children.each{|e|e.update}
     end
 
     def render
-      @objects.each{|e|e.render}
+      @children.each{|e|e.render}
+    end
+  end
+
+  class GameObject < Container
+
+  end
+
+  class Component < Object
+    def update
+
+    end
+
+    def render
+
     end
   end
 end

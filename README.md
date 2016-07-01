@@ -4,6 +4,12 @@
 
 # How to test
 
+Install dependences :
+* `crystal`
+* `libsdl2-dev`
+* `libpangocairo-dev`
+*
+
 ```sh
   git clone https://github.com/unn4m3d/crystal_sdl_test/
   cd crystal_sdl_test

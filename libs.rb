@@ -54,7 +54,7 @@ FFIGen.generate(
   output:      "cbind/glu.cr"
 )
 
-
+=begin
 FFIGen.generate(
   module_name: "FT",
   ffi_lib:     "freetype",
@@ -66,3 +66,4 @@ FFIGen.generate(
   cflags:      ["-I/usr/include/freetype2"],
   output:      "cbind/ft.cr"
 )
+=end
