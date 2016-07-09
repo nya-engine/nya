@@ -10,6 +10,7 @@ height = 480
 WP_CENTERED = 0x2FFF0000
 
 $tex = 0u32
+$size = 1.0
 
 def update_loop
   Nya::Time.update
@@ -29,7 +30,7 @@ def render_loop
 
   GL.raster_pos2i(0,0)
 
-  Nya::DrawUtils.draw_texture(0.0,0.0,100.0,100.0,$tex,{1.0,1.0,1.0})
+  Nya::DrawUtils.draw_texture(0.0,0.0,$size*2,$size,$tex,{1.0,1.0,1.0},-25.0)
 end
 
 begin
@@ -49,6 +50,7 @@ begin
   GL.clear_depth(1.0)
   GL.depth_func(GL::LESS)
   GL.enable(GL::DEPTH_TEST)
+  GL.enable(GL::TEXTURE_2D)
   GL.shade_model(GL::SMOOTH)
   GL.matrix_mode(GL::PROJECTION)
   GL.blend_func(GL::SRC_ALPHA,GL::ONE_MINUS_SRC_ALPHA)
@@ -68,6 +70,13 @@ begin
     SDL2.poll_event(out evt)
     #puts evt.type if i == 0
     raise "Terminated" if evt.type.to_s == "256" #Terminate program when window is closed
+    if evt.type.to_s == "771"
+      if evt.key.keysym.to_s == "100"
+        $size += Nya::Time.delta_time
+      elsif evt.key.keysym.to_s == "97"
+        $size -= Nya::Time.delta_time
+      end
+    end
     Nya::Event.send(:update,Nya::Event.new)
     update_loop
     puts "FPS : " + (1/Nya::Time.delta_time).round(2).to_s if i == 0
