@@ -2,18 +2,32 @@ require "./transform"
 require "./drawutils"
 
 module Nya
-  abstract class Object
-    #include DrawUtils
+  abstract class AbsObject
 
     abstract def update
     abstract def render
-    @transform = Transform.zero
-    property transform
+  end
+
+  class Object
+    include Nya::Serializable
+
+    def update
+    end
+
+    def render
+    end
   end
 
   class Container < Object
     @children : Array(Object)
+    serializable_array children, Object
+    property children
+
     def initialize(@children)
+    end
+
+    def initialize
+      @children = [] of Object
     end
 
     def update
