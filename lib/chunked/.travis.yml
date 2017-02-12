@@ -1,4 +1,0 @@
-language: crystal
-script:
-  - crystal deps
-  - crystal spec -v
