@@ -8,7 +8,7 @@ Install dependences :
 * `crystal`
 * `libsdl2-dev`
 * `libpangocairo-dev`
-*
+* `libode-dev` - for ODE bindings
 
 ```sh
   git clone https://github.com/unn4m3d/crystal_sdl_test/
