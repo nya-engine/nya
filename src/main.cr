@@ -4,16 +4,15 @@ require "./glu"
 require "./nya_engine/**"
 require "crystaledge"
 
-width = 640
-height = 480
+WIDTH = 640
+HEIGHT = 480
 
 WP_CENTERED = 0x2FFF0000
 
-$tex = 0u32
-$size = 1.0
 
 def update_loop
   Nya::Time.update
+  Nya::SceneManager.update
 end
 
 def p2(i : Int)
@@ -27,21 +26,18 @@ end
 def render_loop
   GL.clear_color(0.0,0.0,0.0,1.0)
   GL.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT)
-
-  GL.raster_pos2i(0,0)
-
-  Nya::DrawUtils.draw_texture(0.0,0.0,$size*2,$size,$tex,{1.0,1.0,1.0},-25.0)
+  Nya::SceneManager.render
 end
 
 begin
-  raise SDL2.get_error.as(String) if SDL2.init(SDL2::INIT_VIDEO) < 0
+  raise SDL2.get_error.to_s if SDL2.init(SDL2::INIT_VIDEO) < 0
 
   SDL2.gl_set_attribute(SDL2::GLattr::GLDOUBLEBUFFER,1)
   SDL2.gl_set_attribute(SDL2::GLattr::GLREDSIZE,6)
   SDL2.gl_set_attribute(SDL2::GLattr::GLBLUESIZE,6)
   SDL2.gl_set_attribute(SDL2::GLattr::GLGREENSIZE,6)
 
-  window = SDL2.create_window("Cube",WP_CENTERED,WP_CENTERED,width,height,SDL2::WindowFlags::WINDOWSHOWN|SDL2::WindowFlags::WINDOWOPENGL)
+  window = SDL2.create_window("Cube",WP_CENTERED,WP_CENTERED,@@width,@@height,SDL2::WindowFlags::WINDOWSHOWN|SDL2::WindowFlags::WINDOWOPENGL)
   gl_ctx = SDL2.gl_create_context(window)
 
   raise SDL2.get_error.as(String) if window.null?
@@ -55,14 +51,14 @@ begin
   GL.matrix_mode(GL::PROJECTION)
   GL.blend_func(GL::SRC_ALPHA,GL::ONE_MINUS_SRC_ALPHA)
   GL.load_identity
-  GLU.perspective(45.0,width.to_f/height.to_f,0.1,100.0)
+  GLU.perspective(45.0,WIDTH.to_f/HEIGHT.to_f,0.1,100.0)
 
   GL.matrix_mode(GL::MODELVIEW)
   running = true
   i=0u8
 
   #Nya::Time.init
-  $tex = Nya::Pango.render_text("Hello OpenGL world!","Ubuntu Bold 12")
+  #@@tex = Nya::Pango.render_text("Hello OpenGL world!","Ubuntu Bold 12")
 
   while running
     i+=1
@@ -70,13 +66,6 @@ begin
     SDL2.poll_event(out evt)
     #puts evt.type if i == 0
     raise "Terminated" if evt.type.to_s == "256" #Terminate program when window is closed
-    if evt.type.to_s == "771"
-      if evt.key.keysym.to_s == "100"
-        $size += Nya::Time.delta_time
-      elsif evt.key.keysym.to_s == "97"
-        $size -= Nya::Time.delta_time
-      end
-    end
     Nya::Event.send(:update,Nya::Event.new)
     update_loop
     puts "FPS : " + (1/Nya::Time.delta_time).round(2).to_s if i == 0

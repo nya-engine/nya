@@ -707,13 +707,8 @@ lib SDL2
 
   struct WinMsg
     hwnd : Void*
-    ifdef x86_64
-      lparam : Int64
-      wparam : UInt64
-    else
-      lparam : Int32
-      wparam : UInt32
-    end
+    lparam : Int64
+    wparam : UInt64
     msg : UInt32
   end
 

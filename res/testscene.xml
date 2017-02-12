@@ -1,0 +1,14 @@
+<Nya::Scene id="testscene">
+  <property name="name">Test Scene</property>
+  <property name="children">
+    <Nya::GameObject id="text">
+      <property name="components">
+        <Nya::Render::2DText>
+          <property name="font">Ubuntu Bold 12</property>
+          <property name="text">Hello Nya Engine!</property>
+        </Nya::Render::2DText>
+      </property>
+      <property name="children" />
+    </Nya::GameObject>
+  </property>
+</Nya::Scene>

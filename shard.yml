@@ -7,5 +7,7 @@ authors:
 dependencies:
   crystaledge:
     github: unn4m3d/crystaledge
+  chunked:
+    github: unn4m3d/chunked
 
 license: MIT

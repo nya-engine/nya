@@ -4,6 +4,13 @@ require "crystaledge"
 
 module Nya
   class Pango
+
+    property texture_id : UInt32
+    property size : CrystalEdge::Vector2
+
+    def initialize(@texture_id, @size)
+    end
+
     def self.get_text_size(layout : PangoCairo::PangoLayout*)
       PangoCairo.layout_get_size(layout, out w, out h)
       return (CrystalEdge::Vector2.new(w.to_f64,h.to_f64)) / (PangoCairo::SCALE.to_f64)
@@ -67,7 +74,7 @@ module Nya
 
       puts __FILE__ + __LINE__.to_s
 
-      return texture_id
+      new(texture_id, tsize)
     end
   end
 end

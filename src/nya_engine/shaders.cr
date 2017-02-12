@@ -82,7 +82,7 @@ module Nya
       end
       GL.link_program(@program)
       GL.get_programiv(@program,GL::LINK_STATUS,pointerof(link_ok))
-      raise ShaderLinkException, "Shader linkage error : #{gl_error}" if compile_ok == 0
+      raise ShaderLinkException, "Shader linkage error : #{gl_error}" if link_ok == 0
     end
   end
 end
