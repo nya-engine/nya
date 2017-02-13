@@ -7,9 +7,11 @@ TARGET_XML = <<-XML
     <SomeProp>
       <property name="x">hehe</property>
       <property name="foo">
-        <Foo>
+        <FooBar>
           <property name="bar">KEK</property>
-        </Foo>
+          <property name="biz">lal</property>
+          <property name="fb">KEKUS N</property>
+        </FooBar>
       </property>
       <property name="y">
         <item>a</item>
@@ -24,7 +26,10 @@ XML
 describe Nya::Serializable do
   it "serializes objects" do
     prop = Prop.new
-    prop.someprop.foo.bar = "KEK"
+    fbar = FooBar.new
+    fbar.fb = "KEKUS N"
+    fbar.bar = "KEK"
+    prop.someprop.foo = fbar.as(Foo)
     prop.serialize.gsub(/[\t\n\s]/,"").should eq(TARGET_XML.gsub(/[\t\n\s]/,""))
   end
 

@@ -5,10 +5,18 @@ module Nya
   end
 
   class Scene < AbsScene
-    @root : Container
+    include Nya::Serializable
+    property root : Container
+    property id : String? = nil
 
     def initialize(@root)
     end
+
+    def initialize
+      @root = Container.new
+    end
+
+    attribute id, String, nilable: true
 
     delegate update, render, to: @root
   end

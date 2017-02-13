@@ -17,7 +17,15 @@ module Nya
         end
 
         @@deserialize_{{@type.name.gsub(/::/,"_").id}} = Array(Proc(self, XML::Node, Void?)).new
+        @@serialize_{{@type.name.gsub(/::/,"_").id}} = Array(Proc(self, XML::Builder, Void?)).new
 
+        def self.serialize_{{@type.name.gsub(/::/,"_").id}}
+          @@serialize_{{@type.name.gsub(/::/,"_").id}}
+        end
+
+        def self.deserialize_{{@type.name.gsub(/::/,"_").id}}
+          @@deserialize_{{@type.name.gsub(/::/,"_").id}}
+        end
         NYA_REGISTERED = true
 
         def deserialize(xml : XML::Node)
@@ -28,9 +36,16 @@ module Nya
           {% end %}
           {% begin %}
             #puts "@@deserialize_{{@type.name.gsub(/::/,"_").id}}"
-            @@deserialize_{{@type.name.gsub(/::/,"_").id}}.each &.call(self, xml)
+            {{@type}}.deserialize_{{@type.name.gsub(/::/,"_").id}}.each &.call(self, xml)
           {% end %}
           self
+        end
+
+        def serialize_inner(xml : XML::Builder)
+          puts "S {{@type}}"
+          super xml
+          puts "S {{@type}}  : #{@@serialize_{{@type.name.gsub(/::/,"_").id}}.size}"
+          {{@type}}.serialize_{{@type.name.gsub(/::/,"_").id}}.each &.call(self, xml)
         end
       {% end %}
     end
@@ -69,8 +84,8 @@ module Nya
         nil
       end
 
-      @@serialize << ->(_s : Pointer(Void), b : XML::Builder) do
-        s = Box({{@type}}).unbox(_s)
+      @@serialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, b : XML::Builder) do
+        puts "SERIALIZE {{@type}}\# {{name}}"
         b.element("property", name: {{name.stringify}}) do
           {% if type.resolve <= ::Nya::Serializable %}
             s.as(self).{{name.id}}.serialize_part(b)
@@ -105,8 +120,7 @@ module Nya
 		    nil
       end
 
-      @@serialize << ->(_s : Pointer(Void), xml : XML::Builder) do
-        s = Box({{@type}}).unbox(_s)
+      @@serialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Builder) do
         xml.element("property", name: "{{name}}") do
   		      s.{{name.id}}.each do |elem|
               if elem.responds_to? :serialize_part
@@ -120,30 +134,29 @@ module Nya
       end
     end
 
-    macro attribute(name, tp)
+    macro attribute(name, tp, nilable nl)
       register
-	    @@serialize << ->(s : Pointer(Void), xml : XML::Builder) do
-        xml.attribute({{name.stringify}}, Box({{@type}}).unbox(s).{{name.id}})
+	    @@serialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Builder) do
+        xml.attribute({{name.stringify}}, s.{{name.id}})
 	    end
 
       @@deserialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Node) do
         {% if tp.resolve <= String %}
-          s.{{name.id}} = xml[{{name.stringify}}].to_s
-        {%else%}
+          s.{{name.id}} = xml[{{name.stringify}}]{%if nl%}?{%end%}.to_s
+        {% elsif nl %}
+          obj = xml[{{name.stringify}}]
+          if obj.nil?
+            s.{{name.id}} = nil
+          else
+            s.{{name.id}} = {{tp}}.new(obj.to_s)
+          end
+        {% else %}
           s.{{name.id}} = {{tp}}.new(xml[{{name.stringify}}].to_s)
-        {%end%}
+        {% end %}
       end
     end
 
     macro included
-
-
-      ##puts "Included into {{@type}}"
-
-      #@@deserialize = Hash(String, Array(Proc(Void*, XML::Node, Void?))).new
-      #@@serialize = Hash(String, Array(Proc(Void*, XML::Builder, Void?))).new
-      @@serialize = [] of Proc(Void*, XML::Builder, Void?)
-      #@@deserialize = [] of Proc(Void*, XML::Node, Void?)
 
       def deserialize(n : XML::Node)
         #puts "D:: {{@type}} "
@@ -164,9 +177,7 @@ module Nya
       {{@type.superclass}}.new
     end
 
-    def serialize_inner(xml : Builder)
-      @@serialize.each &.call(Box(self).box(self), xml)
-    end
+    def serialize_inner(xml); end
 
     def serialize_part(xml : Builder)
       xml.element(self.class.name.to_s.gsub(/::/,"_")) do

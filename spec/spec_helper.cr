@@ -11,6 +11,16 @@ class Foo
 	serializable bar, String
 end
 
+class Bar < Foo
+	property biz : String = "lal"
+	serializable biz, String
+end
+
+class FooBar < Bar
+	property fb : String = "kekus"
+	serializable fb, String
+end
+
 
 class SomeProp
   include Nya::Serializable
