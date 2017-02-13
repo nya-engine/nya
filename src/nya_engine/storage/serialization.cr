@@ -42,9 +42,9 @@ module Nya
         end
 
         def serialize_inner(xml : XML::Builder)
-          puts "S {{@type}}"
+          #puts "S {{@type}}"
           super xml
-          puts "S {{@type}}  : #{@@serialize_{{@type.name.gsub(/::/,"_").id}}.size}"
+          #puts "S {{@type}}  : #{@@serialize_{{@type.name.gsub(/::/,"_").id}}.size}"
           {{@type}}.serialize_{{@type.name.gsub(/::/,"_").id}}.each &.call(self, xml)
         end
       {% end %}
@@ -85,7 +85,7 @@ module Nya
       end
 
       @@serialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, b : XML::Builder) do
-        puts "SERIALIZE {{@type}}\# {{name}}"
+        #puts "SERIALIZE {{@type}}\# {{name}}"
         b.element("property", name: {{name.stringify}}) do
           {% if type.resolve <= ::Nya::Serializable %}
             s.as(self).{{name.id}}.serialize_part(b)
