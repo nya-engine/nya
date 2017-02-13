@@ -20,6 +20,7 @@ TARGET_XML = <<-XML
 </Prop>
 XML
 
+
 describe Nya::Serializable do
   it "serializes objects" do
     prop = Prop.new
@@ -28,7 +29,7 @@ describe Nya::Serializable do
   end
 
   it "deserializes objects" do
-    prop = Nya::Serializable.deserialize(TARGET_XML).as(Prop)
+    prop = Nya::Serializable.deserialize(TARGET_XML).not_nil!.as(Prop)
     prop.someprop.foo.bar.should eq("KEK")
   end
 end
