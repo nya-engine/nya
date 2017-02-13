@@ -58,7 +58,7 @@ module Nya
       	  if n.nil?
             #puts "Node is nil! #{xml}"
           else
-            obj = {{type}}.deserialize(n.first_element_child.not_nil!)
+            obj = ::Nya::Serializable.deserialize(n.first_element_child.not_nil!)
             unless obj.nil?
               s.{{name.id}} = obj.as({{type}})
             end
@@ -190,21 +190,25 @@ module Nya
 
     def self.deserialize(node : Node)
         #puts "D<#{node.name}>"
-        nc = node.first_element_child
-        #puts "D[#{nc}]"
-        if nc.nil?
-          nc = node
-          raise "Node is nil : #{node}"
+        #nc = node.first_element_child
+        ##puts "D[#{nc}]"
+        #if nc.nil?
+        #  nc = node
+        #  raise "Node is nil : #{node}"
+        #end
+        ##puts "N #{node.name}"
+        #if nc.not_nil!.name == "property"
+        #  nc = nc.not_nil!.children.first
+        #  #puts "NC : #{nc.to_s} "
+        #end
+        nc = node
+        name = node.name
+        if name == "text"
+          raise name
         end
-        #puts "N #{node.name}"
-        if nc.not_nil!.name == "property"
-          nc = nc.not_nil!.children.first
-        end
-        name = nc.not_nil!.name
-        raise "Text node!" if name == "text"
 
         if Serializable.children.has_key? name
-          #puts "D(#{name})"
+          ##puts "D(#{name})"
           Serializable.children[name].call(nc)
         else
           raise "#{name} is not Serializable (#{nc.class} : #{nc}) "
@@ -212,7 +216,7 @@ module Nya
     end
 
     def self.deserialize(str : String)
-      deserialize XML.parse(str)
+      deserialize XML.parse(str).first_element_child.not_nil!
     end
   end
 end
