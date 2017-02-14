@@ -37,7 +37,7 @@ begin
   SDL2.gl_set_attribute(SDL2::GLattr::GLBLUESIZE,6)
   SDL2.gl_set_attribute(SDL2::GLattr::GLGREENSIZE,6)
 
-  window = SDL2.create_window("Cube",WP_CENTERED,WP_CENTERED,@@width,@@height,SDL2::WindowFlags::WINDOWSHOWN|SDL2::WindowFlags::WINDOWOPENGL)
+  window = SDL2.create_window("Cube",WP_CENTERED,WP_CENTERED,WIDTH,HEIGHT,SDL2::WindowFlags::WINDOWSHOWN|SDL2::WindowFlags::WINDOWOPENGL)
   gl_ctx = SDL2.gl_create_context(window)
 
   raise SDL2.get_error.as(String) if window.null?
@@ -58,18 +58,33 @@ begin
   i=0u8
 
   #Nya::Time.init
-  #@@tex = Nya::Pango.render_text("Hello OpenGL world!","Ubuntu Bold 12")
-
+  tex = Nya::Pango.render_text("Hello OpenGL world!","Ubuntu Bold 12")
+  puts tex.texture_id
+  size = 1.0
   while running
     i+=1
     i%=128
     SDL2.poll_event(out evt)
     #puts evt.type if i == 0
     raise "Terminated" if evt.type.to_s == "256" #Terminate program when window is closed
+    if evt.type.to_s == "771"
+      puts "&&& #{evt.key.keysym.to_s}"
+      if evt.key.keysym.to_s == "100"
+        size += Nya::Time.delta_time
+      elsif evt.key.keysym.to_s == "97"
+        size -= Nya::Time.delta_time
+      end
+    end
     Nya::Event.send(:update,Nya::Event.new)
     update_loop
     puts "FPS : " + (1/Nya::Time.delta_time).round(2).to_s if i == 0
+    GL.clear_color(0.0,0.0,0.0,1.0)
+  GL.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT)
+
+GL.raster_pos2i(0,0)
+
     render_loop
+    Nya::DrawUtils.draw_texture(1.0,0.0,size*tex.size.x,size*tex.size.y,tex.texture_id,{1.0,1.0,1.0})
     GL.flush
     SDL2.gl_swap_window(window)
   end

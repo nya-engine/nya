@@ -1,5 +1,6 @@
 require "./transform"
 require "./drawutils"
+require "./storage/*"
 
 module Nya
   abstract class AbsObject

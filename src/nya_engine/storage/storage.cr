@@ -44,12 +44,13 @@ module Nya
         end
       end
 
-      class << self
-        def init(files)
-          @instance = new files
-        end
+      def self.init(files)
+        @@instance = new files
+      end
 
-        delegate read_file, to: @instance
+
+      def read_file(*args)
+        @@instance.read_file(*args)
       end
     end
   end

@@ -3,8 +3,9 @@ require "../drawutils"
 
 module Nya
   module Render
-    class Text < ::Nya::Object
-      @pango : ::Nya::Pango
+    class 2DText < ::Nya::Object
+      @texture_id = 0u32
+      @size = Rect.zero
       @color = {1.0,1.0,1.0}
       property color
       def initialize(@text : String, @font : String, @position : CrystalEdge::Vector2)

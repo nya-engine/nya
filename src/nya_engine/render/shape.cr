@@ -9,11 +9,11 @@ module Nya
     class Box < Shape
       @sides : CrystalEdge::Vector3
 
-      def initialize(@sizes)
+      def initialize(@sides)
       end
 
       def render(transform : ::Nya::Transform)
-        
+
       end
     end
   end
