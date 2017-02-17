@@ -54,10 +54,42 @@ module Nya
       {% end %}
     end
 
-    macro serializable_array(*names, of tp)
+    macro serializable_array(*names, of type)
+      register
       {%for name in names %}
-        _serializable_array {{name}}, of: {{tp}}
-      {%end%}
+        @@deserialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Node) do
+          node = xml.xpath_node("property[@name='{{name}}']")
+          unless node.nil?
+            node.not_nil!.children.each do |ch|
+              next if ch.name == "text"
+              {% if type.resolve <= ::Nya::Serializable %}
+                obj = ::Nya::Serializable.deserialize(ch).as({{type}}?)
+                unless obj.nil?
+                  s.{{name.id}} << obj.not_nil!
+                end
+              {% elsif type.resolve <= String %}
+                s.{{name.id}} << ch.content
+              {% else %}
+                s.{{name.id}} << {{type}}.new(ch.content)
+              {% end %}
+            end
+          end
+          nil
+        end
+
+        @@serialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Builder) do
+          xml.element("property", name: "{{name}}") do
+            s.{{name.id}}.each do |elem|
+              if elem.responds_to? :serialize_part
+                elem.serialize_part(xml)
+              else
+                xml.element("item"){ xml.text elem.to_s }
+              end
+            end
+          end
+        nil
+        end
+      {% end %}
     end
 
     macro _serializable(name, as type)
@@ -103,42 +135,6 @@ module Nya
           {%end%}
         end
   		  nil
-      end
-    end
-
-    macro _serializable_array(name, of type)
-      register
-      @@deserialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Node) do
-        node = xml.xpath_node("property[@name='{{name}}']")
-  		  unless node.nil?
-          node.not_nil!.children.each do |ch|
-            next if ch.name == "text"
-            {% if type.resolve <= ::Nya::Serializable %}
-              obj = ::Nya::Serializable.deserialize(ch).as({{type}}?)
-              unless obj.nil?
-                s.{{name.id}} << obj.not_nil!
-              end
-            {% elsif type.resolve <= String %}
-              s.{{name.id}} << ch.content
-            {% else %}
-    		      s.{{name.id}} << {{type}}.new(ch.content)
-            {% end %}
-          end
-        end
-		    nil
-      end
-
-      @@serialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Builder) do
-        xml.element("property", name: "{{name}}") do
-  		      s.{{name.id}}.each do |elem|
-              if elem.responds_to? :serialize_part
-                elem.serialize_part(xml)
-              else
-                xml.element("item"){ xml.text elem.to_s }
-              end
-            end
-        end
-		    nil
       end
     end
 
