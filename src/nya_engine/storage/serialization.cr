@@ -50,7 +50,20 @@ module Nya
       {% end %}
     end
 
-    macro serializable(name, as type)
+    macro serializable(*names, as tp)
+
+      {% for name in names %}
+        _serializable {{name}}, as: {{tp}}
+      {% end %}
+    end
+
+    macro serializable_array(*names, of tp)
+      {%for name in names %}
+        _serializable_array {{name}}, of: {{tp}}
+      {%end%}
+    end
+
+    macro _serializable(name, as type)
       register
 
       %xpath = "property[@name='{{name}}']"
@@ -98,7 +111,7 @@ module Nya
 
     end
 
-    macro serializable_array(name, of type)
+    macro _serializable_array(name, of type)
       register
       @@deserialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Node) do
         node = xml.xpath_node("property[@name='{{name}}']")

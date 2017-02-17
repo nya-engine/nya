@@ -21,8 +21,10 @@ module Nya
 
   class Container < Object
     @children : Array(Object)
-    serializable_array children, Object
+
     property children
+
+    serializable_array children, of: Object
 
     def initialize(@children)
     end
