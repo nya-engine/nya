@@ -48,9 +48,50 @@ module Nya
 
     end
 
-    macro serializable(*names, as tp)
+    macro serializable(*names, as type)
+      register
       {% for name in names %}
-        _serializable {{name}}, as: {{tp}}
+        %xpath = "property[@name='{{name}}']"
+        @@deserialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Node) do
+
+          {% if [Float, Bool, Node].any?{|elem| type.resolve <= elem} %}
+            s.{{name.id}} = xml.xpath_{{type.resolve.name.downcase}}(%xpath)
+          {% elsif type.resolve <= String %}
+
+            n = xml.xpath(%xpath)
+            if n.is_a? XML::NodeSet
+
+              s.{{name.id}} = n[0].content
+            else
+              s.{{name.id}} = n.to_s
+            end
+          {% elsif type.resolve <= ::Nya::Serializable %}
+            n = xml.xpath_node(%xpath)
+
+            if n.nil?
+              # TODO: Log
+            else
+              obj = ::Nya::Serializable.deserialize(n.first_element_child.not_nil!)
+              unless obj.nil?
+                s.{{name.id}} = obj.as({{type}})
+              end
+            end
+          {%else%}
+            s.{{name.id}} = {{type}}.new xml.xpath(%xpath).to_s
+          {% end %}
+          nil
+        end
+
+        @@serialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, b : XML::Builder) do
+          b.element("property", name: {{name.stringify}}) do
+            {% if type.resolve <= ::Nya::Serializable %}
+              s.as(self).{{name.id}}.serialize_part(b)
+            {%else%}
+              b.text s.as(self).{{name.id}}.to_s
+            {%end%}
+          end
+          nil
+        end
       {% end %}
     end
 
@@ -90,52 +131,6 @@ module Nya
         nil
         end
       {% end %}
-    end
-
-    macro _serializable(name, as type)
-      register
-
-      %xpath = "property[@name='{{name}}']"
-      @@deserialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Node) do
-
-        {% if [Float, Bool, Node].any?{|elem| type.resolve <= elem} %}
-          s.{{name.id}} = xml.xpath_{{type.resolve.name.downcase}}(%xpath)
-        {% elsif type.resolve <= String %}
-
-          n = xml.xpath(%xpath)
-        	if n.is_a? XML::NodeSet
-
-            s.{{name.id}} = n[0].content
-          else
-            s.{{name.id}} = n.to_s
-          end
-        {% elsif type.resolve <= ::Nya::Serializable %}
-          n = xml.xpath_node(%xpath)
-
-      	  if n.nil?
-            # TODO: Log
-          else
-            obj = ::Nya::Serializable.deserialize(n.first_element_child.not_nil!)
-            unless obj.nil?
-              s.{{name.id}} = obj.as({{type}})
-            end
-      	  end
-        {%else%}
-          s.{{name.id}} = {{type}}.new xml.xpath(%xpath).to_s
-        {% end %}
-        nil
-      end
-
-      @@serialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, b : XML::Builder) do
-        b.element("property", name: {{name.stringify}}) do
-          {% if type.resolve <= ::Nya::Serializable %}
-            s.as(self).{{name.id}}.serialize_part(b)
-          {%else%}
-            b.text s.as(self).{{name.id}}.to_s
-          {%end%}
-        end
-  		  nil
-      end
     end
 
     macro attribute(name, as tp, nilable nl)
