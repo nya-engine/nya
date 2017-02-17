@@ -29,29 +29,26 @@ module Nya
         NYA_REGISTERED = true
 
         def deserialize(xml : XML::Node)
-          #puts "D :; {{@type}}"
+
           {% if @type.superclass < ::Nya::Serializable %}
             super xml
-            #puts "SUPER"
           {% end %}
           {% begin %}
-            #puts "@@deserialize_{{@type.name.gsub(/::/,"_").id}}"
             {{@type}}.deserialize_{{@type.name.gsub(/::/,"_").id}}.each &.call(self, xml)
           {% end %}
           self
         end
 
         def serialize_inner(xml : XML::Builder)
-          #puts "S {{@type}}"
           super xml
-          #puts "S {{@type}}  : #{@@serialize_{{@type.name.gsub(/::/,"_").id}}.size}"
           {{@type}}.serialize_{{@type.name.gsub(/::/,"_").id}}.each &.call(self, xml)
         end
+
       {% end %}
+
     end
 
     macro serializable(*names, as tp)
-
       {% for name in names %}
         _serializable {{name}}, as: {{tp}}
       {% end %}
@@ -68,14 +65,14 @@ module Nya
 
       %xpath = "property[@name='{{name}}']"
       @@deserialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Node) do
-        #puts "& {{name}}"
+
         {% if [Float, Bool, Node].any?{|elem| type.resolve <= elem} %}
           s.{{name.id}} = xml.xpath_{{type.resolve.name.downcase}}(%xpath)
         {% elsif type.resolve <= String %}
-          #puts "STR"
+
           n = xml.xpath(%xpath)
         	if n.is_a? XML::NodeSet
-            #puts "NODESET #{xml}"
+
             s.{{name.id}} = n[0].content
           else
             s.{{name.id}} = n.to_s
@@ -84,7 +81,7 @@ module Nya
           n = xml.xpath_node(%xpath)
 
       	  if n.nil?
-            #puts "Node is nil! #{xml}"
+            # TODO: Log
           else
             obj = ::Nya::Serializable.deserialize(n.first_element_child.not_nil!)
             unless obj.nil?
@@ -98,7 +95,6 @@ module Nya
       end
 
       @@serialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, b : XML::Builder) do
-        #puts "SERIALIZE {{@type}}\# {{name}}"
         b.element("property", name: {{name.stringify}}) do
           {% if type.resolve <= ::Nya::Serializable %}
             s.as(self).{{name.id}}.serialize_part(b)
@@ -108,7 +104,6 @@ module Nya
         end
   		  nil
       end
-
     end
 
     macro _serializable_array(name, of type)
@@ -209,12 +204,10 @@ module Nya
     macro included
 
       def deserialize(n : XML::Node)
-        #puts "D:: {{@type}} "
         self
       end
 
       def self.deserialize(n : XML::Node)
-        #puts "[[[[[[[[[[#{n}]]]]]]]]]]"
         new.deserialize n
       end
 
@@ -250,26 +243,12 @@ module Nya
     def self.children; @@children end
 
     def self.deserialize(node : Node)
-        #puts "D<#{node.name}>"
-        #nc = node.first_element_child
-        ##puts "D[#{nc}]"
-        #if nc.nil?
-        #  nc = node
-        #  raise "Node is nil : #{node}"
-        #end
-        ##puts "N #{node.name}"
-        #if nc.not_nil!.name == "property"
-        #  nc = nc.not_nil!.children.first
-        #  #puts "NC : #{nc.to_s} "
-        #end
         nc = node
         name = node.name
         if name == "text"
           raise name
         end
-
         if Serializable.children.has_key? name
-          ##puts "D(#{name})"
           Serializable.children[name].call(nc)
         else
           raise "#{name} is not Serializable (#{nc.class} : #{nc}) "
