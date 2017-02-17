@@ -8,31 +8,32 @@ class Foo
 	property bar
 	@bar = "LOL"
 
-	serializable bar, String
+	serializable bar, as: String
 end
 
 class Bar < Foo
 	property biz : String = "lal"
-	serializable biz, String
+	serializable biz, as: String
 end
 
 class FooBar < Bar
 	property fb : String = "kekus"
-	serializable fb, String
+	serializable fb, as: String
 end
 
 
 class SomeProp
   include Nya::Serializable
 
-	property x, y, foo
+	property x, y, foo, hash
 	@x = "hehe"
 	@y = ["a","b"] of String
 	@foo = Foo.new
-
-	serializable x, String
-	serializable foo, Foo
-	serializable_array y, String
+	@hash = Hash(String, String).new
+	serializable x, as: String
+	serializable foo, as: Foo
+	serializable_array y, of: String
+	serializable_hash hash, of: String
 end
 
 class Prop
@@ -40,5 +41,5 @@ class Prop
 
 	property someprop : SomeProp
 	@someprop = SomeProp.new
-	serializable someprop, SomeProp
+	serializable someprop, as: SomeProp
 end

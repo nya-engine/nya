@@ -17,6 +17,9 @@ TARGET_XML = <<-XML
         <item>a</item>
         <item>b</item>
       </property>
+      <property name="hash">
+        <item key="kekus">keks</item>
+      </property>
     </SomeProp>
   </property>
 </Prop>
@@ -30,11 +33,13 @@ describe Nya::Serializable do
     fbar.fb = "KEKUS N"
     fbar.bar = "KEK"
     prop.someprop.foo = fbar.as(Foo)
+    prop.someprop.hash["kekus"] = "keks"
     prop.serialize.gsub(/[\t\n\s]/,"").should eq(TARGET_XML.gsub(/[\t\n\s]/,""))
   end
 
   it "deserializes objects" do
     prop = Nya::Serializable.deserialize(TARGET_XML).not_nil!.as(Prop)
     prop.someprop.foo.bar.should eq("KEK")
+    prop.someprop.hash["kekus"].should eq("keks")
   end
 end

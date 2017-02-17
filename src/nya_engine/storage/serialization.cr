@@ -50,7 +50,7 @@ module Nya
       {% end %}
     end
 
-    macro serializable(name, type)
+    macro serializable(name, as type)
       register
 
       %xpath = "property[@name='{{name}}']"
@@ -98,7 +98,7 @@ module Nya
 
     end
 
-    macro serializable_array(name, type)
+    macro serializable_array(name, of type)
       register
       @@deserialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Node) do
         node = xml.xpath_node("property[@name='{{name}}']")
@@ -134,7 +134,7 @@ module Nya
       end
     end
 
-    macro attribute(name, tp, nilable nl)
+    macro attribute(name, as tp, nilable nl)
       register
 	    @@serialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Builder) do
         xml.attribute({{name.stringify}}, s.{{name.id}})
@@ -154,6 +154,43 @@ module Nya
           s.{{name.id}} = {{tp}}.new(xml[{{name.stringify}}].to_s)
         {% end %}
       end
+    end
+
+    macro serializable_hash(*names, of type)
+      {% for name in names %}
+        @@deserialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Node) do
+          node = xml.xpath_node("property[@name='{{name}}']")
+          unless node.nil?
+            node.xpath_nodes("item").each do |pair|
+              {% if type.resolve <= String %}
+                s.{{name.id}}[pair["key"]] = pair.content
+              {% elsif type.resolve <= ::Nya::Serializable %}
+                s.{{name.id}}[pair["key"]] = {{type}}.deserialize(pair.children.first)
+              {% else %}
+                s.{{name.id}}[pair["key"]] = {{type}}.new(pair.content)
+              {% end %}
+            end
+          end
+          nil
+        end
+
+        @@serialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Builder) do
+          xml.element "property", name: {{name.stringify}} do
+            s.{{name}}.each do |k,v|
+              xml.element "item", key: k do
+                {% if type.resolve <= String %}
+                  xml.text v
+                {% elsif type.resolve.has_method("serialize_part") %}
+                  v.serialize_part xml
+                {% else %}
+                  xml.text v.to_s
+                {% end %}
+              end
+            end
+          end
+          nil
+        end
+      {% end %}
     end
 
     macro included
