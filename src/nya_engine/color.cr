@@ -1,13 +1,22 @@
+require "./storage/*"
+
 module Nya
   class Color
-    @r : UInt8
-    @g : UInt8
-    @b : UInt8
-    @a : UInt8
+    include Serializable
+    @r = 255u8
+    @g = 255u8
+    @b = 255u8
+    @a = 255u8
     property r,g,b,a
-    def initialize(@r,@g,@b,@a)
 
+
+    def initialize(@r,@g,@b,@a)
     end
+
+    def initialize
+    end
+
+    serializable r, g, b, a, as: UInt8
 
     def to_gl
       {
