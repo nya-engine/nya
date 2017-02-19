@@ -21,7 +21,7 @@
               <property name="name">white</property>
             </Nya_Color>
           </property>
-        </Nya_Render_2DText>
+        </Nya_Render_Text2D>
       </property>
       <property name="children" />
     </Nya_GameObject>
