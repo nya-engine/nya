@@ -75,7 +75,25 @@ module Nya
                 s.{{name.id}} = obj.as({{type}})
               end
             end
-          {%else%}
+          {% elsif type.resolve <= Bool %}
+            obj = xml.xpath("property[@name='{{name}}']")
+            ns.obj.as?(XML::NodeSet)
+
+            if ns.nil?
+              Nya.log.warn "Cannot deserialize {{name}} as it doesnt exist"
+            else
+              str = ns.first.content
+              case str
+              when "true" || "1" || "yes"
+                s.{{name.id}} = true
+              when "false" || "0" || "no"
+                s.{{name.id}} = false
+              else
+                Nya.log.warn "Invalid value for {{name}} : #{str}"
+              end
+
+            end
+          {% else %}
             #s.{{name.id}} = {{type}}.new xml.xpath(%xpath).to_s
             obj = xml.xpath("property[@name='{{name}}']")
             ns = obj.as?(XML::NodeSet)
@@ -161,8 +179,18 @@ module Nya
           else
             s.{{name.id}} = {{tp}}.new(obj.to_s)
           end
+        {% elsif tp.resolve <= Bool %}
+          str = xml[{{name.stringify}}]?.to_s
+          case str
+          when "true" || "1" || "yes"
+            s.{{name.id}} = true
+          when "false" || "0" || "no"
+            s.{{name.id}} = false
+          else
+            Nya.log.warn "Invalid value for {{name}} : #{str}"
+          end
         {% else %}
-          s.{{name.id}} = {{tp}}.new(xml[{{name.stringify}}].to_s)
+          s.{{name.id}} = {{tp}}.new(xml[{{name.stringify}}]{%if nl%}?{%end%}.to_s)
         {% end %}
       end
     end

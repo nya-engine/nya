@@ -40,6 +40,7 @@ module Nya
       serializable viewport, as: Rect
 
       def render!
+        return unless enabled?
         set_projection_matrix!
         SceneManager.render @tag
       end

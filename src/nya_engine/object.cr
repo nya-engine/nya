@@ -15,10 +15,14 @@ module Nya
 
     attribute tag, as: String, nilable: true
     attribute id, as: String, nilable: true
+    attribute enabled, as: Bool, nilable: false
 
     @tag : String? = nil
     @id : String? = nil
+    @enabled : Bool = true
 
+    property enabled
+    getter? enabled
     property tag, id
 
     def awake

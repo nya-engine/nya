@@ -28,6 +28,7 @@ module Nya
         @@current_scene = Scene.deserialize(obj.first_element_child.not_nil!).as(Scene)
         @@current_scene.not_nil!.awake
       end
+      Nya.log.debug "#{Nya.camera_list.select(&.enabled?).size} camera(s) active"
     end
   end
 end
