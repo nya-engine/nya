@@ -8,7 +8,9 @@ module Nya
       @readers = Hash(String, CReader).new
       @files_index = Hash(String, String).new
 
-      protected def add_file(name : String)
+      @@instance : self? = nil
+
+      protected def add_file(file : String)
         @readers[file] = CReader.new(File.open(file))
         @readers[file].index_chunks!
         idx = 0
@@ -29,7 +31,7 @@ module Nya
       def read_file(name)
         if @files_index.has_key?(name)
           name, idx = @files_index[name].split("/$",2)
-          @readers[file][idx.to_u64]
+          @readers[name][idx.to_u64]
         else
           File.open(name)
         end
@@ -40,7 +42,7 @@ module Nya
           f = read_file name
           block.call f
         ensure
-          f.close
+          f.not_nil!.close unless f.nil?
         end
       end
 
@@ -49,8 +51,9 @@ module Nya
       end
 
 
-      def read_file(*args)
-        @@instance.read_file(*args)
+      def self.read_file(*args, &b : IO -> )
+        init [] of String if @@instance.nil?
+        @@instance.not_nil!.read_file(*args,&b)
       end
     end
   end

@@ -57,7 +57,7 @@ module Nya
       )
       vec = CrystalEdge::Vector3.new(ox,oy,oz)
       vec /= -vec.z
-      puts "#{v.to_s} -> #{vec.to_s}"
+      #puts "#{v.to_s} -> #{vec.to_s}"
       vec
     end
 

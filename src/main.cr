@@ -4,9 +4,6 @@ require "./glu"
 require "./nya_engine/**"
 require "crystaledge"
 
-WIDTH = 640
-HEIGHT = 480
-
 WP_CENTERED = 0x2FFF0000
 
 
@@ -26,7 +23,7 @@ end
 def render_loop
   GL.clear_color(0.0,0.0,0.0,1.0)
   GL.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT)
-  Nya::SceneManager.render
+  Nya.camera_list.each &.render!
 end
 
 begin
@@ -37,7 +34,7 @@ begin
   SDL2.gl_set_attribute(SDL2::GLattr::GLBLUESIZE,6)
   SDL2.gl_set_attribute(SDL2::GLattr::GLGREENSIZE,6)
 
-  window = SDL2.create_window("Cube",WP_CENTERED,WP_CENTERED,WIDTH,HEIGHT,SDL2::WindowFlags::WINDOWSHOWN|SDL2::WindowFlags::WINDOWOPENGL)
+  window = SDL2.create_window("Cube",WP_CENTERED,WP_CENTERED,Nya.width,Nya.height,SDL2::WindowFlags::WINDOWSHOWN|SDL2::WindowFlags::WINDOWOPENGL)
   gl_ctx = SDL2.gl_create_context(window)
 
   raise SDL2.get_error.as(String) if window.null?
@@ -51,16 +48,14 @@ begin
   GL.matrix_mode(GL::PROJECTION)
   GL.blend_func(GL::SRC_ALPHA,GL::ONE_MINUS_SRC_ALPHA)
   GL.load_identity
-  GLU.perspective(45.0,WIDTH.to_f/HEIGHT.to_f,0.1,100.0)
+  GLU.perspective(45.0,Nya.width/Nya.height,0.1,100.0)
 
   GL.matrix_mode(GL::MODELVIEW)
   running = true
   i=0u8
 
-  #Nya::Time.init
-  tex = Nya::Pango.render_text("Hello OpenGL world!","Ubuntu Bold 12")
-  puts tex.texture_id
-  size = 1.0
+  Nya::SceneManager.load_from_file("res/testscene.xml")
+
   while running
     i+=1
     i%=128
@@ -70,23 +65,21 @@ begin
     if evt.type.to_s == "771"
       puts "&&& #{evt.key.keysym.to_s}"
       if evt.key.keysym.to_s == "100"
-        size += Nya::Time.delta_time
+        #size += Nya::Time.delta_time
       elsif evt.key.keysym.to_s == "97"
-        size -= Nya::Time.delta_time
+        #size -= Nya::Time.delta_time
       end
     end
     Nya::Event.send(:update,Nya::Event.new)
     update_loop
     puts "FPS : " + (1/Nya::Time.delta_time).round(2).to_s if i == 0
-    GL.clear_color(0.0,0.0,0.0,1.0)
-  GL.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT)
-
-GL.raster_pos2i(0,0)
 
     render_loop
-    Nya::DrawUtils.draw_texture(1.0,0.0,size*tex.size.x,size*tex.size.y,tex.texture_id,{1.0,1.0,1.0})
+    #Nya::DrawUtils.draw_texture(1.0,0.0,size*tex.size.x,size*tex.size.y,tex.texture_id,{1.0,1.0,1.0})
     GL.flush
     SDL2.gl_swap_window(window)
+
+
   end
 
 ensure

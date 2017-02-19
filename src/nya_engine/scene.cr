@@ -6,18 +6,28 @@ module Nya
 
   class Scene < AbsScene
     include Nya::Serializable
-    property root : Container
-    property id : String? = nil
+    @root = [] of GameObject
+    property  root
 
     def initialize(@root)
     end
 
     def initialize
-      @root = Container.new
     end
 
-    attribute id, String, nilable: true
+    serializable_array root, of: GameObject
 
-    delegate update, render, to: @root
+    def update
+      @root.each &.update
+    end
+
+    def render(tag : String? = nil)
+      @root.each &.render(tag)
+    end
+
+    def awake
+      Nya.log.debug "Scene direct children : #{@root.size}"
+      @root.each &.awake
+    end
   end
 end

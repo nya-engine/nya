@@ -1,31 +1,30 @@
+<!-- Test scene -->
 <Nya_Scene id="testscene">
   <property name="name">Test Scene</property>
-  <property name="children">
+  <property name="root">
     <Nya_GameObject id="text">
       <property name="components">
-        <Nya_Render_2DText>
+        <Nya_Render_Camera id="cam0">
+        </Nya_Render_Camera>
+        <Nya_Render_Text2D>
           <property name="font">Ubuntu Bold 12</property>
           <property name="text">Hello Nya Engine!</property>
           <property name="position">
-            <Nya_Render_Rect>
+            <CrystalEdge_Vector2>
               <property name="x">1.0</property>
               <property name="y">0.0</property>
-              <property name="width">100.0</property>
-              <property name="height">25.0</property>
-            </Nya_Render_Rect>
+            </CrystalEdge_Vector2>
           </property>
 
           <property name="color">
-            <Nya_Render_Color>
-              <property name="r">1.0</property>
-              <property name="g">1.0</property>
-              <property name="b">1.0</property>
-              <property name="a">1.0</property>
-            </Nya_Render_Color>
+            <Nya_Color>
+              <property name="name">white</property>
+            </Nya_Color>
           </property>
         </Nya_Render_2DText>
       </property>
       <property name="children" />
     </Nya_GameObject>
+
   </property>
 </Nya_Scene>

@@ -6,16 +6,28 @@ module Nya
   abstract class AbsObject
 
     abstract def update
-    abstract def render
+    abstract def render(tag : String?)
+    abstract def awake
   end
 
   class Object
     include Nya::Serializable
 
+    attribute tag, as: String, nilable: true
+    attribute id, as: String, nilable: true
+
+    @tag : String? = nil
+    @id : String? = nil
+
+    property tag, id
+
+    def awake
+    end
+
     def update
     end
 
-    def render
+    def render(tag : String? = nil)
     end
   end
 
@@ -33,17 +45,38 @@ module Nya
       @children = [] of Object
     end
 
-    def update
-      @children.each{|e|e.update}
+    def awake
+      @children.each(&.awake)
     end
 
-    def render
-      @children.each{|e|e.render}
+    def update
+      @children.each(&.update)
+    end
+
+    def render(tag : String? = nil)
+      @children.each(&.render(tag))
     end
   end
 
   class GameObject < Container
+    @components = [] of Object
+    property components
+    serializable_array components, of: Object
 
+    def render(tag : String? = nil)
+      super
+      @components.each &.render(tag)
+    end
+
+    def update
+      super
+      @components.each &.update
+    end
+
+    def awake
+      super
+      @components.each &.awake
+    end
   end
 
   class Component < Object

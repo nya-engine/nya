@@ -2,6 +2,8 @@ require "./storage/*"
 
 module Nya
   class Color
+    @@predef = Hash(String, Color).new
+
     include Serializable
     @r = 255u8
     @g = 255u8
@@ -14,6 +16,20 @@ module Nya
     end
 
     def initialize
+    end
+
+    # Completely useless method. Used for serialization purposes
+    # Returns empty string
+    def name
+      ""
+    end
+
+    def name=(n : String)
+      if @@predef.has_key? n
+
+      else
+
+      end
     end
 
     serializable r, g, b, a, as: UInt8
@@ -46,25 +62,16 @@ module Nya
       )
     end
 
-    def self.red
-      Color.new(255,0,0,255)
+    macro predef(name, r, g, b)
+      def self.{{name.id}}
+        new({{r}},{{g}},{{b}},255u8)
+      end
+
+      @@predef[{{name.stringify}}] = {{name.id}}
     end
 
-    def self.green
-      Color.new(0,255,0,255)
-    end
-
-    def self.blue
-      Color.new(0,0,255,255)
-    end
-
-    def self.brown
-      Color.new(255,255,0,255)
-    end
-
-    def self.black
-      Color.new(0,0,0,255)
-    end
+    predef white, 255u8, 255u8, 255u8
+    predef black, 0u8, 0u8, 0u8
 
   end
 end
