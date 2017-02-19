@@ -61,10 +61,38 @@ module Nya
     end
   end
 
+  class Component < Object
+    @parent : GameObject? = nil
+
+    setter parent
+
+    def parent
+      @parent.not_nil!
+    end
+
+    def parent?
+      @parent
+    end
+
+    def awake
+
+    end
+
+    def update
+
+    end
+
+    def render
+
+    end
+  end
+
   class GameObject < Container
-    @components = [] of Object
-    property components
-    serializable_array components, of: Object
+    @components = [] of Component
+    @position = CrystalEdge::Vector3.new(0.0,0.0,0.0)
+    @rotation = CrystalEdge::Vector3.new(0.0,0.0,0.0)
+    property components, position, rotation
+    serializable_array components, of: Nya::Component
 
     def render(tag : String? = nil)
       super
@@ -78,17 +106,8 @@ module Nya
 
     def awake
       super
+      @components.each &.parent=(self)
       @components.each &.awake
-    end
-  end
-
-  class Component < Object
-    def update
-
-    end
-
-    def render
-
     end
   end
 end

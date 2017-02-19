@@ -4,15 +4,13 @@ require "crystaledge"
 
 module Nya
   module Render
-    class Camera < Nya::Object
+    class Camera < Component
 
       def awake
         Nya.camera_list << self
         GL.enable(GL::SCISSOR_TEST)
       end
 
-      @position = CrystalEdge::Vector3.new(0.0,0.0,0.0)
-      @rotation = CrystalEdge::Vector3.new(0.0,0.0,0.0)
       @depth = 1.0
       @near = 0.1
       @far = 100.0
@@ -27,15 +25,13 @@ module Nya
         GL.viewport(vp.x.to_i, vp.y.to_i, vp.width.to_i, vp.height.to_i)
         GL.scissor(vp.x.to_i, vp.y.to_i, vp.width.to_i, vp.height.to_i)
         GLU.perspective(@angle_of_view, Nya.width/Nya.height, @near, @far)
-        GL.rotatef(-@rotation.x, 1.0, 0.0, 0.0)
-        GL.rotatef(-@rotation.y, 0.0, 1.0, 0.0)
-        GL.rotatef(-@rotation.z, 0.0, 0.0, 1.0)
-        GL.translatef(*(-@position).to_gl)
-
+        GL.rotatef(-parent.rotation.x, 1.0, 0.0, 0.0)
+        GL.rotatef(-parent.rotation.y, 0.0, 1.0, 0.0)
+        GL.rotatef(-parent.rotation.z, 0.0, 0.0, 1.0)
+        GL.translatef(*(-parent.position).to_gl)
       end
 
-      property position, rotation, depth, near, far, angle_of_view, viewport
-      serializable position, rotation, as: CrystalEdge::Vector3
+      property depth, near, far, angle_of_view, viewport
       serializable depth, near, far, angle_of_view, as: Float64
       serializable viewport, as: Rect
 

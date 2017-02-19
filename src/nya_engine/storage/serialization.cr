@@ -54,7 +54,7 @@ module Nya
       register
       {% for name in names %}
         @@deserialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Node) do
-          Nya.log.debug "Deserializing {{name}} ({{@type.name}}) {\"property[@name='{{name}}']\"}", "XML"
+          Nya.log.debug "Deserializing {{name}} ({{@type.name}})", "XML"
           {% if type.resolve <= String %}
 
             n = xml.xpath("property[@name='{{name}}']")
@@ -68,7 +68,7 @@ module Nya
             n = xml.xpath_node("property[@name='{{name}}']")
 
             if n.nil?
-              Nya.log.warn "Cannot deserialize node #{xml}"
+              Nya.log.warn "Cannot deserialize node {{name}}", "XML"
             else
               obj = ::Nya::Serializable.deserialize(n.first_element_child.not_nil!)
               unless obj.nil?
@@ -80,7 +80,7 @@ module Nya
             ns.obj.as?(XML::NodeSet)
 
             if ns.nil?
-              Nya.log.warn "Cannot deserialize {{name}} as it doesnt exist"
+              Nya.log.warn "Cannot deserialize {{name}} as it doesnt exist", "XML"
             else
               str = ns.first.content
               case str
@@ -89,7 +89,7 @@ module Nya
               when "false" || "0" || "no"
                 s.{{name.id}} = false
               else
-                Nya.log.warn "Invalid value for {{name}} : #{str}"
+                Nya.log.warn "Invalid value for {{name}} : #{str}", "XML"
               end
 
             end
@@ -98,7 +98,7 @@ module Nya
             obj = xml.xpath("property[@name='{{name}}']")
             ns = obj.as?(XML::NodeSet)
             if ns.nil? || ns.empty?
-              Nya.log.warn "Cannot deserialize {{name}} as it doesnt exist"
+              Nya.log.warn "Cannot deserialize {{name}} as it doesnt exist", "XML"
             else
               s.{{name.id}} = {{type}}.new ns.first.content
             end
@@ -125,16 +125,16 @@ module Nya
       register
       {%for name in names %}
         @@deserialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Node) do
-          Nya.log.debug "Deserializing [{{name}}] ({{@type.name}})"
+          Nya.log.debug "Deserializing [{{name}}] ({{@type.name}})", "XML"
           node = xml.xpath_node("property[@name='{{name}}']")
           unless node.nil?
+            Nya.log.debug "Found #{node.not_nil!.children.size} children", "XML"
             node.not_nil!.children.each do |ch|
               next if ch.name == "text"
               {% if type.resolve <= ::Nya::Serializable %}
-                Nya.log.debug "Another array element"
                 obj = ::Nya::Serializable.deserialize(ch).as({{type}})
                 if obj.nil?
-                  Nya.log.warn "Cannot deserialize item (#{ch})"
+                  Nya.log.warn "Cannot deserialize item (#{ch})", "XML"
                 else
                   s.{{name.id}} << obj.not_nil!
                 end
@@ -187,7 +187,7 @@ module Nya
           when "false" || "0" || "no"
             s.{{name.id}} = false
           else
-            Nya.log.warn "Invalid value for {{name}} : #{str}"
+            Nya.log.warn "Invalid value for {{name}} : #{str}", "XML"
           end
         {% else %}
           s.{{name.id}} = {{tp}}.new(xml[{{name.stringify}}]{%if nl%}?{%end%}.to_s)
