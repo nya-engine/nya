@@ -1,4 +1,3 @@
-require "./transform"
 require "./drawutils"
 require "./storage/*"
 
