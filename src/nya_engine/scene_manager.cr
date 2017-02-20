@@ -29,6 +29,7 @@ module Nya
         @@current_scene.not_nil!.awake
       end
       Nya.log.debug "#{Nya.camera_list.select(&.enabled?).size} camera(s) active", "SceneManager"
+      Nya::Event.print!
     end
   end
 end

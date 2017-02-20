@@ -5,11 +5,15 @@ module Nya
   end
 
   class Event
-    @@events = Hash(Symbol,Array(EventHandler)).new
+    @@events = Hash(String,Array(EventHandler)).new
     @@id = 0i64
 
     @status = EventStatus::ACTIVE
     property status
+
+    def self.print!
+      Nya.log.debug "Registered handlers for #{@@events.keys.size} event types", "Event"
+    end
 
     def self.id
       i = @@id
@@ -17,14 +21,14 @@ module Nya
       i
     end
 
-    def self.subscribe(*events : Symbol,handler : EventHandler)
+    def self.subscribe(*events,handler : EventHandler)
       events.each do |e|
-        @@events[e] ||= Array(EventHandler).new
-        @@events[e].push handler
+        @@events[e.to_s] ||= Array(EventHandler).new
+        @@events[e.to_s].push handler
       end
     end
 
-    def self.subscribe(*events : Symbol, &handler : Event ->)
+    def self.subscribe(*events, &handler : Event ->)
       e = EventHandler.new(&handler)
       subscribe(*events,e)
       e
@@ -43,9 +47,9 @@ module Nya
     end
 
 
-    def self.send(name : Symbol, event : Event)
-      if @@events.has_key? name
-        @@events[name].each do |h|
+    def self.send(name, event : Event)
+      if @@events.has_key? name.to_s
+        @@events[name.to_s].each do |h|
           h.call event
         end
       end
