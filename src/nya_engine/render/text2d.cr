@@ -3,7 +3,7 @@ require "../drawutils"
 
 module Nya
   module Render
-    class Text2D < ::Nya::Object
+    class Text2D < ::Nya::Component
       @texture_id = 0u32
       @color = Color.white
       @text = ""
@@ -18,12 +18,10 @@ module Nya
       serializable text, font, as: String
 
       def text=(t)
-        Nya.log.debug "T #{t}"
         @text = t
       end
 
       def font=(f)
-        Nya.log.debug "F #{f}"
         @font = f
       end
 
@@ -36,11 +34,9 @@ module Nya
           @size = pango.size
         end
         @texture_id = pango.texture_id
-        Nya.log.debug "A #{@font} #{@text}"
       end
 
       def render(tag : String? = nil)
-        #Nya.log.debug "R"
         return if !tag.nil? && !self.tag.nil? && tag.to_s != self.tag.to_s
         ::Nya::DrawUtils.draw_texture(
           @position.x,

@@ -26,7 +26,7 @@ module Nya
     end
 
     def awake
-      Nya.log.debug "Scene direct children : #{@root.size}"
+      Nya.log.debug "Scene direct children : #{@root.size}", "SceneManager"
       @root.each &.awake
     end
   end

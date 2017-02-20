@@ -72,8 +72,6 @@ module Nya
       PangoCairo.destroy(context)
       PangoCairo.destroy(rendering_context)
 
-      puts __FILE__ + __LINE__.to_s
-
       new(texture_id, tsize)
     end
   end
