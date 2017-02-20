@@ -61,14 +61,9 @@ begin
     i%=128
     SDL2.poll_event(out evt)
     #puts evt.type if i == 0
-    raise "Terminated" if evt.type.to_s == "256" #Terminate program when window is closed
-    if evt.type.to_s == "771"
-      puts "&&& #{evt.key.keysym.to_s}"
-      if evt.key.keysym.to_s == "100"
-        #size += Nya::Time.delta_time
-      elsif evt.key.keysym.to_s == "97"
-        #size -= Nya::Time.delta_time
-      end
+    raise "Terminated" if evt.type == SDL2::EventType::QUIT
+    if evt.type == SDL2::EventType::KEYUP
+      
     end
     Nya::Event.send(:update,Nya::Event.new)
     update_loop
