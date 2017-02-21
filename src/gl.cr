@@ -1,5 +1,6 @@
 @[Link("GL")]
 lib GL
+  # <editor-fold> Enum
   VERSION_1_1 = 1
   VERSION_1_2 = 1
   VERSION_1_3 = 1
@@ -790,27 +791,36 @@ lib GL
   ATI_BLEND_EQUATION_SEPARATE = 1
   ALPHA_BLEND_EQUATION_ATI = 0x883D
   OES_EGL_IMAGE = 1
+  # </editor-fold>
+
+  # <editor-fold> Shaders
   FRAGMENT_SHADER = 0x8B30
   VERTEX_SHADER = 0x8B31
   GEOMETRY_SHADER = 0x8DD9
   TESS_EVALUATION_SHADER = 0x8E87
   TESS_CONTROL_SHADER = 0x8E88
-
+  INFO_LOG_LENGTH = 0x8B84
   COMPILE_STATUS = 0x8B81
   LINK_STATUS = 0x8B82
   SHADER_TYPE = 0x8B4F
 
-  fun attach_shader = "glAttachShader"(program, shader : UInt32) : Void
+  fun attach_shader = "glAttachShader"(program : UInt32, shader : UInt32) : Void
   fun compile_shader = "glCompileShader"(shader : UInt32) : Void
-  fun create_shader = "glCreateShader"(type : UInt32) : Void
-  fun get_shaderiv = "glGetShaderiv"(shader, name : UInt32, params : Int32*) : Void
-  fun shader_source = "glShaderSource"(shader, count  : UInt32, src : UInt8**, size: UInt32*) : Void
+  fun create_shader = "glCreateShader"(type : UInt32) : UInt32
+  fun get_shaderiv = "glGetShaderiv"(shader : UInt32, name : UInt32, params : Int32*) : Void
+  fun shader_source = "glShaderSource"(shader : UInt32, count  : UInt32, src : UInt8**, size: UInt32*) : Void
   fun delete_shader = "glDeleteShader"(shader : UInt32) : Void
-  fun get_shader_info_log = "glGetShaderInfoLog"(shader, size : UInt32, il : UInt32*, log : UInt8*) : Void
-  fun get_shader_source = "glGetShaderSource"(shader, size : UInt32, il : UInt32*, src : UInt8*) : Void
+  fun get_shader_info_log = "glGetShaderInfoLog"(shader : UInt32, size : UInt32, il : UInt32*, log : UInt8*) : Void
+  fun get_shader_source = "glGetShaderSource"(shader : UInt32, size : UInt32, il : UInt32*, src : UInt8*) : Void
   fun is_shader = "glIsShader"(shader : UInt32) : Bool
-  fun detach_shader = "glDetachShader"(shader, program : UInt32) : Void
-  
+  fun detach_shader = "glDetachShader"(shader : UInt32, program : UInt32) : Void
+
+  fun create_program = "glCreateProgram"() : UInt32
+  fun delete_program = "glDeleteProgram"(pr : UInt32) : Void
+  fun link_program = "glLinkProgram"(prog : UInt32) : Void
+  fun use_program = "glUseProgram"(prog : UInt32) : Void
+
+  # </editor-fold>
 
   fun clear_index = "glClearIndex"(c : Float32) : Void
   fun clear_color = "glClearColor"(red : Float32, green : Float32, blue : Float32, alpha : Float32) : Void

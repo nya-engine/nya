@@ -46,6 +46,13 @@ module Nya
         end
       end
 
+      def self.read_to_end(name)
+        f = read_file name
+        s = f.gets_to_end
+        f.close
+        s
+      end
+
       def self.init(files)
         @@instance = new files
       end
