@@ -790,6 +790,28 @@ lib GL
   ATI_BLEND_EQUATION_SEPARATE = 1
   ALPHA_BLEND_EQUATION_ATI = 0x883D
   OES_EGL_IMAGE = 1
+  FRAGMENT_SHADER = 0x8B30
+  VERTEX_SHADER = 0x8B31
+  GEOMETRY_SHADER = 0x8DD9
+  TESS_EVALUATION_SHADER = 0x8E87
+  TESS_CONTROL_SHADER = 0x8E88
+
+  COMPILE_STATUS = 0x8B81
+  LINK_STATUS = 0x8B82
+  SHADER_TYPE = 0x8B4F
+
+  fun attach_shader = "glAttachShader"(program, shader : UInt32) : Void
+  fun compile_shader = "glCompileShader"(shader : UInt32) : Void
+  fun create_shader = "glCreateShader"(type : UInt32) : Void
+  fun get_shaderiv = "glGetShaderiv"(shader, name : UInt32, params : Int32*) : Void
+  fun shader_source = "glShaderSource"(shader, count  : UInt32, src : UInt8**, size: UInt32*) : Void
+  fun delete_shader = "glDeleteShader"(shader : UInt32) : Void
+  fun get_shader_info_log = "glGetShaderInfoLog"(shader, size : UInt32, il : UInt32*, log : UInt8*) : Void
+  fun get_shader_source = "glGetShaderSource"(shader, size : UInt32, il : UInt32*, src : UInt8*) : Void
+  fun is_shader = "glIsShader"(shader : UInt32) : Bool
+  fun detach_shader = "glDetachShader"(shader, program : UInt32) : Void
+  
+
   fun clear_index = "glClearIndex"(c : Float32) : Void
   fun clear_color = "glClearColor"(red : Float32, green : Float32, blue : Float32, alpha : Float32) : Void
   fun clear = "glClear"(mask : UInt16) : Void
