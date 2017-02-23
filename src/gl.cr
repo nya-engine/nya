@@ -814,14 +814,67 @@ lib GL
   fun get_shader_source = "glGetShaderSource"(shader : UInt32, size : UInt32, il : UInt32*, src : UInt8*) : Void
   fun is_shader = "glIsShader"(shader : UInt32) : Bool
   fun detach_shader = "glDetachShader"(shader : UInt32, program : UInt32) : Void
-
+  fun get_programiv = "glGetProgramiv"(shader : UInt32, name : UInt32, params : Int32*) : Void
   fun create_program = "glCreateProgram"() : UInt32
   fun delete_program = "glDeleteProgram"(pr : UInt32) : Void
   fun link_program = "glLinkProgram"(prog : UInt32) : Void
   fun use_program = "glUseProgram"(prog : UInt32) : Void
-
+  fun get_program_info_log = "glGetProgramInfoLog"(shader : UInt32, size : UInt32, il : UInt32*, log : UInt8*) : Void
   # </editor-fold>
 
+  # <editor-fold> Shader attributes
+  {% for i in [1,2,3,4] %}
+    fun vertex_attrib{{i.id}}f = "glVertexAttrib{{i.id}}f"(idx : UInt32,
+      {% for idx in (0...i) %}
+        v{{idx.id}} : Float32 {% if idx < i - 1 %}, {%end%}
+      {% end %}) : Void
+    fun vertex_attrib{{i.id}}d = "glVertexAttrib{{i.id}}d"(idx : UInt32,
+      {% for idx in (0...i) %}
+        v{{idx.id}} : Float64 {% if idx < i - 1 %}, {%end%}
+      {%end%}) : Void
+    fun vertex_attrib{{i.id}}s = "glVertexAttrib{{i.id}}s"(idx : UInt32,
+      {% for idx in (0...i) %}
+        v{{idx.id}} : UInt16 {% if idx < i - 1 %}, {%end%}
+      {%end%}) : Void
+
+    fun vertex_attrib{{i.id}}i = "glVertexAttribI{{i.id}}i"(idx : UInt32,
+      {% for idx in (0...i) %}
+        v{{idx.id}} : Int32 {% if idx < i - 1 %}, {%end%}
+      {%end%}) : Void
+
+    fun vertex_attrib{{i.id}}ui = "glVertexAttribI{{i.id}}ui"(idx : UInt32,
+      {% for idx in (0...i) %}
+        v{{idx.id}} : UInt32 {% if idx < i - 1 %}, {%end%}
+      {%end%}) : Void
+
+    fun uniform{{i.id}}f = "glUniform{{i.id}}f"(idx : UInt32,
+      {% for idx in (0...i) %}
+        v{{idx.id}} : Float32 {% if idx < i - 1 %}, {%end%}
+      {%end%}) : Void
+    fun uniform{{i.id}}i = "glUniform{{i.id}}i"(idx : UInt32,
+      {% for idx in (0...i) %}
+        v{{idx.id}} : Int32 {% if idx < i - 1 %}, {%end%}
+      {%end%}) : Void
+    fun uniform{{i.id}}ui = "glUniform{{i.id}}ui"(idx : UInt32,
+      {% for idx in (0...i) %}
+        v{{idx.id}} : UInt32 {% if idx < i - 1 %}, {%end%}
+      {%end%}) : Void
+
+    fun vertex_attrib{{i.id}}fv = "glVertexAttrib{{i.id}}fv"(idx : UInt32, data : Float32*) : Void
+    fun vertex_attrib{{i.id}}dv = "glVertexAttrib{{i.id}}dv"(idx : UInt32, data : Float64*) : Void
+    fun vertex_attrib{{i.id}}sv = "glVertexAttrib{{i.id}}sv"(idx : UInt32, data : UInt16*) : Void
+    fun uniform{{i.id}}fv = "glUniform{{i.id}}fv"(idx : UInt32, data : Float32*) : Void
+    fun uniform{{i.id}}iv = "glUniform{{i.id}}iv"(idx : UInt32, data : Int32*) : Void
+    fun uniform{{i.id}}uiv = "glUniform{{i.id}}uiv"(idx : UInt32, data : UInt32*) : Void
+
+    {% if i == 4 %}
+      # TODO: glVertexAttrib4bv and others
+    {% end %}
+  {% end %}
+
+  fun get_uniform_location = "glGetUniformLocation"(prog : UInt32, name : UInt8*) : UInt32
+  fun get_attrib_location = "glGetAttribLocation"(prog : UInt32, name : UInt8*) : UInt32
+  # </editor-fold>
   fun clear_index = "glClearIndex"(c : Float32) : Void
   fun clear_color = "glClearColor"(red : Float32, green : Float32, blue : Float32, alpha : Float32) : Void
   fun clear = "glClear"(mask : UInt16) : Void

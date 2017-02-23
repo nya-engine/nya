@@ -4,6 +4,20 @@ module Nya
     DEAD
   end
 
+  class EventHandler
+    @proc : Event ->
+    @id : Int64
+    getter id
+    def initialize(&proc : Event ->)
+      @id = Event.id
+      @proc = proc
+    end
+
+    def call(e : Event)
+      @proc.call e unless e.status == EventStatus::DEAD
+    end
+  end
+
   class Event
     @@events = Hash(String,Array(EventHandler)).new
     @@id = 0i64
@@ -21,7 +35,7 @@ module Nya
       i
     end
 
-    def self.subscribe(*events,handler : EventHandler)
+    def self.subscribe(*events, handler)
       events.each do |e|
         @@events[e.to_s] ||= Array(EventHandler).new
         @@events[e.to_s].push handler
@@ -29,9 +43,10 @@ module Nya
     end
 
     def self.subscribe(*events, &handler : Event ->)
-      e = EventHandler.new(&handler)
-      subscribe(*events,e)
-      e
+      events.each do |e|
+        @@events[e.to_s] ||= Array(EventHandler).new
+        @@events[e.to_s].push EventHandler.new(&handler)
+      end
     end
 
     def self.unsubscribe(handler : EventHandler)
@@ -56,16 +71,5 @@ module Nya
     end
   end
 
-  class EventHandler
-    @proc : Event ->
-    @id : Int64
-    getter id
-    def initialize(&@proc)
-      @id = Event.id
-    end
 
-    def call(e : Event)
-      @proc.call e unless e.status == EventStatus::DEAD
-    end
-  end
 end

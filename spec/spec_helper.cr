@@ -1,6 +1,7 @@
 require "spec"
 require "../src/nya_engine/storage/serialization"
 require "../src/nya_engine"
+require "../src/nya_engine/render/shader_compiler"
 
 
 class Foo

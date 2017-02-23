@@ -109,5 +109,17 @@ module Nya
       @components.each &.parent=(self)
       @components.each &.awake
     end
+
+    def find_components_of(type : Component.class)
+      @components.select(&.class.<=(type)).map { |x| type.cast x }
+    end
+
+    def find_component_of?(type)
+      find_components_of(type).first?
+    end
+
+    def find_component_of(type)
+      find_component_of?(type).not_nil!
+    end
   end
 end

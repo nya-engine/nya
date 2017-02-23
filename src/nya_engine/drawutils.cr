@@ -56,9 +56,7 @@ module Nya
         pointerof(oz).as(Pointer(Void))
       )
       vec = CrystalEdge::Vector3.new(ox,oy,oz)
-      vec /= -vec.z
-      #puts "#{v.to_s} -> #{vec.to_s}"
-      vec
+      vec / -vec.z
     end
 
     def self.draw_texture(x,y,w,h : Float64, t : UInt32, c : Tuple(Float64, Float64, Float64))

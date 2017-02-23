@@ -4,17 +4,19 @@ module Nya::Render
   class ShaderCompiler
     @@shader_cache = Hash(String, UInt32).new
     @@program_cache = Hash(String, UInt32).new
+    @@preprocessor_cache = Hash(String, String).new
 
     def self.flush_cache!
       Nya.log.warn "Flushing shader and shader program cache"
-      @@shader_cache = Hash(String, UInt32).new
-      @@program_cache = Hash(String, UInt32).new
+      [@@shader_cache,
+      @@program_cache,
+      @@preprocessor_cache].each &.clear
     end
 
     def self.preprocess(text : String)
       text.split("\n").map do |line|
         if md = line.match /^\s*\/\/\s*@require (?<name>.+)/
-          Storage::Reader.read_fully(md["name"])
+          Storage::Reader.read_to_end(md["name"])
         else
           line
         end
@@ -47,19 +49,26 @@ module Nya::Render
         Nya.log.debug "Found cached shader for #{filename}"
         return @@shader_cache[ckey]
       end
-      Nya.log.debug "Compiling shader #{filename}", "Shader"
-      text = Storage::Reader.read_fully(filename)
-      while text =~ /\/\/\s*@require/
-        text = preprocess text
+      Nya.log.info "Compiling shader #{filename}", "Shader"
+      text = Storage::Reader.read_to_end(filename)
+      if @@preprocessor_cache.has_key? filename
+        text = @@preprocessor_cache[filename]
+      else
+        while text =~ /\/\/\s*@require/
+          text = preprocess text
+        end
       end
-
+      @@preprocessor_cache[filename] = text
       stype ||= detect_type text
       Nya.log.debug "Type is #{stype}", "Shader"
 
-      shid = GL.create_shader
+      shid = GL.create_shader stype.to_i
       Nya.log.debug "Allocated ID : 0x#{shid.to_s(16)}", "Shader"
 
-      GL.shader_source shid, 1, pointerof(text.to_unsafe), 0
+      utext = text.to_unsafe
+
+
+      GL.shader_source shid, 1, pointerof(utext), nil
       GL.compile_shader shid
 
       GL.get_shaderiv shid, GL::COMPILE_STATUS, out comp_ok
@@ -105,10 +114,29 @@ module Nya::Render
         end
       end
 
-      raise "Cannot link shader program. See log for more details" if comp_ok == 0
+      raise "Cannot link shader program. See log for more details" if link_ok == 0
       Nya.log.debug "Linked successfully", "Shader"
       @@program_cache[ckey] = pid
       pid
+    end
+
+    def self.parse_vars(filename : String)
+      unless @@preprocessor_cache.has_key? filename
+        Nya.log.warn "Compiling shader #{filename} as it has been not compiled yet", "Shader"
+      end
+      text = @@preprocessor_cache[filename]
+      text.split("\n").compact_map do |line|
+        md = line.match(/^[^\/]*(?<kind>attribute|uniform)\s*(?<type>[a-z0-9A-Z]+)\s*(?<name>.+);/)
+        if md.nil?
+          nil
+        else
+          {
+            kind: md["kind"].not_nil!,
+            type: md["type"].not_nil!,
+            name: md["name"].not_nil!
+          }
+        end
+      end
     end
   end
 end

@@ -12,6 +12,10 @@ module Nya
       Box(self).box(self)
     end
 
+    macro also_known_as(name)
+      ::Nya::Serializable.children[{{name.stringify}}] = ::Nya::Serializable.children[{{@type.name.stringify}}.gsub(/::/,"_")]
+    end
+
     macro register
       {% unless @type.has_constant?("NYA_REGISTERED") %}
         ::Nya::Serializable.children[{{@type.name.stringify}}.gsub(/::/,"_")] = ->(s : XML::Node) do
@@ -219,7 +223,7 @@ module Nya
               xml.element "item", key: k do
                 {% if type.resolve <= String %}
                   xml.text v
-                {% elsif type.resolve.has_method("serialize_part") %}
+                {% elsif type.resolve.methods.any?{|x| x.name == "serialize_part"}%}
                   v.serialize_part xml
                 {% else %}
                   xml.text v.to_s

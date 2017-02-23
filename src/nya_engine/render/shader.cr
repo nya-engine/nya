@@ -1,7 +1,10 @@
 require "./shader_type"
+require "../storage/*"
 
 module Nya::Render
   class Shader
+    include Nya::Serializable
+
     @shader = 0u32
     property shader
 
@@ -24,6 +27,5 @@ module Nya::Render
     def initialize(filename : String)
       @shader = ShaderCompiler.compile(filename)
     end
-
   end
 end

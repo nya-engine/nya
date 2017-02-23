@@ -37,7 +37,7 @@ module Nya
         end
       end
 
-      def read_file(name, &block : IO->Void)
+      def read_file(name, &block : IO->)
         begin
           f = read_file name
           block.call f
@@ -61,6 +61,11 @@ module Nya
       def self.read_file(*args, &b : IO -> )
         init [] of String if @@instance.nil?
         @@instance.not_nil!.read_file(*args,&b)
+      end
+
+      def self.read_file(name)
+        init [] of String if @@instance.nil?
+        @@instance.not_nil!.read_file(name)
       end
     end
   end
