@@ -1,4 +1,4 @@
-require "../ode"
+require "../bindings/ode"
 require "crystaledge"
 
 module Nya

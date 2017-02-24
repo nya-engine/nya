@@ -1,5 +1,5 @@
-require "../gl"
-require "../glu"
+require "./bindings/gl"
+require "./bindings/glu"
 
 module Nya
   class DrawUtils

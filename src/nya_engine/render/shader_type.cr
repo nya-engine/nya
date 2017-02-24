@@ -1,4 +1,4 @@
-require "../../gl"
+require "../bindings/gl"
 
 module Nya::Render
   enum ShaderType

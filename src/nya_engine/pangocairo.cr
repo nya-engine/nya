@@ -1,5 +1,5 @@
-require "../pangocairo"
-require "../gl"
+require "./bindings/pangocairo"
+require "./bindings/gl"
 require "crystaledge"
 
 module Nya

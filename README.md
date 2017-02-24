@@ -2,6 +2,8 @@
 
 NyaEngine : 3D Game Engine written in [crystal](https://crystal-lang.org/) \[**Work in progress**\]
 
+Inspired by Unity3D and X-Ray Engine
+
 # How to test
 
 Install dependences :

@@ -1,5 +1,5 @@
 require "crystaledge"
-require "../ode"
+require "./bindings/ode"
 require "./storage/serialization"
 
 

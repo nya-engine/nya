@@ -1,6 +1,6 @@
-require "./sdl2"
-require "./gl"
-require "./glu"
+#require "./sdl2"
+#require "./gl"
+#require "./glu"
 require "./nya_engine/**"
 require "crystaledge"
 
@@ -63,7 +63,7 @@ begin
     #puts evt.type if i == 0
     raise "Terminated" if evt.type == SDL2::EventType::QUIT
     if evt.type == SDL2::EventType::KEYUP
-      
+
     end
     Nya::Event.send(:update,Nya::Event.new)
     update_loop

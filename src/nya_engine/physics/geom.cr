@@ -1,4 +1,4 @@
-require "../ode"
+require "../bindings/ode"
 require "crystaledge"
 
 module Nya
@@ -7,7 +7,7 @@ module Nya
       @geom_id : LibODE::Geomid
 
       def initialize(@geom_id)
-        
+
       end
     end
   end
