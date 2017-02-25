@@ -875,6 +875,15 @@ lib GL
   fun get_uniform_location = "glGetUniformLocation"(prog : UInt32, name : UInt8*) : UInt32
   fun get_attrib_location = "glGetAttribLocation"(prog : UInt32, name : UInt8*) : UInt32
   # </editor-fold>
+
+  # <editor-fold> Buffers
+  ARRAY_BUFFER = 0x8892
+  STATIC_DRAW = 0x88E4
+
+  fun gen_buffers = "glGenBuffers"(size : UInt32, buf : UInt32*)
+  fun bind_buffer = "glBindBuffer"(t : UInt32, b : UInt32)
+  fun buffer_data = "glBufferData"(t : UInt32, s : UInt64, data : Void*, usage : UInt32)
+  # </editor-fold>
   fun clear_index = "glClearIndex"(c : Float32) : Void
   fun clear_color = "glClearColor"(red : Float32, green : Float32, blue : Float32, alpha : Float32) : Void
   fun clear = "glClear"(mask : UInt16) : Void

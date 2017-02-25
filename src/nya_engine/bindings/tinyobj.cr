@@ -1,6 +1,15 @@
-@[Link(ldflags: "src/ext/tinyobj.o")]
+@[Link(ldflags: "#{__DIR__}/../ext/libtinyobj.a")]
 lib TinyOBJ
-  fun parse_obj = tinyobj_parse_obj(attrib : AttribT*, shapes : ShapeT**, num_shapes : LibC::SizeT*, materials : MaterialT**, num_materials : LibC::SizeT*, buf : LibC::Char*, len : LibC::SizeT, flags : LibC::UInt) : LibC::Int
+  fun parse_obj = tinyobj_parse_obj(
+    attrib : AttribT*,
+    shapes : ShapeT**,
+    num_shapes : LibC::SizeT*,
+    materials : MaterialT**,
+    num_materials : LibC::SizeT*,
+    buf : LibC::Char*,
+    len : LibC::SizeT,
+    flags : LibC::UInt
+  ) : LibC::Int
   struct AttribT
     num_vertices : LibC::UInt
     num_normals : LibC::UInt

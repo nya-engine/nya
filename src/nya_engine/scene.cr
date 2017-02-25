@@ -7,7 +7,7 @@ module Nya
   class Scene < AbsScene
     include Nya::Serializable
     @root = [] of GameObject
-    property  root
+    property root
 
     def initialize(@root)
     end
@@ -22,6 +22,7 @@ module Nya
     end
 
     def render(tag : String? = nil)
+      #GL.load_identity
       @root.each &.render(tag)
     end
 

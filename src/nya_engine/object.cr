@@ -30,6 +30,10 @@ module Nya
     def update
     end
 
+    def matches_tag?(tag)
+      tag.nil? || self.tag.nil? || self.tag == tag
+    end
+
     def render(tag : String? = nil)
     end
   end
@@ -57,7 +61,11 @@ module Nya
     end
 
     def render(tag : String? = nil)
-      @children.each(&.render(tag))
+      @children.each do |ch|
+        GL.push_matrix
+        ch.render tag
+        GL.pop_matrix
+      end
     end
   end
 
@@ -87,16 +95,37 @@ module Nya
     end
   end
 
+end
+
+require "./render/shader_program"
+
+module Nya
+
   class GameObject < Container
     @components = [] of Component
     @position = CrystalEdge::Vector3.new(0.0,0.0,0.0)
     @rotation = CrystalEdge::Vector3.new(0.0,0.0,0.0)
+    @parent : GameObject? = nil
+    property parent
     property components, position, rotation
     serializable_array components, of: Nya::Component
+    serializable position, rotation, as: CrystalEdge::Vector3
 
     def render(tag : String? = nil)
+      return unless matches_tag? tag
+      comp = find_component_of?(Nya::Render::ShaderProgram)
+      comp.use! unless comp.nil?
+      GL.matrix_mode GL::MODELVIEW
+      GL.push_matrix
+      GL.rotatef(@rotation.x, 1.0, 0.0, 0.0)
+      GL.rotatef(@rotation.y, 0.0, 1.0, 0.0)
+      GL.rotatef(@rotation.z, 0.0, 0.0, 1.0)
+      GL.translatef(*@position.to_gl)
       super
       @components.each &.render(tag)
+      comp.unuse! unless comp.nil?
+      GL.matrix_mode GL::MODELVIEW
+      GL.pop_matrix
     end
 
     def update
@@ -105,13 +134,14 @@ module Nya
     end
 
     def awake
+      @children.each &.as(GameObject).parent=(self)
       super
       @components.each &.parent=(self)
       @components.each &.awake
     end
 
     def find_components_of(type : Component.class)
-      @components.select(&.class.<=(type)).map { |x| type.cast x }
+      @components.select(&.class.===(type)).map { |x| type.cast x }
     end
 
     def find_component_of?(type)

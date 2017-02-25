@@ -1,3 +1,5 @@
+require "../storage/serialization"
+
 module Nya
   module Render
     class Rect
@@ -6,7 +8,7 @@ module Nya
       @width = 0.0
       @height = 0.0
 
-      include Nya::Serializable
+      include ::Nya::Serializable
       property x, y, width, height
       serializable x, y, width, height, as: Float64
 

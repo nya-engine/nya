@@ -38,6 +38,8 @@ module Nya
       def render!
         return unless enabled?
         set_projection_matrix!
+        GL.matrix_mode GL::MODELVIEW
+        GL.load_identity
         SceneManager.render @tag
       end
 

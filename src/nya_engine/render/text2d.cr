@@ -34,6 +34,7 @@ module Nya
           @size = pango.size
         end
         @texture_id = pango.texture_id
+        Nya.log.debug "Awake text : #{@texture_id}", "Text2D"
       end
 
       def render(tag : String? = nil)

@@ -177,7 +177,7 @@ module Nya
         {% if tp.resolve <= String %}
           s.{{name.id}} = xml[{{name.stringify}}]{%if nl%}?{%end%}.to_s
         {% elsif nl %}
-          obj = xml[{{name.stringify}}]
+          obj = xml[{{name.stringify}}]?
           if obj.nil?
             s.{{name.id}} = nil
           else

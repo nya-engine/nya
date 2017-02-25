@@ -50,7 +50,7 @@ module Nya::Render
     class Bool < Var
       property value : String = ""
       attribute value, as: String, nilable: true
-      also_known_as "glsl_bool"
+      also_known_as glsl_bool
       def apply(p, n)
         value = case @value
         when "yes" || "true" || "1"
@@ -66,7 +66,7 @@ module Nya::Render
     class Int < Var
       property value : Int32 = 0
       attribute value, as: Int32, nilable: false
-      also_known_as "glsl_int"
+      also_known_as glsl_int
 
       def apply(p, n)
         apply_value p, n, "1i", @value
@@ -76,7 +76,7 @@ module Nya::Render
     class Float < Var
       property value : Float32 = 0f32
       attribute value, as: Float32, nilable: false
-      also_known_as "glsl_float"
+      also_known_as glsl_float
 
       def apply(p, n)
         apply_value p, n, "1f", @value
@@ -91,7 +91,7 @@ module Nya::Render
       property y = 0f32
       attribute x, as: Float32, nilable: false
       attribute y, as: Float32, nilable: false
-      also_known_as "glsl_v2"
+      also_known_as glsl_v2
 
       def apply(p, n)
         apply_value p, n, "2f", @x, @y
@@ -101,7 +101,7 @@ module Nya::Render
     class Vec3 < Vec2
       property z = 0f32
       attribute z, as: Float32, nilable: false
-      also_known_as "glsl_v3"
+      also_known_as glsl_v3
 
       def apply(p, n)
         apply_value p, n, "3f", self.x, self.y, @z
@@ -111,13 +111,12 @@ module Nya::Render
     class Vec4 < Vec3
       property w = 0f32
       attribute z, as: Float32, nilable: false
-      also_known_as "glsl_v4"
+      also_known_as glsl_v4
 
       def apply(p, n)
         apply_value p, n, "4f", self.z, self.y, self.z, @w
       end
     end
     # </editor-fold>
-
   end
 end

@@ -56,22 +56,21 @@ module Nya
         pointerof(oz).as(Pointer(Void))
       )
       vec = CrystalEdge::Vector3.new(ox,oy,oz)
-      vec / -vec.z
+      vec /= -vec.z
+      #puts vec.to_s
+      vec
     end
 
     def self.draw_texture(x,y,w,h : Float64, t : UInt32, c : Tuple(Float64, Float64, Float64))
       GL.matrix_mode(GL::MODELVIEW)
-
       GL.load_identity
-      GL.clear(GL::COLOR_BUFFER_BIT)
-      GL.push_matrix
 
+      GL.clear(GL::COLOR_BUFFER_BIT)
+      #GL.push_matrix
+      #
       va = un_project(CrystalEdge::Vector3.new(x,y,-20.0))
       vb = un_project(CrystalEdge::Vector3.new(x + w, y + h, -20.0))
-
-      #exit
-
-      GL.translatef(0.0,0.0,vb.z)
+      GL.translatef(0.0,0.0,va.z)
       GL.bind_texture(GL::TEXTURE_2D,t)
       GL.color3d(*c)
 
