@@ -281,10 +281,12 @@ module Nya
         nc = node
         name = node.name
         if name == "text"
-          raise name
+          raise node.parent.to_s
         end
         if Serializable.children.has_key? name
           Serializable.children[name].call(nc)
+        elsif name == "property"
+          deserialize node.first_element_child.not_nil!
         else
           puts Serializable.children.keys.join("\n")
           raise "#{name} is not Serializable (#{nc.class} : #{nc}) "
