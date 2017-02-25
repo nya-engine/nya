@@ -26,7 +26,7 @@
             <CrystalEdge_Vector3>
               <property name="x">0.0</property>
               <property name="y">0.0</property>
-              <property name="z">-1000.0</property>
+              <property name="z">-500.0</property>
             </CrystalEdge_Vector3>
           </property>
           <property name="components">

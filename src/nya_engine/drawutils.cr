@@ -84,7 +84,7 @@ module Nya
         GL.tex_coord2d(0.0,1.0)
         GL.vertex2d(va.x, va.y)
       end
-      GL.pop_matrix
+      #GL.pop_matrix
     end
   end
 end

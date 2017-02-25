@@ -1,0 +1,40 @@
+<!-- Test scene -->
+<Nya_Scene id="testscene">
+  <property name="name">Test Scene</property>
+  <property name="root">
+    <Nya_GameObject id="text">
+      <property name="position">
+        <CrystalEdge_Vector3>
+          <property name="x">0.0</property>
+          <property name="y">0.0</property>
+          <property name="z">500.0</property>
+        </CrystalEdge_Vector3>
+      </property>
+      <property name="components">
+        <Nya_Render_Camera id="cam0"></Nya_Render_Camera>
+      </property>
+      <property name="children">
+
+      </property>
+    </Nya_GameObject>
+
+    <Nya_GameObject>
+      <property name="position">
+        <CrystalEdge_Vector3>
+          <property name="x">0.0</property>
+          <property name="y">0.0</property>
+          <property name="z">-500.0</property>
+        </CrystalEdge_Vector3>
+      </property>
+      <property name="components">
+        <Nya_Render_Mesh filename="res/cornell_box.obj" />
+        <Nya_Render_ShaderProgram>
+          <property name="filenames">
+            <item>res/test.vert</item>
+            <item>res/test.frag</item>
+          </property>
+        </Nya_Render_ShaderProgram>
+      </property>
+    </Nya_GameObject>
+  </property>
+</Nya_Scene>

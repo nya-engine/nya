@@ -11,13 +11,13 @@ module Nya
     INVALID_OPERATION = GL::INVALID_OPERATION
     #INVALID_FRAMEBUFFER_OPERATION = GL::INVALID_FRAMEBUFFER_OPERATION
   end
-  def gl_error
-    err = GLError.new GL.get_error
+  def self.gl_error
+    err = GLError.from_value GL.get_error
     err.to_s
   end
 
-  def gl_error?
-    err = GLError.new GL.get_error
+  def self.gl_error?
+    err = GLError.from_value GL.get_error
     err == GLError::NO_ERROR ? nil : err.to_s
   end
 end

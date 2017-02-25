@@ -111,6 +111,23 @@ module Nya
     serializable_array components, of: Nya::Component
     serializable position, rotation, as: CrystalEdge::Vector3
 
+    def absolute_rotation
+      rot = @rotation
+      unless @parent.nil?
+        rot += @parent.not_nil!.absolute_rotation
+      end
+      rot
+    end
+
+    def absolute_position
+      pos = @position
+      unless @parent.nil?
+        pos = pos
+          .rotate(CrystalEdge::Quaternion.from_euler @parent.not_nil!.rotation) + @parent.not_nil!.absolute_position
+      end
+      pos
+    end
+
     def render(tag : String? = nil)
       return unless matches_tag? tag
       comp = find_component_of?(Nya::Render::ShaderProgram)
@@ -134,6 +151,7 @@ module Nya
     end
 
     def awake
+      Nya.log.debug "Position #{@position.to_s}"
       @children.each &.as(GameObject).parent=(self)
       super
       @components.each &.parent=(self)

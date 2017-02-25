@@ -73,6 +73,10 @@ module Nya::Render
       super
       #GL.gen_buffers 1, pointerof(@vb)
       #refresh_vertexbuffer!
+      #pos = parent.absolute_position
+      #@vertices.each_with_index do |e, i|
+      #  Nya.log.error "Vertex #{i} : #{(e+pos).to_s}"
+      #end
       Nya.log.unknown "#{@filename} stats #{@vertices.size} vertices, #{@normals.size} normals, #{@colors.size} colors, #{@texcoords.size} texcoords", "Mesh"
     end
 
@@ -92,18 +96,22 @@ module Nya::Render
       #GL.normal_pointer GL::FLOAT, 36, Pointer(Void).new(12)
       #GL.tex_coord_pointer 3, GL::FLOAT, 36, Pointer(Void).new(24)
       #GL.draw_arrays GL::TRIANGLES, 0, @size * 3
-      Nya::DrawUtils.draw(GL::POLYGON) do
+      GL.begin_(GL::TRIANGLES)
         @vertices.each_with_index do |e, i|
           GL.vertex3d *e.to_gl
+          if @normals.size > i
+            GL.normal3d *@normals[i].to_gl
+          end
           if @texcoords.size > i
             GL.tex_coord3d *@texcoords[i].to_gl
           elsif @colors.size > i
             GL.color4d *@colors[i].to_gl4
           else
-            GL.color3d 1.0, 1.0, 1.0
+            #puts "COLOR"
+            GL.color4d 1.0, 1.0, 1.0, 1.0
           end
         end
-      end
+      GL.end_
     end
 
   end

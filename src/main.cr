@@ -13,6 +13,10 @@ def render_loop
   GL.clear_color(0.0,0.0,0.0,1.0)
   GL.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT)
   Nya.camera_list.each &.render!
+  err = Nya.gl_error?
+  unless err.nil?
+    Nya.log.error err.to_s, "GL"
+  end
 end
 
 begin
@@ -40,7 +44,7 @@ begin
   GLU.perspective(45.0,Nya.width/Nya.height,0.1,100.0)
 
   GL.matrix_mode(GL::MODELVIEW)
-  Nya::SceneManager.load_from_file("res/testscene.xml")
+  Nya::SceneManager.load_from_file("res/testscene2.xml")
 
   while true
     SDL2.poll_event(out evt)

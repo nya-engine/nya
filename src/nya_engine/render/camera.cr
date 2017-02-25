@@ -13,7 +13,7 @@ module Nya
 
       @depth = 1.0
       @near = 0.1
-      @far = 100.0
+      @far = 1000.0
       @angle_of_view = 45.0
       @viewport = Rect.new(0.0,0.0,1.0,1.0)
 
@@ -41,6 +41,10 @@ module Nya
         GL.matrix_mode GL::MODELVIEW
         GL.load_identity
         SceneManager.render @tag
+      end
+
+      def update
+        parent.rotation.y += Nya::Time.delta_time
       end
 
     end
