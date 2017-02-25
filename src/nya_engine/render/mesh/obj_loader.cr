@@ -25,6 +25,8 @@ module Nya::Render
         buffer.size,
         1
       )
+      nv, nn, nt = attrib.num_vertices, attrib.num_normals, attrib.num_texcoords
+      Nya.log.debug "Loaded #{nv} vertices, #{nn} normals, #{nt} texcoords", "OBJLoader"
       if result == 0
         Nya.log.warn "Obj parser returned 0 for #{file}", "OBJLoader"
       end

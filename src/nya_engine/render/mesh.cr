@@ -5,15 +5,20 @@ module Nya::Render
     @vertices = [] of CrystalEdge::Vector3
     @normals = [] of CrystalEdge::Vector3
     @texcoords = [] of CrystalEdge::Vector3
+    @colors = [] of Color
     @filename = ""
     serializable_array vertices, normals, texcoords, of: CrystalEdge::Vector3
-    property vertices, normals, texcoords
+    #serializable_array coords, of: CrystalEdge::Vector3
+    serializable_array colors, of: Color
+    property vertices, normals, texcoords, colors
     attribute filename, as: String, nilable: true
 
     def filename=(f)
       return if f.to_s.empty?
       mesh = Loader.load_from f.to_s
-      unless mesh.nil?
+      if mesh.nil?
+        Nya.log.error "Cannot load mesh #{f}", "Mesh"
+      else
         @vertices = mesh.vertices
         @normals = mesh.normals
         @texcoords = mesh.texcoords
@@ -66,26 +71,39 @@ module Nya::Render
 
     def awake
       super
-      GL.gen_buffers 1, pointerof(@vb)
-      refresh_vertexbuffer!
+      #GL.gen_buffers 1, pointerof(@vb)
+      #refresh_vertexbuffer!
+      Nya.log.unknown "#{@filename} stats #{@vertices.size} vertices, #{@normals.size} normals, #{@colors.size} colors, #{@texcoords.size} texcoords", "Mesh"
     end
 
     def update
       unless @valid_cache
-        refresh_vertexbuffer!
+        #refresh_vertexbuffer!
       end
     end
 
     def render(tag : String? = nil)
       return unless matches_tag? tag
-      GL.bind_buffer GL::ARRAY_BUFFER, @vb
-      GL.enable_client_state GL::VERTEX_ARRAY
-      GL.enable_client_state GL::NORMAL_ARRAY
-      GL.enable_client_state GL::TEXTURE_COORD_ARRAY
-      GL.vertex_pointer 3, GL::FLOAT, 36, Pointer(Void).new(0)
-      GL.normal_pointer GL::FLOAT, 36, Pointer(Void).new(12)
-      GL.tex_coord_pointer 3, GL::FLOAT, 36, Pointer(Void).new(24)
-      GL.draw_arrays GL::TRIANGLES, 0, @size * 3
+      #GL.bind_buffer GL::ARRAY_BUFFER, @vb
+      #GL.enable_client_state GL::VERTEX_ARRAY
+      #GL.enable_client_state GL::NORMAL_ARRAY
+      #GL.enable_client_state GL::TEXTURE_COORD_ARRAY
+      #GL.vertex_pointer 3, GL::FLOAT, 36, Pointer(Void).new(0)
+      #GL.normal_pointer GL::FLOAT, 36, Pointer(Void).new(12)
+      #GL.tex_coord_pointer 3, GL::FLOAT, 36, Pointer(Void).new(24)
+      #GL.draw_arrays GL::TRIANGLES, 0, @size * 3
+      Nya::DrawUtils.draw(GL::POLYGON) do
+        @vertices.each_with_index do |e, i|
+          GL.vertex3d *e.to_gl
+          if @texcoords.size > i
+            GL.tex_coord3d *@texcoords[i].to_gl
+          elsif @colors.size > i
+            GL.color4d *@colors[i].to_gl4
+          else
+            GL.color3d 1.0, 1.0, 1.0
+          end
+        end
+      end
     end
 
   end

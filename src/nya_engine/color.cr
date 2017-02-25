@@ -4,7 +4,7 @@ module Nya
   class Color
     @@predef = Hash(String, Color).new
 
-    include Serializable
+    include Nya::Serializable
     @r = 255u8
     @g = 255u8
     @b = 255u8
@@ -26,28 +26,29 @@ module Nya
 
     def name=(n : String)
       if @@predef.has_key? n
-
-      else
-
+        {% for name in %w(r g b a) %}
+          {{name.id}} = @@predef[n].{{name.id}}
+        {% end %}
       end
     end
 
     serializable r, g, b, a, as: UInt8
+    attribute name, as: String, nilable: true
 
     def to_gl
       {
-        @r.to_f / 255.0,
-        @g.to_f / 255.0,
-        @b.to_f / 255.0
+        @r.to_f64 / 255.0,
+        @g.to_f64 / 255.0,
+        @b.to_f64 / 255.0
       }
     end
 
-    def to_gl_4
+    def to_gl4
       {
-        @r.to_f / 255.0,
-        @g.to_f / 255.0,
-        @b.to_f / 255.0,
-        @a.to_f / 255.0
+        @r.to_f64 / 255.0,
+        @g.to_f64 / 255.0,
+        @b.to_f64 / 255.0,
+        @a.to_f64 / 255.0
       }
     end
 

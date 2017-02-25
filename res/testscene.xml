@@ -16,9 +16,7 @@
           </property>
 
           <property name="color">
-            <Nya_Color>
-              <property name="name">white</property>
-            </Nya_Color>
+            <Nya_Color name="white" />
           </property>
         </Nya_Render_Text2D>
       </property>
@@ -28,17 +26,11 @@
             <CrystalEdge_Vector3>
               <property name="x">0.0</property>
               <property name="y">0.0</property>
-              <property name="z">100.0</property>
+              <property name="z">-1000.0</property>
             </CrystalEdge_Vector3>
           </property>
           <property name="components">
             <Nya_Render_Mesh filename="res/cornell_box.obj" />
-            <Nya_Render_ShaderProgram>
-              <property name="filenames">
-                <item>res/test.vert</item>
-                <item>res/test.frag</item>
-              </property>
-            </Nya_Render_ShaderProgram>
           </property>
         </Nya_GameObject>
       </property>

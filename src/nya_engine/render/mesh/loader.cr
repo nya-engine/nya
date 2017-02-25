@@ -14,12 +14,11 @@ module Nya::Render
 
       def self.exists_for?(extname : String)
         extname = "." + extname unless extname.starts_with? "."
-        puts "K #{@@loaders.keys}"
         @@loaders.has_key? extname.downcase
       end
 
       def self.load_from(filename : String) : Mesh?
-        Nya.log.debug "Trying to load mesh #{filename}"
+        Nya.log.debug "Trying to load mesh #{filename}", "MeshLoader"
         if exists_for? File.extname(filename)
           @@loaders[File.extname(filename).downcase].load filename
         else
