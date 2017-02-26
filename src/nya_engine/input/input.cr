@@ -9,7 +9,7 @@ module Nya
       if event.nil?
         Nya.log.debug "KeyUp hook received Non-keyboard event", "Input"
       else
-        puts event.inner.keysym.scancode.to_s
+        #puts event.inner.keysym.scancode.to_s
       end
     end
   end
