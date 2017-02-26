@@ -87,7 +87,7 @@ lib SDL2
     TRUE  = 1
   end
 
-  enum Scancode
+  enum Scancode : UInt32
     UNKNOWN = 0
 
     A =  4
@@ -350,7 +350,7 @@ lib SDL2
     SDL_NUM_SCANCODES = 512
   end
 
-  enum Keycode
+  enum Keycode : UInt32
     UNKNOWN = 0
 
     RETURN     = 13
@@ -745,7 +745,7 @@ lib SDL2
     CONTROLLERBUTTONMAX           = 15
   end
 
-  enum EventType
+  enum EventType : UInt32
     FIRSTEVENT               =     0
     QUIT                     =   256
     APPTERMINATING           =   257
@@ -1013,14 +1013,14 @@ lib SDL2
   struct Keysym
     scancode : Scancode
     keycode : Keycode
-    mod : UInt16
-    unused : UInt16
+    mod : UInt32
+    unused : UInt32
   end
 
   struct KeyboardEvent
     type : EventType
-    timestamp : UInt16
-    window_id : UInt16
+    timestamp : UInt32
+    window_id : UInt32
     state : UInt8
     repeat : UInt8
     padding2 : UInt8

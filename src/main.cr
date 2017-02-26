@@ -3,7 +3,6 @@ require "crystaledge"
 
 WP_CENTERED = 0x2FFF0000
 
-
 def update_loop
   Nya::Time.update
   Nya::SceneManager.update
@@ -45,12 +44,11 @@ begin
 
   GL.matrix_mode(GL::MODELVIEW)
   Nya::SceneManager.load_from_file("res/testscene2.xml")
-
   while true
     SDL2.poll_event(out evt)
     raise "Terminated" if evt.type == SDL2::EventType::QUIT
     if evt.type == SDL2::EventType::KEYUP
-      # TODO
+      Nya::Event.send :raw_key_up, Nya::Input::KeyboardEvent.new(evt.key)
     end
     Nya::Event.send(:update,Nya::Event.new)
     update_loop
