@@ -37,6 +37,14 @@ module Nya
         end
       end
 
+      def exists?(name)
+        if @files_index.has_key?(name)
+          true
+        else
+          File.exists?(name)
+        end
+      end
+
       def read_file(name, &block : IO->)
         begin
           f = read_file name
@@ -67,6 +75,8 @@ module Nya
         init [] of String if @@instance.nil?
         @@instance.not_nil!.read_file(name)
       end
+
+      def self.exists?(n); @@instance.exists? n end
     end
   end
 end
