@@ -1,4 +1,5 @@
 require "../../log"
+require "../mode"
 
 module Nya::Render
   class Mesh

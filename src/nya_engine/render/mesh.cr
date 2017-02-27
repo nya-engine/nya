@@ -10,7 +10,8 @@ module Nya::Render
     serializable_array vertices, normals, texcoords, of: CrystalEdge::Vector3
     #serializable_array coords, of: CrystalEdge::Vector3
     serializable_array colors, of: Color
-    property vertices, normals, texcoords, colors
+    @mode = Mode::TRIANGLES
+    property vertices, normals, texcoords, colors, mode
     attribute filename, as: String, nilable: true
 
     def filename=(f)
@@ -22,6 +23,7 @@ module Nya::Render
         @vertices = mesh.vertices
         @normals = mesh.normals
         @texcoords = mesh.texcoords
+        @mode = mesh.mode
       end
       @filename = f
     end
@@ -96,7 +98,7 @@ module Nya::Render
       #GL.normal_pointer GL::FLOAT, 36, Pointer(Void).new(12)
       #GL.tex_coord_pointer 3, GL::FLOAT, 36, Pointer(Void).new(24)
       #GL.draw_arrays GL::TRIANGLES, 0, @size * 3
-      GL.begin_(GL::TRIANGLES)
+      GL.begin_(@mode.to_u32)
         @vertices.each_with_index do |e, i|
           GL.vertex3d *e.to_gl
           if @normals.size > i
@@ -108,7 +110,7 @@ module Nya::Render
             GL.color4d *@colors[i].to_gl4
           else
             #puts "COLOR"
-            GL.color4d 1.0, 1.0, 1.0, 1.0
+            GL.color3d *e.to_gl
           end
         end
       GL.end_

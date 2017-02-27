@@ -97,6 +97,7 @@ module Nya
               end
 
             end
+
           {% else %}
             #s.{{name.id}} = {{type}}.new xml.xpath(%xpath).to_s
             obj = xml.xpath("property[@name='{{name}}']")
@@ -104,7 +105,11 @@ module Nya
             if ns.nil? || ns.empty?
               Nya.log.warn "Cannot deserialize {{name}} as it doesnt exist", "XML"
             else
-              s.{{name.id}} = {{type}}.new ns.first.content
+              {% if type.resolve <= Enum %}
+                s.{{name.id}} = {{type}}.from_value ns.first.content
+              {% else %}
+                s.{{name.id}} = {{type}}.new ns.first.content
+              {% end %}
             end
 
           {% end %}

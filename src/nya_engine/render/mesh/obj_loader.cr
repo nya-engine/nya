@@ -40,6 +40,7 @@ module Nya::Render
       attrib.num_texcoords.times do |i|
         mesh.texcoords << pull_v3 attrib.texcoords, i*3
       end
+      mesh.mode = Mode::QUADS
       Nya.log.info "#{file} : #{attrib.num_vertices} V, #{attrib.num_normals} N", "OBJLoader"
       mesh
     end

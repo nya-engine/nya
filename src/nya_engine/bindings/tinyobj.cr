@@ -1,5 +1,7 @@
 @[Link(ldflags: "#{__DIR__}/../ext/libtinyobj.a")]
 lib TinyOBJ
+  FLAG_TRIANGULATE = 1
+
   fun parse_obj = tinyobj_parse_obj(
     attrib : AttribT*,
     shapes : ShapeT**,
