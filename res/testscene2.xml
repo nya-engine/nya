@@ -11,7 +11,9 @@
         </CrystalEdge_Vector3>
       </property>
       <property name="components">
-        <Nya_Render_Camera id="cam0"></Nya_Render_Camera>
+        <Nya_Render_Camera id="cam0">
+          <property name="far">10000.0</property>
+        </Nya_Render_Camera>
       </property>
       <property name="children">
 
@@ -23,7 +25,7 @@
         <CrystalEdge_Vector3>
           <property name="x">0.0</property>
           <property name="y">0.0</property>
-          <property name="z">-500.0</property>
+          <property name="z">0.0</property>
         </CrystalEdge_Vector3>
       </property>
       <property name="components">

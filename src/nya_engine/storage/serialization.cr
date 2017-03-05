@@ -120,7 +120,9 @@ module Nya
           Nya.log.debug "Serializing {{name}} ({{@type.name}})", "XML"
           b.element("property", name: {{name.stringify}}) do
             {% if type.resolve <= ::Nya::Serializable %}
-              s.as(self).{{name.id}}.serialize_part(b)
+              val = s.as(self).{{name.id}}
+
+              val.serialize_part(b) unless val.nil?
             {%else%}
               b.text s.as(self).{{name.id}}.to_s
             {%end%}

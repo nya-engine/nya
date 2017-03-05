@@ -9,5 +9,7 @@ dependencies:
     github: unn4m3d/crystaledge
   chunked:
     github: unn4m3d/chunked
+  obj:
+    github: unn4m3d/obj
 
 license: MIT

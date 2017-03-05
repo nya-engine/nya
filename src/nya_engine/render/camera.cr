@@ -44,7 +44,7 @@ module Nya
       end
 
       def update
-        parent.rotation.y += Nya::Time.delta_time
+        
       end
 
     end
