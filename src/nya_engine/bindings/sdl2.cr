@@ -1,5 +1,5 @@
-@[Link("sdl2")]
-lib SDL2
+@[Link("SDL2")]
+lib LibSDL2
   ASSERT_LEVEL                            =          2
   LIL_ENDIAN                              =       1234
   BIG_ENDIAN                              =       4321

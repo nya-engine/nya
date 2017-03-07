@@ -19,17 +19,17 @@ def render_loop
 end
 
 begin
-  raise SDL2.get_error.to_s if SDL2.init(SDL2::INIT_VIDEO) < 0
+  raise LibSDL2.get_error.to_s if LibSDL2.init(LibSDL2::INIT_VIDEO) < 0
 
-  SDL2.gl_set_attribute(SDL2::GLattr::GLDOUBLEBUFFER,1)
-  SDL2.gl_set_attribute(SDL2::GLattr::GLREDSIZE,6)
-  SDL2.gl_set_attribute(SDL2::GLattr::GLBLUESIZE,6)
-  SDL2.gl_set_attribute(SDL2::GLattr::GLGREENSIZE,6)
+  LibSDL2.gl_set_attribute(LibSDL2::GLattr::GLDOUBLEBUFFER,1)
+  LibSDL2.gl_set_attribute(LibSDL2::GLattr::GLREDSIZE,6)
+  LibSDL2.gl_set_attribute(LibSDL2::GLattr::GLBLUESIZE,6)
+  LibSDL2.gl_set_attribute(LibSDL2::GLattr::GLGREENSIZE,6)
 
-  Nya.window = SDL2.create_window("Cube",WP_CENTERED,WP_CENTERED,Nya.width,Nya.height,SDL2::WindowFlags::WINDOWSHOWN|SDL2::WindowFlags::WINDOWOPENGL)
-  gl_ctx = SDL2.gl_create_context(Nya.window)
+  Nya.window = LibSDL2.create_window("Cube",WP_CENTERED,WP_CENTERED,Nya.width,Nya.height,LibSDL2::WindowFlags::WINDOWSHOWN|LibSDL2::WindowFlags::WINDOWOPENGL)
+  gl_ctx = LibSDL2.gl_create_context(Nya.window)
 
-  raise SDL2.get_error.as(String) if Nya.window?.is_a?(Nil) || Nya.window.not_nil!.null?
+  raise LibSDL2.get_error.as(String) if Nya.window?.is_a?(Nil) || Nya.window.not_nil!.null?
 
   GL.clear_color(0.0,0.0,0.0,0.0)
   GL.clear_depth(1.0)
@@ -47,23 +47,23 @@ begin
   while true
     Nya::Event.send(:update,Nya::Event.new)
     update_loop
-    while SDL2.poll_event(out evt) != 0
+    while LibSDL2.poll_event(out evt) != 0
       case evt.type
-      when SDL2::EventType::KEYUP
+      when LibSDL2::EventType::KEYUP
         Nya::Event.send :key_up, Nya::Input::KeyboardEvent.new(evt.key)
-      when SDL2::EventType::KEYDOWN
+      when LibSDL2::EventType::KEYDOWN
         Nya::Event.send :key_down, Nya::Input::KeyboardEvent.new(evt.key)
-      when SDL2::EventType::QUIT
+      when LibSDL2::EventType::QUIT
         evt = Nya::Event.new
         Nya::Event.send :quit, evt
         exit 0 unless evt.status.dead?
-      when SDL2::EventType::MOUSEMOTION
+      when LibSDL2::EventType::MOUSEMOTION
         Nya::Event.send :mouse_motion, Nya::Input::MouseMotionEvent.new(evt.motion)
-      when SDL2::EventType::MOUSEWHEEL
+      when LibSDL2::EventType::MOUSEWHEEL
         Nya::Event.send :mouse_wheel, Nya::Input::MouseWheelEvent.new(evt.wheel)
-      when SDL2::EventType::MOUSEBUTTONUP
+      when LibSDL2::EventType::MOUSEBUTTONUP
         Nya::Event.send :mouse_button_up, Nya::Input::MouseButtonEvent.new(evt.button)
-      when SDL2::EventType::MOUSEBUTTONDOWN
+      when LibSDL2::EventType::MOUSEBUTTONDOWN
         Nya::Event.send :mouse_button_down, Nya::Input::MouseButtonEvent.new(evt.button)
       end
     end
@@ -71,9 +71,9 @@ begin
 
     render_loop
     GL.flush
-    SDL2.gl_swap_window(Nya.window)
+    LibSDL2.gl_swap_window(Nya.window)
   end
 
 ensure
-  SDL2.quit
+  LibSDL2.quit
 end

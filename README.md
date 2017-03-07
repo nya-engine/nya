@@ -8,7 +8,7 @@ Inspired by Unity3D and X-Ray Engine
 
 Install dependences :
 * `crystal`
-* `libsdl2-dev`
+* `libLibSDL2-dev`
 * `libpangocairo-dev`
 * `libode-dev` - for ODE bindings
 
