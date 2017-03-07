@@ -54,12 +54,17 @@ begin
       when SDL2::EventType::KEYDOWN
         Nya::Event.send :key_down, Nya::Input::KeyboardEvent.new(evt.key)
       when SDL2::EventType::QUIT
-        Nya::Event.send :quit, Nya::Event.new
-        exit 0
+        evt = Nya::Event.new
+        Nya::Event.send :quit, evt
+        exit 0 unless evt.status.dead?
       when SDL2::EventType::MOUSEMOTION
         Nya::Event.send :mouse_motion, Nya::Input::MouseMotionEvent.new(evt.motion)
       when SDL2::EventType::MOUSEWHEEL
         Nya::Event.send :mouse_wheel, Nya::Input::MouseWheelEvent.new(evt.wheel)
+      when SDL2::EventType::MOUSEBUTTONUP
+        Nya::Event.send :mouse_button_up, Nya::Input::MouseButtonEvent(evt.button)
+      when SDL2::EventType::MOUSEBUTTONDOWN
+        Nya::Event.send :mouse_button_down, Nya::Input::MouseButtonEvent(evt.button)
       end
     end
 
