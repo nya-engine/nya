@@ -40,7 +40,7 @@ begin
   LibGL.matrix_mode(LibGL::PROJECTION)
   LibGL.blend_func(LibGL::SRC_ALPHA,LibGL::ONE_MINUS_SRC_ALPHA)
   LibGL.load_identity
-  GLU.perspective(45.0,Nya.width/Nya.height,0.1,100.0)
+  LibGLU.perspective(45.0,Nya.width/Nya.height,0.1,100.0)
 
   LibGL.matrix_mode(LibGL::MODELVIEW)
   Nya::SceneManager.load_from_file("res/testscene2.xml")

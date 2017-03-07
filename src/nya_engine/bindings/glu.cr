@@ -1,5 +1,5 @@
 @[Link("GLU")]
-lib GLU
+lib LibGLU
   EXT_OBJECT_SPACE_TESS = 1
   EXT_NURBS_TESSELLATOR = 1
   FALSE = 0

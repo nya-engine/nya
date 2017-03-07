@@ -24,7 +24,7 @@ module Nya
         vp = @viewport * CrystalEdge::Vector2.new(Nya.width, Nya.height)
         LibGL.viewport(vp.x.to_i, vp.y.to_i, vp.width.to_i, vp.height.to_i)
         LibGL.scissor(vp.x.to_i, vp.y.to_i, vp.width.to_i, vp.height.to_i)
-        GLU.perspective(@angle_of_view, Nya.width/Nya.height, @near, @far)
+        LibGLU.perspective(@angle_of_view, Nya.width/Nya.height, @near, @far)
         LibGL.rotatef(-parent.rotation.x, 1.0, 0.0, 0.0)
         LibGL.rotatef(-parent.rotation.y, 0.0, 1.0, 0.0)
         LibGL.rotatef(-parent.rotation.z, 0.0, 0.0, 1.0)

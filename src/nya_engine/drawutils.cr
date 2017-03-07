@@ -44,7 +44,7 @@ module Nya
       oy = uninitialized Float64
       oz = uninitialized Float64
 
-      GLU.un_project(
+      LibGLU.un_project(
         v.x,
         v.y,
         v.z,
