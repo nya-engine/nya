@@ -4,8 +4,13 @@ module Nya
   class SceneManager
     @@current_scene : AbsScene?
 
-    def self.current_scene; @@current_scene end
-    def self.current_scene=(s); @@current_scene = s end
+    def self.current_scene
+      @@current_scene
+    end
+
+    def self.current_scene=(s)
+      @@current_scene = s
+    end
 
     def self.render(tag : String? = nil)
       if @@current_scene.nil?

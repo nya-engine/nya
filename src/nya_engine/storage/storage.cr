@@ -30,7 +30,7 @@ module Nya
 
       def read_file(name)
         if @files_index.has_key?(name)
-          name, idx = @files_index[name].split("/$",2)
+          name, idx = @files_index[name].split("/$", 2)
           @readers[name][idx.to_u64]
         else
           File.open(name)
@@ -45,7 +45,7 @@ module Nya
         end
       end
 
-      def read_file(name, &block : IO->)
+      def read_file(name, &block : IO ->)
         begin
           f = read_file name
           block.call f
@@ -65,10 +65,9 @@ module Nya
         @@instance = new files
       end
 
-
-      def self.read_file(*args, &b : IO -> )
+      def self.read_file(*args, &b : IO ->)
         init [] of String if @@instance.nil?
-        @@instance.not_nil!.read_file(*args,&b)
+        @@instance.not_nil!.read_file(*args, &b)
       end
 
       def self.read_file(name)
@@ -76,7 +75,9 @@ module Nya
         @@instance.not_nil!.read_file(name)
       end
 
-      def self.exists?(n); @@instance.exists? n end
+      def self.exists?(n)
+        @@instance.exists? n
+      end
     end
   end
 end

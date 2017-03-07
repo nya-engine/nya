@@ -10,6 +10,7 @@ module Nya::Render
       @color : CrystalEdge::Vector3?
       property coord, normal, texture_coord, color
       serializable coord, normal, texture_coord, color, as: CrystalEdge::Vector3
+
       def render
         LibGL.vertex3d(@coord.x, @coord.y, @coord.z)
         unless @normal.nil?
@@ -32,7 +33,7 @@ module Nya::Render
       end
 
       def initialize
-        @coord = CrystalEdge::Vector3.new(0.0,0.0,0.0)
+        @coord = CrystalEdge::Vector3.new(0.0, 0.0, 0.0)
         @normal = @texture_coord = @color = nil
       end
     end
@@ -42,6 +43,7 @@ module Nya::Render
       property vertices : Array(Vertex)
       @vertices = [] of Vertex
       serializable_array vertices, of: Vertex
+
       def render
         LibGL.begin_(LibGL::POLYGON)
         vertices.each &.render
@@ -64,6 +66,7 @@ module Nya::Render
       serializable_array faces, of: Face
       serializable_array subshapes, of: Shape
       attribute name, as: String, nilable: false
+
       def render
         @faces.each &.render
         @subshapes.each &.render
@@ -84,7 +87,7 @@ module Nya::Render
     attribute filename, as: String, nilable: false
 
     def filename=(f)
-      #return if f.to_s.empty?
+      # return if f.to_s.empty?
       mesh = Loader.load_from f.to_s
       if mesh.nil?
         Nya.log.error "Cannot load mesh #{f}", "Mesh"
@@ -113,7 +116,6 @@ module Nya::Render
       return unless matches_tag? tag
       shapes.each_value &.render
     end
-
   end
 end
 

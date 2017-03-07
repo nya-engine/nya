@@ -22,15 +22,15 @@ module Nya
           {{@type.name.id}}.deserialize(s).not_nil!.as(::Nya::Serializable)
         end
 
-        @@deserialize_{{@type.name.gsub(/::/,"_").id}} = Array(Proc(self, XML::Node, Void?)).new
-        @@serialize_{{@type.name.gsub(/::/,"_").id}} = Array(Proc(self, XML::Builder, Void?)).new
+        @@deserialize_{{@type.name.gsub(/::/, "_").id}} = Array(Proc(self, XML::Node, Void?)).new
+        @@serialize_{{@type.name.gsub(/::/, "_").id}} = Array(Proc(self, XML::Builder, Void?)).new
 
-        def self.serialize_{{@type.name.gsub(/::/,"_").id}}
-          @@serialize_{{@type.name.gsub(/::/,"_").id}}
+        def self.serialize_{{@type.name.gsub(/::/, "_").id}}
+          @@serialize_{{@type.name.gsub(/::/, "_").id}}
         end
 
-        def self.deserialize_{{@type.name.gsub(/::/,"_").id}}
-          @@deserialize_{{@type.name.gsub(/::/,"_").id}}
+        def self.deserialize_{{@type.name.gsub(/::/, "_").id}}
+          @@deserialize_{{@type.name.gsub(/::/, "_").id}}
         end
         NYA_REGISTERED = true
 
@@ -40,14 +40,14 @@ module Nya
             super xml
           {% end %}
           {% begin %}
-            {{@type}}.deserialize_{{@type.name.gsub(/::/,"_").id}}.each &.call(self, xml)
+            {{@type}}.deserialize_{{@type.name.gsub(/::/, "_").id}}.each &.call(self, xml)
           {% end %}
           self
         end
 
         def serialize_inner(xml : XML::Builder)
           super xml
-          {{@type}}.serialize_{{@type.name.gsub(/::/,"_").id}}.each &.call(self, xml)
+          {{@type}}.serialize_{{@type.name.gsub(/::/, "_").id}}.each &.call(self, xml)
         end
 
       {% end %}
@@ -57,7 +57,7 @@ module Nya
     macro serializable(*names, as type)
       register
       {% for name in names %}
-        @@deserialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Node) do
+        @@deserialize_{{@type.name.gsub(/::/, "_").id}} << ->(s : self, xml : XML::Node) do
           Nya.log.debug "Deserializing {{name}} ({{@type.name}})", "XML"
           {% if type.resolve <= String %}
 
@@ -116,16 +116,16 @@ module Nya
           nil
         end
 
-        @@serialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, b : XML::Builder) do
+        @@serialize_{{@type.name.gsub(/::/, "_").id}} << ->(s : self, b : XML::Builder) do
           Nya.log.debug "Serializing {{name}} ({{@type.name}})", "XML"
           b.element("property", name: {{name.stringify}}) do
             {% if type.resolve <= ::Nya::Serializable %}
               val = s.as(self).{{name.id}}
 
               val.serialize_part(b) unless val.nil?
-            {%else%}
+            {% else %}
               b.text s.as(self).{{name.id}}.to_s
-            {%end%}
+            {% end %}
           end
           nil
         end
@@ -134,8 +134,8 @@ module Nya
 
     macro serializable_array(*names, of type)
       register
-      {%for name in names %}
-        @@deserialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Node) do
+      {% for name in names %}
+        @@deserialize_{{@type.name.gsub(/::/, "_").id}} << ->(s : self, xml : XML::Node) do
           Nya.log.debug "Deserializing [{{name}}] ({{@type.name}})", "XML"
           node = xml.xpath_node("property[@name='{{name}}']")
           unless node.nil?
@@ -159,7 +159,7 @@ module Nya
           nil
         end
 
-        @@serialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Builder) do
+        @@serialize_{{@type.name.gsub(/::/, "_").id}} << ->(s : self, xml : XML::Builder) do
           xml.element("property", name: "{{name}}") do
             s.{{name.id}}.each do |elem|
               if elem.responds_to? :serialize_part
@@ -176,13 +176,13 @@ module Nya
 
     macro attribute(name, as tp, nilable nl)
       register
-	    @@serialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Builder) do
+	    @@serialize_{{@type.name.gsub(/::/, "_").id}} << ->(s : self, xml : XML::Builder) do
         xml.attribute({{name.stringify}}, s.{{name.id}})
 	    end
 
-      @@deserialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Node) do
+      @@deserialize_{{@type.name.gsub(/::/, "_").id}} << ->(s : self, xml : XML::Node) do
         {% if tp.resolve <= String %}
-          s.{{name.id}} = xml[{{name.stringify}}]{%if nl%}?{%end%}.to_s
+          s.{{name.id}} = xml[{{name.stringify}}]{% if nl %}?{% end %}.to_s
         {% elsif nl %}
           obj = xml[{{name.stringify}}]?
           if obj.nil?
@@ -201,14 +201,14 @@ module Nya
             Nya.log.warn "Invalid value for {{name}} : #{str}", "XML"
           end
         {% else %}
-          s.{{name.id}} = {{tp}}.new(xml[{{name.stringify}}]{%if nl%}?{%end%}.to_s)
+          s.{{name.id}} = {{tp}}.new(xml[{{name.stringify}}]{% if nl %}?{% end %}.to_s)
         {% end %}
       end
     end
 
     macro serializable_hash(*names, of type)
       {% for name in names %}
-        @@deserialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Node) do
+        @@deserialize_{{@type.name.gsub(/::/, "_").id}} << ->(s : self, xml : XML::Node) do
           node = xml.xpath_node("property[@name='{{name}}']")
           unless node.nil?
             node.xpath_nodes("item").each do |pair|
@@ -224,13 +224,13 @@ module Nya
           nil
         end
 
-        @@serialize_{{@type.name.gsub(/::/,"_").id}} << ->(s : self, xml : XML::Builder) do
+        @@serialize_{{@type.name.gsub(/::/, "_").id}} << ->(s : self, xml : XML::Builder) do
           xml.element "property", name: {{name.stringify}} do
             s.{{name}}.each do |k,v|
               xml.element "item", key: k do
                 {% if type.resolve <= String %}
                   xml.text v
-                {% elsif type.resolve.methods.any?{|x| x.name == "serialize_part"}%}
+                {% elsif type.resolve.methods.any? { |x| x.name == "serialize_part" } %}
                   v.serialize_part xml
                 {% else %}
                   xml.text v.to_s
@@ -265,7 +265,7 @@ module Nya
     def serialize_inner(xml); end
 
     def serialize_part(xml : Builder)
-      xml.element(self.class.name.to_s.gsub(/::/,"_")) do
+      xml.element(self.class.name.to_s.gsub(/::/, "_")) do
         serialize_inner xml
       end
     end
@@ -277,27 +277,29 @@ module Nya
     end
 
     def serialize
-	    XML.build(indent: "\t") do |xml|
-		    serialize_part xml
+      XML.build(indent: "\t") do |xml|
+        serialize_part xml
       end
-	  end
+    end
 
-    def self.children; @@children end
+    def self.children
+      @@children
+    end
 
     def self.deserialize(node : Node)
-        nc = node
-        name = node.name
-        if name == "text"
-          raise node.parent.to_s
-        end
-        if Serializable.children.has_key? name
-          Serializable.children[name].call(nc)
-        elsif name == "property"
-          deserialize node.first_element_child.not_nil!
-        else
-          puts Serializable.children.keys.join("\n")
-          raise "#{name} is not Serializable (#{nc.class} : #{nc}) "
-        end
+      nc = node
+      name = node.name
+      if name == "text"
+        raise node.parent.to_s
+      end
+      if Serializable.children.has_key? name
+        Serializable.children[name].call(nc)
+      elsif name == "property"
+        deserialize node.first_element_child.not_nil!
+      else
+        puts Serializable.children.keys.join("\n")
+        raise "#{name} is not Serializable (#{nc.class} : #{nc}) "
+      end
     end
 
     def self.deserialize(str : String)

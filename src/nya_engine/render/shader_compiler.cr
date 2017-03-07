@@ -9,8 +9,8 @@ module Nya::Render
     def self.flush_cache!
       Nya.log.warn "Flushing shader and shader program cache"
       [@@shader_cache,
-      @@program_cache,
-      @@preprocessor_cache].each &.clear
+       @@program_cache,
+       @@preprocessor_cache].each &.clear
     end
 
     def self.preprocess(text : String)
@@ -28,17 +28,17 @@ module Nya::Render
       tp = ShaderType::Vertex
       if md
         tp = case md["type"].downcase
-        when /^frag/
-          ShaderType::Fragment
-        when /^tess.*c/
-          ShaderType::TessControl
-        when /^tess.*e/
-          ShaderType::TessEvaluation
-        when /^geom/
-          ShaderType::Geometry
-        else
-          ShaderType::Vertex
-        end
+             when /^frag/
+               ShaderType::Fragment
+             when /^tess.*c/
+               ShaderType::TessControl
+             when /^tess.*e/
+               ShaderType::TessEvaluation
+             when /^geom/
+               ShaderType::Geometry
+             else
+               ShaderType::Vertex
+             end
       end
       tp
     end
@@ -66,7 +66,6 @@ module Nya::Render
       Nya.log.debug "Allocated ID : 0x#{shid.to_s(16)}", "Shader"
 
       utext = text.to_unsafe
-
 
       LibGL.shader_source shid, 1, pointerof(utext), nil
       LibGL.compile_shader shid
@@ -99,7 +98,7 @@ module Nya::Render
       Nya.log.debug "Linking shader program", "Shader"
       pid = LibGL.create_program
       Nya.log.debug "Allocated ID : #{pid}", "Shader"
-      shaders.each{ |s| LibGL.attach_shader pid, s }
+      shaders.each { |s| LibGL.attach_shader pid, s }
       LibGL.link_program pid
 
       LibGL.get_programiv pid, LibGL::LINK_STATUS, out link_ok
@@ -133,7 +132,7 @@ module Nya::Render
           {
             kind: md["kind"].not_nil!,
             type: md["type"].not_nil!,
-            name: md["name"].not_nil!
+            name: md["name"].not_nil!,
           }
         end
       end

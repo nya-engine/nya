@@ -519,49 +519,49 @@ lib LibSDL2
     KP_00              = (1 << 30) | Scancode::KP_00
     KP_000             = (1 << 30) | Scancode::KP_000
     THOUSANDSSEPARATOR = (1 << 30) | Scancode::THOUSANDSSEPARATOR
-    DECIMALSEPARATOR = (1 << 30) | Scancode::DECIMALSEPARATOR
-    CURRENCYUNIT    = (1 << 30) | Scancode::CURRENCYUNIT
-    CURRENCYSUBUNIT = (1 << 30) | Scancode::CURRENCYSUBUNIT
-    KP_LEFTPAREN    = (1 << 30) | Scancode::KP_LEFTPAREN
-    KP_RIGHTPAREN   = (1 << 30) | Scancode::KP_RIGHTPAREN
-    KP_LEFTBRACE    = (1 << 30) | Scancode::KP_LEFTBRACE
-    KP_RIGHTBRACE   = (1 << 30) | Scancode::KP_RIGHTBRACE
-    KP_TAB          = (1 << 30) | Scancode::KP_TAB
-    KP_BACKSPACE    = (1 << 30) | Scancode::KP_BACKSPACE
-    KP_A            = (1 << 30) | Scancode::KP_A
-    KP_B            = (1 << 30) | Scancode::KP_B
-    KP_C            = (1 << 30) | Scancode::KP_C
-    KP_D            = (1 << 30) | Scancode::KP_D
-    KP_E            = (1 << 30) | Scancode::KP_E
-    KP_F            = (1 << 30) | Scancode::KP_F
-    KP_XOR          = (1 << 30) | Scancode::KP_XOR
-    KP_POWER        = (1 << 30) | Scancode::KP_POWER
-    KP_PERCENT      = (1 << 30) | Scancode::KP_PERCENT
-    KP_LESS         = (1 << 30) | Scancode::KP_LESS
-    KP_GREATER      = (1 << 30) | Scancode::KP_GREATER
-    KP_AMPERSAND    = (1 << 30) | Scancode::KP_AMPERSAND
-    KP_DBLAMPERSAND = (1 << 30) | Scancode::KP_DBLAMPERSAND
-    KP_VERTICALBAR = (1 << 30) | Scancode::KP_VERTICALBAR
-    KP_DBLVERTICALBAR = (1 << 30) | Scancode::KP_DBLVERTICALBAR
-    KP_COLON       = (1 << 30) | Scancode::KP_COLON
-    KP_HASH        = (1 << 30) | Scancode::KP_HASH
-    KP_SPACE       = (1 << 30) | Scancode::KP_SPACE
-    KP_AT          = (1 << 30) | Scancode::KP_AT
-    KP_EXCLAM      = (1 << 30) | Scancode::KP_EXCLAM
-    KP_MEMSTORE    = (1 << 30) | Scancode::KP_MEMSTORE
-    KP_MEMRECALL   = (1 << 30) | Scancode::KP_MEMRECALL
-    KP_MEMCLEAR    = (1 << 30) | Scancode::KP_MEMCLEAR
-    KP_MEMADD      = (1 << 30) | Scancode::KP_MEMADD
-    KP_MEMSUBTRACT = (1 << 30) | Scancode::KP_MEMSUBTRACT
-    KP_MEMMULTIPLY = (1 << 30) | Scancode::KP_MEMMULTIPLY
-    KP_MEMDIVIDE   = (1 << 30) | Scancode::KP_MEMDIVIDE
-    KP_PLUSMINUS   = (1 << 30) | Scancode::KP_PLUSMINUS
-    KP_CLEAR       = (1 << 30) | Scancode::KP_CLEAR
-    KP_CLEARENTRY  = (1 << 30) | Scancode::KP_CLEARENTRY
-    KP_BINARY      = (1 << 30) | Scancode::KP_BINARY
-    KP_OCTAL       = (1 << 30) | Scancode::KP_OCTAL
-    KP_DECIMAL     = (1 << 30) | Scancode::KP_DECIMAL
-    KP_HEXADECIMAL = (1 << 30) | Scancode::KP_HEXADECIMAL
+    DECIMALSEPARATOR   = (1 << 30) | Scancode::DECIMALSEPARATOR
+    CURRENCYUNIT       = (1 << 30) | Scancode::CURRENCYUNIT
+    CURRENCYSUBUNIT    = (1 << 30) | Scancode::CURRENCYSUBUNIT
+    KP_LEFTPAREN       = (1 << 30) | Scancode::KP_LEFTPAREN
+    KP_RIGHTPAREN      = (1 << 30) | Scancode::KP_RIGHTPAREN
+    KP_LEFTBRACE       = (1 << 30) | Scancode::KP_LEFTBRACE
+    KP_RIGHTBRACE      = (1 << 30) | Scancode::KP_RIGHTBRACE
+    KP_TAB             = (1 << 30) | Scancode::KP_TAB
+    KP_BACKSPACE       = (1 << 30) | Scancode::KP_BACKSPACE
+    KP_A               = (1 << 30) | Scancode::KP_A
+    KP_B               = (1 << 30) | Scancode::KP_B
+    KP_C               = (1 << 30) | Scancode::KP_C
+    KP_D               = (1 << 30) | Scancode::KP_D
+    KP_E               = (1 << 30) | Scancode::KP_E
+    KP_F               = (1 << 30) | Scancode::KP_F
+    KP_XOR             = (1 << 30) | Scancode::KP_XOR
+    KP_POWER           = (1 << 30) | Scancode::KP_POWER
+    KP_PERCENT         = (1 << 30) | Scancode::KP_PERCENT
+    KP_LESS            = (1 << 30) | Scancode::KP_LESS
+    KP_GREATER         = (1 << 30) | Scancode::KP_GREATER
+    KP_AMPERSAND       = (1 << 30) | Scancode::KP_AMPERSAND
+    KP_DBLAMPERSAND    = (1 << 30) | Scancode::KP_DBLAMPERSAND
+    KP_VERTICALBAR     = (1 << 30) | Scancode::KP_VERTICALBAR
+    KP_DBLVERTICALBAR  = (1 << 30) | Scancode::KP_DBLVERTICALBAR
+    KP_COLON           = (1 << 30) | Scancode::KP_COLON
+    KP_HASH            = (1 << 30) | Scancode::KP_HASH
+    KP_SPACE           = (1 << 30) | Scancode::KP_SPACE
+    KP_AT              = (1 << 30) | Scancode::KP_AT
+    KP_EXCLAM          = (1 << 30) | Scancode::KP_EXCLAM
+    KP_MEMSTORE        = (1 << 30) | Scancode::KP_MEMSTORE
+    KP_MEMRECALL       = (1 << 30) | Scancode::KP_MEMRECALL
+    KP_MEMCLEAR        = (1 << 30) | Scancode::KP_MEMCLEAR
+    KP_MEMADD          = (1 << 30) | Scancode::KP_MEMADD
+    KP_MEMSUBTRACT     = (1 << 30) | Scancode::KP_MEMSUBTRACT
+    KP_MEMMULTIPLY     = (1 << 30) | Scancode::KP_MEMMULTIPLY
+    KP_MEMDIVIDE       = (1 << 30) | Scancode::KP_MEMDIVIDE
+    KP_PLUSMINUS       = (1 << 30) | Scancode::KP_PLUSMINUS
+    KP_CLEAR           = (1 << 30) | Scancode::KP_CLEAR
+    KP_CLEARENTRY      = (1 << 30) | Scancode::KP_CLEARENTRY
+    KP_BINARY          = (1 << 30) | Scancode::KP_BINARY
+    KP_OCTAL           = (1 << 30) | Scancode::KP_OCTAL
+    KP_DECIMAL         = (1 << 30) | Scancode::KP_DECIMAL
+    KP_HEXADECIMAL     = (1 << 30) | Scancode::KP_HEXADECIMAL
 
     LCTRL  = (1 << 30) | Scancode::LCTRL
     LSHIFT = (1 << 30) | Scancode::LSHIFT
@@ -596,10 +596,10 @@ lib LibSDL2
     BRIGHTNESSUP   = (1 << 30) | Scancode::BRIGHTNESSUP
     DISPLAYSWITCH  = (1 << 30) | Scancode::DISPLAYSWITCH
     KBDILLUMTOGGLE = (1 << 30) | Scancode::KBDILLUMTOGGLE
-    KBDILLUMDOWN = (1 << 30) | Scancode::KBDILLUMDOWN
-    KBDILLUMUP   = (1 << 30) | Scancode::KBDILLUMUP
-    EJECT        = (1 << 30) | Scancode::EJECT
-    SLEEP        = (1 << 30) | Scancode::SLEEP
+    KBDILLUMDOWN   = (1 << 30) | Scancode::KBDILLUMDOWN
+    KBDILLUMUP     = (1 << 30) | Scancode::KBDILLUMUP
+    EJECT          = (1 << 30) | Scancode::EJECT
+    SLEEP          = (1 << 30) | Scancode::SLEEP
   end
 
   enum DUMMYENUM
@@ -932,7 +932,7 @@ lib LibSDL2
     read : Void*
     write : Void*
     close : Void*
-    type: UInt16
+    type : UInt16
     hidden : RWopsHidden
   end
 

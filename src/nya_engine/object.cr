@@ -3,7 +3,6 @@ require "./storage/*"
 
 module Nya
   abstract class AbsObject
-
     abstract def update
     abstract def render(tag : String?)
     abstract def awake
@@ -83,28 +82,23 @@ module Nya
     end
 
     def awake
-
     end
 
     def update
-
     end
 
     def render
-
     end
   end
-
 end
 
 require "./render/shader_program"
 
 module Nya
-
   class GameObject < Container
     @components = [] of Component
-    @position = CrystalEdge::Vector3.new(0.0,0.0,0.0)
-    @rotation = CrystalEdge::Vector3.new(0.0,0.0,0.0)
+    @position = CrystalEdge::Vector3.new(0.0, 0.0, 0.0)
+    @rotation = CrystalEdge::Vector3.new(0.0, 0.0, 0.0)
     @parent : GameObject? = nil
     property parent
     property components, position, rotation

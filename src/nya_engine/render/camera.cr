@@ -5,7 +5,6 @@ require "crystaledge"
 module Nya
   module Render
     class Camera < Component
-
       def awake
         Nya.camera_list << self
         LibGL.enable(LibGL::SCISSOR_TEST)
@@ -15,8 +14,7 @@ module Nya
       @near = 0.1
       @far = 1000.0
       @angle_of_view = 45.0
-      @viewport = Rect.new(0.0,0.0,1.0,1.0)
-
+      @viewport = Rect.new(0.0, 0.0, 1.0, 1.0)
 
       protected def set_projection_matrix! : Void
         LibGL.matrix_mode(LibGL::PROJECTION)
@@ -44,9 +42,7 @@ module Nya
       end
 
       def update
-
       end
-
     end
   end
 end

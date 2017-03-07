@@ -3,31 +3,31 @@ require "./bindings/glu"
 
 module Nya
   class DrawUtils
-    def self.draw(mode = LibGL::QUADS,&block : -> Void)
+    def self.draw(mode = LibGL::QUADS, &block : -> Void)
       LibGL.begin_(mode)
       block.call
       LibGL.end_
     end
 
-    def self.draw_texture(x,y,w,h : Float64, t : UInt32, c : Tuple(Float64,Float64,Float64), z : Float64)
+    def self.draw_texture(x, y, w, h : Float64, t : UInt32, c : Tuple(Float64, Float64, Float64), z : Float64)
       LibGL.matrix_mode(LibGL::MODELVIEW)
       LibGL.load_identity
       LibGL.clear(LibGL::COLOR_BUFFER_BIT)
       LibGL.push_matrix
-      #LibGL.ortho(x,y,w,h,-z,z*2)
-      LibGL.translatef(0.0,0.0,z)
-      LibGL.bind_texture(LibGL::TEXTURE_2D,t)
+      # LibGL.ortho(x,y,w,h,-z,z*2)
+      LibGL.translatef(0.0, 0.0, z)
+      LibGL.bind_texture(LibGL::TEXTURE_2D, t)
       LibGL.color3d(*c)
 
       draw do
-        LibGL.tex_coord2d(0.0,0.0)
-        LibGL.vertex2d(x,y+h)
-        LibGL.tex_coord2d(1.0,0.0)
-        LibGL.vertex2d(x+w,y+h)
-        LibGL.tex_coord2d(1.0,1.0)
-        LibGL.vertex2d(x+w,y)
-        LibGL.tex_coord2d(0.0,1.0)
-        LibGL.vertex2d(x,y)
+        LibGL.tex_coord2d(0.0, 0.0)
+        LibGL.vertex2d(x, y + h)
+        LibGL.tex_coord2d(1.0, 0.0)
+        LibGL.vertex2d(x + w, y + h)
+        LibGL.tex_coord2d(1.0, 1.0)
+        LibGL.vertex2d(x + w, y)
+        LibGL.tex_coord2d(0.0, 1.0)
+        LibGL.vertex2d(x, y)
       end
       LibGL.pop_matrix
     end
@@ -55,36 +55,36 @@ module Nya
         pointerof(oy).as(Pointer(Void)),
         pointerof(oz).as(Pointer(Void))
       )
-      vec = CrystalEdge::Vector3.new(ox,oy,oz)
+      vec = CrystalEdge::Vector3.new(ox, oy, oz)
       vec /= -vec.z
-      #puts vec.to_s
+      # puts vec.to_s
       vec
     end
 
-    def self.draw_texture(x,y,w,h : Float64, t : UInt32, c : Tuple(Float64, Float64, Float64))
+    def self.draw_texture(x, y, w, h : Float64, t : UInt32, c : Tuple(Float64, Float64, Float64))
       LibGL.matrix_mode(LibGL::MODELVIEW)
       LibGL.load_identity
 
       LibGL.clear(LibGL::COLOR_BUFFER_BIT)
-      #LibGL.push_matrix
+      # LibGL.push_matrix
       #
-      va = un_project(CrystalEdge::Vector3.new(x,y,-20.0))
+      va = un_project(CrystalEdge::Vector3.new(x, y, -20.0))
       vb = un_project(CrystalEdge::Vector3.new(x + w, y + h, -20.0))
-      LibGL.translatef(0.0,0.0,va.z)
-      LibGL.bind_texture(LibGL::TEXTURE_2D,t)
+      LibGL.translatef(0.0, 0.0, va.z)
+      LibGL.bind_texture(LibGL::TEXTURE_2D, t)
       LibGL.color3d(*c)
 
       draw do
-        LibGL.tex_coord2d(0.0,0.0)
-        LibGL.vertex2d(va.x,vb.y)
-        LibGL.tex_coord2d(1.0,0.0)
+        LibGL.tex_coord2d(0.0, 0.0)
+        LibGL.vertex2d(va.x, vb.y)
+        LibGL.tex_coord2d(1.0, 0.0)
         LibGL.vertex2d(vb.x, vb.y)
-        LibGL.tex_coord2d(1.0,1.0)
+        LibGL.tex_coord2d(1.0, 1.0)
         LibGL.vertex2d(vb.x, va.y)
-        LibGL.tex_coord2d(0.0,1.0)
+        LibGL.tex_coord2d(0.0, 1.0)
         LibGL.vertex2d(va.x, va.y)
       end
-      #LibGL.pop_matrix
+      # LibGL.pop_matrix
     end
   end
 end

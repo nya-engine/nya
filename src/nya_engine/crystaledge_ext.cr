@@ -2,7 +2,6 @@ require "crystaledge"
 require "./bindings/ode"
 require "./storage/serialization"
 
-
 module CrystalEdge
   class Vector2
     include Nya::Serializable
@@ -13,7 +12,6 @@ module CrystalEdge
       @x = 0.0
       @y = 0.0
     end
-
 
     def to_gl
       {@x, @y}

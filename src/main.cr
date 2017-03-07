@@ -9,7 +9,7 @@ def update_loop
 end
 
 def render_loop
-  LibGL.clear_color(0.0,0.0,0.0,1.0)
+  LibGL.clear_color(0.0, 0.0, 0.0, 1.0)
   LibGL.clear(LibGL::COLOR_BUFFER_BIT | LibGL::DEPTH_BUFFER_BIT)
   Nya.camera_list.each &.render!
   err = Nya.gl_error?
@@ -21,31 +21,31 @@ end
 begin
   raise LibSDL2.get_error.to_s if LibSDL2.init(LibSDL2::INIT_VIDEO) < 0
 
-  LibSDL2.gl_set_attribute(LibSDL2::GLattr::GLDOUBLEBUFFER,1)
-  LibSDL2.gl_set_attribute(LibSDL2::GLattr::GLREDSIZE,6)
-  LibSDL2.gl_set_attribute(LibSDL2::GLattr::GLBLUESIZE,6)
-  LibSDL2.gl_set_attribute(LibSDL2::GLattr::GLGREENSIZE,6)
+  LibSDL2.gl_set_attribute(LibSDL2::GLattr::GLDOUBLEBUFFER, 1)
+  LibSDL2.gl_set_attribute(LibSDL2::GLattr::GLREDSIZE, 6)
+  LibSDL2.gl_set_attribute(LibSDL2::GLattr::GLBLUESIZE, 6)
+  LibSDL2.gl_set_attribute(LibSDL2::GLattr::GLGREENSIZE, 6)
 
-  Nya.window = LibSDL2.create_window("Cube",WP_CENTERED,WP_CENTERED,Nya.width,Nya.height,LibSDL2::WindowFlags::WINDOWSHOWN|LibSDL2::WindowFlags::WINDOWOPENGL)
+  Nya.window = LibSDL2.create_window("Cube", WP_CENTERED, WP_CENTERED, Nya.width, Nya.height, LibSDL2::WindowFlags::WINDOWSHOWN | LibSDL2::WindowFlags::WINDOWOPENGL)
   gl_ctx = LibSDL2.gl_create_context(Nya.window)
 
   raise LibSDL2.get_error.as(String) if Nya.window?.is_a?(Nil) || Nya.window.not_nil!.null?
 
-  LibGL.clear_color(0.0,0.0,0.0,0.0)
+  LibGL.clear_color(0.0, 0.0, 0.0, 0.0)
   LibGL.clear_depth(1.0)
   LibGL.depth_func(LibGL::LESS)
   LibGL.enable(LibGL::DEPTH_TEST)
   LibGL.enable(LibGL::TEXTURE_2D)
   LibGL.shade_model(LibGL::SMOOTH)
   LibGL.matrix_mode(LibGL::PROJECTION)
-  LibGL.blend_func(LibGL::SRC_ALPHA,LibGL::ONE_MINUS_SRC_ALPHA)
+  LibGL.blend_func(LibGL::SRC_ALPHA, LibGL::ONE_MINUS_SRC_ALPHA)
   LibGL.load_identity
-  LibGLU.perspective(45.0,Nya.width/Nya.height,0.1,100.0)
+  LibGLU.perspective(45.0, Nya.width/Nya.height, 0.1, 100.0)
 
   LibGL.matrix_mode(LibGL::MODELVIEW)
   Nya::SceneManager.load_from_file("res/testscene2.xml")
   while true
-    Nya::Event.send(:update,Nya::Event.new)
+    Nya::Event.send(:update, Nya::Event.new)
     update_loop
     while LibSDL2.poll_event(out evt) != 0
       case evt.type
@@ -68,12 +68,10 @@ begin
       end
     end
 
-
     render_loop
     LibGL.flush
     LibSDL2.gl_swap_window(Nya.window)
   end
-
 ensure
   LibSDL2.quit
 end

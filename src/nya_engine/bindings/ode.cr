@@ -3,6 +3,7 @@ lib LibODE
   DOUBLE = 1
   fun printf = dprintf(__fd : LibC::Int, __fmt : LibC::Char*, ...) : LibC::Int
   fun rand48 = drand48 : LibC::Double
+
   struct Rand48Data
     __x : LibC::UShort[3]
     __old_x : LibC::UShort[3]
@@ -14,15 +15,15 @@ lib LibODE
   fun rand48_r = drand48_r(__buffer : Rand48Data*, __result : LibC::Double*) : LibC::Int
   fun rem = drem(__x : LibC::Double, __y : LibC::Double) : LibC::Double
   fun remf = dremf(__x : LibC::Float, __y : LibC::Float) : LibC::Float
-  #fun reml = dreml(__x : LibC::LongDouble, __y : LibC::LongDouble) : LibC::LongDouble
-  #fun set_error_handler = dSetErrorHandler(fn : (LibC::Int, LibC::Char*, VaList -> Void))
-  #alias X__GnucVaList = LibC::VaList
-  #alias VaList = X__GnucVaList
-  #fun set_debug_handler = dSetDebugHandler(fn : (LibC::Int, LibC::Char*, VaList -> Void))
-  #fun set_message_handler = dSetMessageHandler(fn : (LibC::Int, LibC::Char*, VaList -> Void))
-  #fun get_error_handler = dGetErrorHandler : (LibC::Int, LibC::Char*, VaList -> Void)
-  #fun get_debug_handler = dGetDebugHandler : (LibC::Int, LibC::Char*, VaList -> Void)
-  #fun get_message_handler = dGetMessageHandler : (LibC::Int, LibC::Char*, VaList -> Void)
+  # fun reml = dreml(__x : LibC::LongDouble, __y : LibC::LongDouble) : LibC::LongDouble
+  # fun set_error_handler = dSetErrorHandler(fn : (LibC::Int, LibC::Char*, VaList -> Void))
+  # alias X__GnucVaList = LibC::VaList
+  # alias VaList = X__GnucVaList
+  # fun set_debug_handler = dSetDebugHandler(fn : (LibC::Int, LibC::Char*, VaList -> Void))
+  # fun set_message_handler = dSetMessageHandler(fn : (LibC::Int, LibC::Char*, VaList -> Void))
+  # fun get_error_handler = dGetErrorHandler : (LibC::Int, LibC::Char*, VaList -> Void)
+  # fun get_debug_handler = dGetDebugHandler : (LibC::Int, LibC::Char*, VaList -> Void)
+  # fun get_message_handler = dGetMessageHandler : (LibC::Int, LibC::Char*, VaList -> Void)
   fun error = dError(num : LibC::Int, msg : LibC::Char*, ...)
   fun debug = dDebug(num : LibC::Int, msg : LibC::Char*, ...)
   fun message = dMessage(num : LibC::Int, msg : LibC::Char*, ...)
@@ -33,86 +34,88 @@ lib LibODE
   alias Xjoint = Void
   alias Xjointnode = Void
   alias Xjointgroup = Void
-  X_ErrUnknown = 0
-  X_ErrIassert = 1
-  X_ErrUassert = 2
-  X_ErrLcp = 3
-  Jointtypenone = 0
-  Jointtypeball = 1
-  Jointtypehinge = 2
-  Jointtypeslider = 3
-  Jointtypecontact = 4
-  Jointtypeuniversal = 5
-  Jointtypehinge2 = 6
-  Jointtypefixed = 7
-  Jointtypenull = 8
-  Jointtypeamotor = 9
-  Jointtypelmotor = 10
-  Jointtypeplane2d = 11
-  Jointtypepr = 12
-  Jointtypepu = 13
-  Jointtypepiston = 14
-  Paramlostop = 0
-  Paramhistop = 1
-  Paramvel = 2
-  Paramfmax = 3
-  Paramfudgefactor = 4
-  Parambounce = 5
-  Paramcfm = 6
-  Paramstoperp = 7
-  Paramstopcfm = 8
-  Paramsuspensionerp = 9
-  Paramsuspensioncfm = 10
-  Paramerp = 11
-  Paramsingroup = 12
-  Paramgroup1 = 0
-  Paramlostop1 = 0
-  Paramhistop1 = 1
-  Paramvel1 = 2
-  Paramfmax1 = 3
-  Paramfudgefactor1 = 4
-  Parambounce1 = 5
-  Paramcfm1 = 6
-  Paramstoperp1 = 7
-  Paramstopcfm1 = 8
-  Paramsuspensionerp1 = 9
-  Paramsuspensioncfm1 = 10
-  Paramerp1 = 11
-  Paramgroup2 = 256
-  Paramlostop2 = 256
-  Paramhistop2 = 257
-  Paramvel2 = 258
-  Paramfmax2 = 259
-  Paramfudgefactor2 = 260
-  Parambounce2 = 261
-  Paramcfm2 = 262
-  Paramstoperp2 = 263
-  Paramstopcfm2 = 264
+  X_ErrUnknown        =   0
+  X_ErrIassert        =   1
+  X_ErrUassert        =   2
+  X_ErrLcp            =   3
+  Jointtypenone       =   0
+  Jointtypeball       =   1
+  Jointtypehinge      =   2
+  Jointtypeslider     =   3
+  Jointtypecontact    =   4
+  Jointtypeuniversal  =   5
+  Jointtypehinge2     =   6
+  Jointtypefixed      =   7
+  Jointtypenull       =   8
+  Jointtypeamotor     =   9
+  Jointtypelmotor     =  10
+  Jointtypeplane2d    =  11
+  Jointtypepr         =  12
+  Jointtypepu         =  13
+  Jointtypepiston     =  14
+  Paramlostop         =   0
+  Paramhistop         =   1
+  Paramvel            =   2
+  Paramfmax           =   3
+  Paramfudgefactor    =   4
+  Parambounce         =   5
+  Paramcfm            =   6
+  Paramstoperp        =   7
+  Paramstopcfm        =   8
+  Paramsuspensionerp  =   9
+  Paramsuspensioncfm  =  10
+  Paramerp            =  11
+  Paramsingroup       =  12
+  Paramgroup1         =   0
+  Paramlostop1        =   0
+  Paramhistop1        =   1
+  Paramvel1           =   2
+  Paramfmax1          =   3
+  Paramfudgefactor1   =   4
+  Parambounce1        =   5
+  Paramcfm1           =   6
+  Paramstoperp1       =   7
+  Paramstopcfm1       =   8
+  Paramsuspensionerp1 =   9
+  Paramsuspensioncfm1 =  10
+  Paramerp1           =  11
+  Paramgroup2         = 256
+  Paramlostop2        = 256
+  Paramhistop2        = 257
+  Paramvel2           = 258
+  Paramfmax2          = 259
+  Paramfudgefactor2   = 260
+  Parambounce2        = 261
+  Paramcfm2           = 262
+  Paramstoperp2       = 263
+  Paramstopcfm2       = 264
   Paramsuspensionerp2 = 265
   Paramsuspensioncfm2 = 266
-  Paramerp2 = 267
-  Paramgroup3 = 512
-  Paramlostop3 = 512
-  Paramhistop3 = 513
-  Paramvel3 = 514
-  Paramfmax3 = 515
-  Paramfudgefactor3 = 516
-  Parambounce3 = 517
-  Paramcfm3 = 518
-  Paramstoperp3 = 519
-  Paramstopcfm3 = 520
+  Paramerp2           = 267
+  Paramgroup3         = 512
+  Paramlostop3        = 512
+  Paramhistop3        = 513
+  Paramvel3           = 514
+  Paramfmax3          = 515
+  Paramfudgefactor3   = 516
+  Parambounce3        = 517
+  Paramcfm3           = 518
+  Paramstoperp3       = 519
+  Paramstopcfm3       = 520
   Paramsuspensionerp3 = 521
   Paramsuspensioncfm3 = 522
-  Paramerp3 = 523
-  Paramgroup = 256
-  Amotoruser = 0
-  Amotoreuler = 1
+  Paramerp3           = 523
+  Paramgroup          = 256
+  Amotoruser          =   0
+  Amotoreuler         =   1
+
   struct Jointfeedback
     f1 : Vector3
     t1 : Vector3
     f2 : Vector3
     t2 : Vector3
   end
+
   alias Real = LibC::Double
   alias Vector3 = Real[4]
   fun geom_moved = dGeomMoved(x0 : Geomid)
@@ -120,6 +123,7 @@ lib LibODE
   fun geom_get_body_next = dGeomGetBodyNext(x0 : Geomid) : Geomid
   fun get_configuration = dGetConfiguration : LibC::Char*
   fun check_configuration = dCheckConfiguration(token : LibC::Char*) : LibC::Int
+
   struct Contactgeom
     pos : Vector3
     normal : Vector3
@@ -129,6 +133,7 @@ lib LibODE
     side1 : LibC::Int
     side2 : LibC::Int
   end
+
   fun simple_space_create = dSimpleSpaceCreate(space : Spaceid) : Spaceid
   type Spaceid = Void*
   fun hash_space_create = dHashSpaceCreate(space : Spaceid) : Spaceid
@@ -150,20 +155,21 @@ lib LibODE
   fun space_get_num_geoms = dSpaceGetNumGeoms(x0 : Spaceid) : LibC::Int
   fun space_get_geom = dSpaceGetGeom(x0 : Spaceid, i : LibC::Int) : Geomid
   fun space_get_class = dSpaceGetClass(space : Spaceid) : LibC::Int
-  Contactmu2 = 1
-  Contactfdir1 = 2
-  Contactbounce = 4
-  Contactsofterp = 8
-  Contactsoftcfm = 16
-  Contactmotion1 = 32
-  Contactmotion2 = 64
-  Contactmotionn = 128
-  Contactslip1 = 256
-  Contactslip2 = 512
-  Contactapprox0 = 0
-  Contactapprox11 = 4096
-  Contactapprox12 = 8192
-  Contactapprox1 = 12288
+  Contactmu2      =     1
+  Contactfdir1    =     2
+  Contactbounce   =     4
+  Contactsofterp  =     8
+  Contactsoftcfm  =    16
+  Contactmotion1  =    32
+  Contactmotion2  =    64
+  Contactmotionn  =   128
+  Contactslip1    =   256
+  Contactslip2    =   512
+  Contactapprox0  =     0
+  Contactapprox11 =  4096
+  Contactapprox12 =  8192
+  Contactapprox1  = 12288
+
   struct Surfaceparameters
     mode : LibC::Int
     mu : Real
@@ -178,11 +184,13 @@ lib LibODE
     slip1 : Real
     slip2 : Real
   end
+
   struct Contact
     surface : Surfaceparameters
     geom : Contactgeom
     fdir1 : Vector3
   end
+
   fun init_ode = dInitODE
   fun init_od_e2 = dInitODE2(ui_init_flags : LibC::UInt) : LibC::Int
   fun allocate_ode_data_for_thread = dAllocateODEDataForThread(ui_allocate_flags : LibC::UInt) : LibC::Int
@@ -231,26 +239,26 @@ lib LibODE
   fun collide = dCollide(o1 : Geomid, o2 : Geomid, flags : LibC::Int, contact : Contactgeom*, skip : LibC::Int) : LibC::Int
   fun space_collide = dSpaceCollide(space : Spaceid, ata : Void*, callback : (Void*, Geomid, Geomid -> Void))
   fun space_collide2 = dSpaceCollide2(space1 : Geomid, space2 : Geomid, ata : Void*, callback : (Void*, Geomid, Geomid -> Void))
-  Maxuserclasses = 4
-  Sphereclass = 0
-  Boxclass = 1
-  Capsuleclass = 2
-  Cylinderclass = 3
-  Planeclass = 4
-  Rayclass = 5
-  Convexclass = 6
-  Geomtransformclass = 7
-  Trimeshclass = 8
-  Heightfieldclass = 9
-  Firstspaceclass = 10
-  Simplespaceclass = 10
-  Hashspaceclass = 11
+  Maxuserclasses          =  4
+  Sphereclass             =  0
+  Boxclass                =  1
+  Capsuleclass            =  2
+  Cylinderclass           =  3
+  Planeclass              =  4
+  Rayclass                =  5
+  Convexclass             =  6
+  Geomtransformclass      =  7
+  Trimeshclass            =  8
+  Heightfieldclass        =  9
+  Firstspaceclass         = 10
+  Simplespaceclass        = 10
+  Hashspaceclass          = 11
   Sweepandprunespaceclass = 12
-  Quadtreespaceclass = 13
-  Lastspaceclass = 13
-  Firstuserclass = 14
-  Lastuserclass = 17
-  Geomnumclasses = 18
+  Quadtreespaceclass      = 13
+  Lastspaceclass          = 13
+  Firstuserclass          = 14
+  Lastuserclass           = 17
+  Geomnumclasses          = 18
   fun create_sphere = dCreateSphere(space : Spaceid, radius : Real) : Geomid
   fun geom_sphere_set_radius = dGeomSphereSetRadius(sphere : Geomid, radius : Real)
   fun geom_sphere_get_radius = dGeomSphereGetRadius(sphere : Geomid) : Real
@@ -262,7 +270,7 @@ lib LibODE
   fun geom_box_get_lengths = dGeomBoxGetLengths(box : Geomid, result : Vector3)
   fun geom_box_point_depth = dGeomBoxPointDepth(box : Geomid, x : Real, y : Real, z : Real) : Real
   fun create_plane = dCreatePlane(space : Spaceid, a : Real, b : Real, c : Real, d : Real) : Geomid
-  fun geom_plane_set_params = dGeomPlaneSetParams(plane : Geomid, a : Real, b : Real, c : Real,  d : Real)
+  fun geom_plane_set_params = dGeomPlaneSetParams(plane : Geomid, a : Real, b : Real, c : Real, d : Real)
   fun geom_plane_get_params = dGeomPlaneGetParams(plane : Geomid, result : Vector4)
   alias Vector4 = Real[4]
   fun geom_plane_point_depth = dGeomPlanePointDepth(plane : Geomid, x : Real, y : Real, z : Real) : Real
@@ -332,7 +340,7 @@ lib LibODE
   fun create_heightfield = dCreateHeightfield(space : Spaceid, ata : Heightfielddataid, b_placeable : LibC::Int) : Geomid
   type Heightfielddataid = Void*
   fun geom_heightfield_data_create = dGeomHeightfieldDataCreate : Heightfielddataid
-  fun geom_heightfield_data_destroy = dGeomHeightfieldDataDestroy( h : Heightfielddataid)
+  fun geom_heightfield_data_destroy = dGeomHeightfieldDataDestroy(h : Heightfielddataid)
   fun geom_heightfield_data_build_callback = dGeomHeightfieldDataBuildCallback(h : Heightfielddataid, p_user_data : Void*, p_callback : (Void*, LibC::Int, LibC::Int -> Real), width : Real, epth : Real, width_samples : LibC::Int, epth_samples : LibC::Int, scale : Real, offset : Real, thickness : Real, b_wrap : LibC::Int)
   fun geom_heightfield_data_build_byte = dGeomHeightfieldDataBuildByte(h : Heightfielddataid, p_height_data : UInt8*, b_copy_height_data : LibC::Int, width : Real, epth : Real, width_samples : LibC::Int, epth_samples : LibC::Int, scale : Real, offset : Real, thickness : Real, b_wrap : LibC::Int)
   fun geom_heightfield_data_build_short = dGeomHeightfieldDataBuildShort(h : Heightfielddataid, p_height_data : LibC::Short*, b_copy_height_data : LibC::Int, width : Real, epth : Real, width_samples : LibC::Int, epth_samples : LibC::Int, scale : Real, offset : Real, thickness : Real, b_wrap : LibC::Int)
@@ -345,6 +353,7 @@ lib LibODE
   fun box_touches_box = dBoxTouchesBox(_p1 : Vector3, r1 : Matrix3, side1 : Vector3, _p2 : Vector3, r2 : Matrix3, side2 : Vector3) : LibC::Int
   fun box_box = dBoxBox(p1 : Vector3, r1 : Matrix3, side1 : Vector3, p2 : Vector3, r2 : Matrix3, side2 : Vector3, normal : Vector3, epth : Real*, return_code : LibC::Int*, flags : LibC::Int, contact : Contactgeom*, skip : LibC::Int) : LibC::Int
   fun infinite_aabb = dInfiniteAABB(geom : Geomid, aabb : Real[6])
+
   struct Geomclass
     bytes : LibC::Int
     collider : (LibC::Int -> (Geomid, Geomid, LibC::Int, Contactgeom*, LibC::Int -> LibC::Int))
@@ -352,12 +361,14 @@ lib LibODE
     aabb_test : (Geomid, Geomid, Real[6] -> LibC::Int)
     tor : (Geomid -> Void)
   end
+
   fun create_geom_class = dCreateGeomClass(classptr : Geomclass*) : LibC::Int
   fun geom_get_class_data = dGeomGetClassData(x0 : Geomid) : Void*
   fun create_geom = dCreateGeom(classnum : LibC::Int) : Geomid
   fun set_collider_override = dSetColliderOverride(i : LibC::Int, j : LibC::Int, fn : (Geomid, Geomid, LibC::Int, Contactgeom*, LibC::Int -> LibC::Int))
   fun world_export_dif = dWorldExportDIF(w : Worldid, file : File*, world_name : LibC::Char*)
   type Worldid = Void*
+
   struct X_IoFile
     _flags : LibC::Int
     _io_read_ptr : LibC::Char*
@@ -389,20 +400,25 @@ lib LibODE
     _mode : LibC::Int
     _unused2 : LibC::Char[20]
   end
+
   type File = X_IoFile
+
   struct X_IoMarker
     _next : X_IoMarker*
     _sbuf : X_IoFile*
     _pos : LibC::Int
   end
+
   alias X__OffT = LibC::Long
   alias X_IoLockT = Void
   alias X__Off64T = LibC::Long
+
   struct Mass
     mass : Real
     c : Vector3
     i : Matrix3
   end
+
   fun mass_check = dMassCheck(m : Mass*) : LibC::Int
   fun mass_set_zero = dMassSetZero(x0 : Mass*)
   fun mass_set_parameters = dMassSetParameters(x0 : Mass*, themass : Real, cgx : Real, cgy : Real, cgz : Real, i11 : Real, i22 : Real, i33 : Real, i12 : Real, i13 : Real, i23 : Real)
@@ -621,21 +637,21 @@ lib LibODE
   fun joint_get_data = dJointGetData(x0 : Jointid) : Void*
   fun joint_get_type = dJointGetType(x0 : Jointid) : Jointtype
   enum Jointtype
-    Jointtypenone = 0
-    Jointtypeball = 1
-    Jointtypehinge = 2
-    Jointtypeslider = 3
-    Jointtypecontact = 4
-    Jointtypeuniversal = 5
-    Jointtypehinge2 = 6
-    Jointtypefixed = 7
-    Jointtypenull = 8
-    Jointtypeamotor = 9
-    Jointtypelmotor = 10
-    Jointtypeplane2d = 11
-    Jointtypepr = 12
-    Jointtypepu = 13
-    Jointtypepiston = 14
+    Jointtypenone      =  0
+    Jointtypeball      =  1
+    Jointtypehinge     =  2
+    Jointtypeslider    =  3
+    Jointtypecontact   =  4
+    Jointtypeuniversal =  5
+    Jointtypehinge2    =  6
+    Jointtypefixed     =  7
+    Jointtypenull      =  8
+    Jointtypeamotor    =  9
+    Jointtypelmotor    = 10
+    Jointtypeplane2d   = 11
+    Jointtypepr        = 12
+    Jointtypepu        = 13
+    Jointtypepiston    = 14
   end
   fun joint_get_body = dJointGetBody(x0 : Jointid, index : LibC::Int) : Bodyid
   fun joint_set_feedback = dJointSetFeedback(x0 : Jointid, x1 : Jointfeedback*)
@@ -780,10 +796,12 @@ lib LibODE
   fun normalize4 = dNormalize4(a : Vector4)
   fun plane_space = dPlaneSpace(n : Vector3, p : Vector3, q : Vector3)
   fun orthogonalize_r = dOrthogonalizeR(m : Matrix3)
+
   struct Stopwatch
     time : LibC::Double
     cc : LibC::ULong[2]
   end
+
   fun stopwatch_reset = dStopwatchReset(x0 : Stopwatch*)
   fun stopwatch_start = dStopwatchStart(x0 : Stopwatch*)
   fun stopwatch_stop = dStopwatchStop(x0 : Stopwatch*)

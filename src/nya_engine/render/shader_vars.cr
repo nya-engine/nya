@@ -25,7 +25,7 @@ module Nya::Render
     abstract class AbsVar
       abstract def apply(program : UInt32, name : String) : Void
 
-      macro apply_value(p,n,fsign,*v)
+      macro apply_value(p, n, fsign, *v)
         case self.kind
         when "uniform"
           LibGL.uniform{{fsign.id}}(LibGL.get_uniform_location({{p}}, {{n}}), {{*v}})
@@ -41,9 +41,11 @@ module Nya::Render
       include Serializable
       property kind : String = "uniform"
       attribute kind, as: String, nilable: true
+
       def apply(p, n)
       end
     end
+
     # </editor-fold>
 
     # <editor-fold> Primitives
@@ -51,13 +53,14 @@ module Nya::Render
       property value : String = ""
       attribute value, as: String, nilable: true
       also_known_as glsl_bool
+
       def apply(p, n)
         value = case @value
-        when "yes" || "true" || "1"
-          1
-        else
-          0
-        end
+                when "yes" || "true" || "1"
+                  1
+                else
+                  0
+                end
 
         apply_value p, n, "1i", value
       end

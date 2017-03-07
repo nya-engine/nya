@@ -9,10 +9,9 @@ module Nya
     @g = 255u8
     @b = 255u8
     @a = 255u8
-    property r,g,b,a
+    property r, g, b, a
 
-
-    def initialize(@r,@g,@b,@a)
+    def initialize(@r, @g, @b, @a)
     end
 
     def initialize
@@ -39,7 +38,7 @@ module Nya
       {
         @r.to_f64 / 255.0,
         @g.to_f64 / 255.0,
-        @b.to_f64 / 255.0
+        @b.to_f64 / 255.0,
       }
     end
 
@@ -48,13 +47,13 @@ module Nya
         @r.to_f64 / 255.0,
         @g.to_f64 / 255.0,
         @b.to_f64 / 255.0,
-        @a.to_f64 / 255.0
+        @a.to_f64 / 255.0,
       }
     end
 
     def +(other : Color)
       alpha = other.a
-      ia = 256-alpha
+      ia = 256 - alpha
       Color.new(
         ((alpha*other.r + ia*self.r) >> 8).as(UInt8),
         ((alpha*other.g + ia*self.g) >> 8).as(UInt8),
@@ -73,6 +72,5 @@ module Nya
 
     predef white, 255u8, 255u8, 255u8
     predef black, 0u8, 0u8, 0u8
-
   end
 end

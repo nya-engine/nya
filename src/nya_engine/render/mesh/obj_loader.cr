@@ -45,10 +45,8 @@ module OBJ
 end
 
 module Nya::Render
-
   class Mesh::OBJLoader < Nya::Render::Mesh::Loader
     extension ".obj"
-
 
     def load(file : String)
       mesh = Mesh.new
@@ -65,7 +63,7 @@ module Nya::Render
           c = e.cause
           unless c.nil?
             Nya.log.error c.to_s, "OBJParser"
-            c.backtrace.each { |loc| Nya.log.error loc, "OBJParser"}
+            c.backtrace.each { |loc| Nya.log.error loc, "OBJParser" }
           end
         end
         Tempfile.open("nya_obj_parser") do |f|

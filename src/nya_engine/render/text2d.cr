@@ -7,8 +7,8 @@ module Nya
       @texture_id = 0u32
       @color = Color.white
       @text = ""
-      @position = CrystalEdge::Vector2.new(0.0,0.0)
-      @size = CrystalEdge::Vector2.new(0.0,0.0)
+      @position = CrystalEdge::Vector2.new(0.0, 0.0)
+      @size = CrystalEdge::Vector2.new(0.0, 0.0)
       @font = "Ubuntu Bold 12"
 
       property color, position, size, text, font

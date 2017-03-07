@@ -31,7 +31,7 @@ lib LibPangoCairo
   fun free_font_desc = "pango_font_description_free"(font : PangoFontDescription*) : Void
   fun layout_get_size = "pango_layout_get_size"(layout : PangoLayout*, width : UInt32*, height : UInt32*) : Void
 
-  fun set_source_rgba = "cairo_set_source_rgba"(ctx : Cairo*, r : Float64,g : Float64,b : Float64,a : Float64) : Void
+  fun set_source_rgba = "cairo_set_source_rgba"(ctx : Cairo*, r : Float64, g : Float64, b : Float64, a : Float64) : Void
 
   fun show_layout = "pango_cairo_show_layout"(ctx : Cairo*, layout : PangoLayout*) : Void
 end

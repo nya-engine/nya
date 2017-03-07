@@ -8,6 +8,7 @@ module Nya
     @proc : Event ->
     @id : Int64
     getter id
+
     def initialize(&proc : Event ->)
       @id = Event.id
       @proc = proc
@@ -19,7 +20,7 @@ module Nya
   end
 
   class Event
-    @@events = Hash(String,Array(EventHandler)).new
+    @@events = Hash(String, Array(EventHandler)).new
     @@id = 0i64
 
     @status = EventStatus::ACTIVE
@@ -50,17 +51,16 @@ module Nya
     end
 
     def self.unsubscribe(handler : EventHandler)
-      @@events.each do |k,v|
-        v.delete_if{|elem| elem.id == handler.id}
+      @@events.each do |k, v|
+        v.delete_if { |elem| elem.id == handler.id }
       end
     end
 
     def self.unsubscribe(id : Int64)
-      @@events.each do |k,v|
-        v.delete_if{|elem| elem.id == id}
+      @@events.each do |k, v|
+        v.delete_if { |elem| elem.id == id }
       end
     end
-
 
     def self.send(name, event : Event)
       if @@events.has_key? name.to_s
