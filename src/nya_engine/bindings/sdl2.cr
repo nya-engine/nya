@@ -995,13 +995,13 @@ lib SDL2
 
   struct CommonEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
   end
 
   struct WindowEvent
     type : EventType
-    timestamp : UInt16
-    window_id : UInt16
+    timestamp : UInt32
+    window_id : UInt32
     event : UInt8
     padding1 : UInt8
     padding2 : UInt8
@@ -1030,7 +1030,7 @@ lib SDL2
 
   struct TextEditingEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
     window_id : UInt16
     text : StaticArray(UInt8, 32)
     start : Int16
@@ -1039,48 +1039,48 @@ lib SDL2
 
   struct TextInputEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
     window_id : UInt16
     text : StaticArray(UInt8, 32)
   end
 
   struct MouseMotionEvent
     type : EventType
-    timestamp : UInt16
-    window_id : UInt16
-    which : UInt16
-    state : UInt16
-    x : Int16
-    y : Int16
-    xrel : Int16
-    yrel : Int16
+    timestamp : UInt32
+    window_id : UInt32
+    which : UInt32
+    state : UInt32
+    x : Int32
+    y : Int32
+    xrel : Int32
+    yrel : Int32
   end
 
   struct MouseButtonEvent
     type : EventType
-    timestamp : UInt16
-    window_id : UInt16
-    which : UInt16
+    timestamp : UInt32
+    window_id : UInt32
+    which : UInt32
     button : UInt8
     state : UInt8
     clicks : UInt8
     padding1 : UInt8
-    x : Int16
-    y : Int16
+    x : Int32
+    y : Int32
   end
 
   struct MouseWheelEvent
     type : EventType
-    timestamp : UInt16
-    window_id : UInt16
-    which : UInt16
-    x : Int16
-    y : Int16
+    timestamp : UInt32
+    window_id : UInt32
+    which : UInt32
+    x : Int32
+    y : Int32
   end
 
   struct JoyAxisEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
     which : Int16
     axis : UInt8
     padding1 : UInt8
@@ -1092,7 +1092,7 @@ lib SDL2
 
   struct JoyBallEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
     which : Int16
     ball : UInt8
     padding1 : UInt8
@@ -1104,7 +1104,7 @@ lib SDL2
 
   struct JoyHatEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
     which : Int16
     hat : UInt8
     value : UInt8
@@ -1114,7 +1114,7 @@ lib SDL2
 
   struct JoyButtonEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
     which : Int16
     button : UInt8
     state : UInt8
@@ -1124,13 +1124,13 @@ lib SDL2
 
   struct JoyDeviceEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
     which : Int16
   end
 
   struct ControllerAxisEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
     which : Int16
     axis : UInt8
     padding1 : UInt8
@@ -1142,7 +1142,7 @@ lib SDL2
 
   struct ControllerButtonEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
     which : Int16
     button : UInt8
     state : UInt8
@@ -1152,13 +1152,13 @@ lib SDL2
 
   struct ControllerDeviceEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
     which : Int16
   end
 
   struct TouchFingerEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
     touch_id : Int32
     finger_id : Int32
     x : Float32
@@ -1170,7 +1170,7 @@ lib SDL2
 
   struct MultiGestureEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
     touch_id : Int32
     d_theta : Float32
     d_dist : Float32
@@ -1182,7 +1182,7 @@ lib SDL2
 
   struct DollarGestureEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
     touch_id : Int32
     gesture_id : Int32
     num_fingers : UInt16
@@ -1193,23 +1193,23 @@ lib SDL2
 
   struct DropEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
     file : UInt8*
   end
 
   struct QuitEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
   end
 
   struct OSEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
   end
 
   struct UserEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
     window_id : UInt16
     code : Int16
     data1 : Void*
@@ -1253,7 +1253,7 @@ lib SDL2
 
   struct SysWMEvent
     type : EventType
-    timestamp : UInt16
+    timestamp : UInt32
     msg : SysWMmsg*
   end
 

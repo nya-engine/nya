@@ -62,9 +62,9 @@ begin
       when SDL2::EventType::MOUSEWHEEL
         Nya::Event.send :mouse_wheel, Nya::Input::MouseWheelEvent.new(evt.wheel)
       when SDL2::EventType::MOUSEBUTTONUP
-        Nya::Event.send :mouse_button_up, Nya::Input::MouseButtonEvent(evt.button)
+        Nya::Event.send :mouse_button_up, Nya::Input::MouseButtonEvent.new(evt.button)
       when SDL2::EventType::MOUSEBUTTONDOWN
-        Nya::Event.send :mouse_button_down, Nya::Input::MouseButtonEvent(evt.button)
+        Nya::Event.send :mouse_button_down, Nya::Input::MouseButtonEvent.new(evt.button)
       end
     end
 
