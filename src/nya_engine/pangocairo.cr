@@ -11,43 +11,43 @@ module Nya
     def initialize(@texture_id, @size)
     end
 
-    def self.get_text_size(layout : PangoCairo::PangoLayout*)
-      PangoCairo.layout_get_size(layout, out w, out h)
-      return (CrystalEdge::Vector2.new(w.to_f64,h.to_f64)) / (PangoCairo::SCALE.to_f64)
+    def self.get_text_size(layout : LibPangoCairo::PangoLayout*)
+      LibPangoCairo.layout_get_size(layout, out w, out h)
+      return (CrystalEdge::Vector2.new(w.to_f64,h.to_f64)) / (LibPangoCairo::SCALE.to_f64)
     end
 
     def self.render_text(text : String, font : String, channels = 4u8)
       # Create a context
-      temp_surface = PangoCairo.create_surf(PangoCairo::CairoFormat::ARGB32,0,0)
-      context = PangoCairo.create(temp_surface)
-      PangoCairo.destroy_surface(temp_surface)
+      temp_surface = LibPangoCairo.create_surf(LibPangoCairo::CairoFormat::ARGB32,0,0)
+      context = LibPangoCairo.create(temp_surface)
+      LibPangoCairo.destroy_surface(temp_surface)
 
-      layout = PangoCairo.create_layout(context)
+      layout = LibPangoCairo.create_layout(context)
 
-      PangoCairo.layout_set_text(layout,text,-1)
+      LibPangoCairo.layout_set_text(layout,text,-1)
 
 
-      desc = PangoCairo.font_desc_from_string(font)
-      PangoCairo.layout_set_font_desc(layout,desc)
-      PangoCairo.free_font_desc(desc)
+      desc = LibPangoCairo.font_desc_from_string(font)
+      LibPangoCairo.layout_set_font_desc(layout,desc)
+      LibPangoCairo.free_font_desc(desc)
 
 
       tsize = get_text_size(layout)
       buffer = Array(UInt32).build((tsize.x*tsize.y*channels).to_i){0}
 
 
-      rendering_context = PangoCairo.create(PangoCairo.create_surf_for_data(
+      rendering_context = LibPangoCairo.create(LibPangoCairo.create_surf_for_data(
         buffer,
-        PangoCairo::CairoFormat::ARGB32,
+        LibPangoCairo::CairoFormat::ARGB32,
         tsize.x,
         tsize.y,
         channels*tsize.x
       ))
 
 
-      PangoCairo.set_source_rgba(rendering_context,1,1,1,1)
+      LibPangoCairo.set_source_rgba(rendering_context,1,1,1,1)
 
-      PangoCairo.show_layout(rendering_context,layout)
+      LibPangoCairo.show_layout(rendering_context,layout)
 
       texture_id = 0u32
       LibGL.gen_textures 1, pointerof(texture_id)
@@ -69,8 +69,8 @@ module Nya
       )
 
 
-      PangoCairo.destroy(context)
-      PangoCairo.destroy(rendering_context)
+      LibPangoCairo.destroy(context)
+      LibPangoCairo.destroy(rendering_context)
 
       new(texture_id, tsize)
     end
