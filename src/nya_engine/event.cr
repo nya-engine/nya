@@ -69,7 +69,20 @@ module Nya
         end
       end
     end
+
+    macro subscribe_typed(*args, as t, &proc)
+      {% name = proc.args.first %}
+      ::Nya::Event.subscribe {{*args}} do |%evt|
+        {{name.id}} = %evt.as?({{t}})
+        {{proc.body}}
+      end
+    end
   end
 
+  class EventWrapper(T) < Event
+    property inner : T
 
+    def initialize(@inner)
+    end
+  end
 end

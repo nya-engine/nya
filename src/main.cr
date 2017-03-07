@@ -45,13 +45,24 @@ begin
   GL.matrix_mode(GL::MODELVIEW)
   Nya::SceneManager.load_from_file("res/testscene2.xml")
   while true
-    SDL2.poll_event(out evt)
-    raise "Terminated" if evt.type == SDL2::EventType::QUIT
-    if evt.type == SDL2::EventType::KEYUP
-      Nya::Event.send :raw_key_up, Nya::Input::KeyboardEvent.new(evt.key)
-    end
     Nya::Event.send(:update,Nya::Event.new)
     update_loop
+    while SDL2.poll_event(out evt) != 0
+      case evt.type
+      when SDL2::EventType::KEYUP
+        Nya::Event.send :key_up, Nya::Input::KeyboardEvent.new(evt.key)
+      when SDL2::EventType::KEYDOWN
+        Nya::Event.send :key_down, Nya::Input::KeyboardEvent.new(evt.key)
+      when SDL2::EventType::QUIT
+        Nya::Event.send :quit, Nya::Event.new
+        exit 0
+      when SDL2::EventType::MOUSEMOTION
+        Nya::Event.send :mouse_motion, Nya::Input::MouseMotionEvent.new(evt.motion)
+      when SDL2::EventType::MOUSEWHEEL
+        Nya::Event.send :mouse_wheel, Nya::Input::MouseWheelEvent.new(evt.wheel)
+      end
+    end
+
 
     render_loop
     GL.flush

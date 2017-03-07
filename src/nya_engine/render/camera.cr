@@ -44,7 +44,7 @@ module Nya
       end
 
       def update
-        
+
       end
 
     end
