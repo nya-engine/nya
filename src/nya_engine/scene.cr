@@ -22,7 +22,7 @@ module Nya
     end
 
     def render(tag : String? = nil)
-      #GL.load_identity
+      #LibGL.load_identity
       @root.each &.render(tag)
     end
 

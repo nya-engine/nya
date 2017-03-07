@@ -9,9 +9,9 @@ module Nya::Render
     property shader
 
     def shader_type
-      raise "#{@shader} is not a shader!" unless GL.is_shader? @shader
+      raise "#{@shader} is not a shader!" unless LibGL.is_shader? @shader
 
-      GL.get_shaderiv(@shader, GL::SHADER_TYPE, out stp)
+      LibGL.get_shaderiv(@shader, LibGL::SHADER_TYPE, out stp)
 
       sh_type = ShaderType.from_value? stp
       if sh_type.nil?

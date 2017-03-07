@@ -50,21 +50,21 @@ module Nya
       PangoCairo.show_layout(rendering_context,layout)
 
       texture_id = 0u32
-      GL.gen_textures 1, pointerof(texture_id)
-      GL.bind_texture(GL::TEXTURE_2D,texture_id)
+      LibGL.gen_textures 1, pointerof(texture_id)
+      LibGL.bind_texture(LibGL::TEXTURE_2D,texture_id)
 
-      GL.tex_parameteri(GL::TEXTURE_2D,GL::TEXTURE_MIN_FILTER,GL::LINEAR)
-      GL.tex_parameteri(GL::TEXTURE_2D,GL::TEXTURE_MAG_FILTER,GL::LINEAR)
+      LibGL.tex_parameteri(LibGL::TEXTURE_2D,LibGL::TEXTURE_MIN_FILTER,LibGL::LINEAR)
+      LibGL.tex_parameteri(LibGL::TEXTURE_2D,LibGL::TEXTURE_MAG_FILTER,LibGL::LINEAR)
 
-      GL.tex_image2d(
-        GL::TEXTURE_2D,
+      LibGL.tex_image2d(
+        LibGL::TEXTURE_2D,
         0,
-        GL::RGBA,
+        LibGL::RGBA,
         tsize.x,
         tsize.y,
         0,
-        GL::BGRA,
-        GL::UNSIGNED_BYTE,
+        LibGL::BGRA,
+        LibGL::UNSIGNED_BYTE,
         buffer
       )
 

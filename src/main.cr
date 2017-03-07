@@ -9,8 +9,8 @@ def update_loop
 end
 
 def render_loop
-  GL.clear_color(0.0,0.0,0.0,1.0)
-  GL.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT)
+  LibGL.clear_color(0.0,0.0,0.0,1.0)
+  LibGL.clear(LibGL::COLOR_BUFFER_BIT | LibGL::DEPTH_BUFFER_BIT)
   Nya.camera_list.each &.render!
   err = Nya.gl_error?
   unless err.nil?
@@ -31,18 +31,18 @@ begin
 
   raise LibSDL2.get_error.as(String) if Nya.window?.is_a?(Nil) || Nya.window.not_nil!.null?
 
-  GL.clear_color(0.0,0.0,0.0,0.0)
-  GL.clear_depth(1.0)
-  GL.depth_func(GL::LESS)
-  GL.enable(GL::DEPTH_TEST)
-  GL.enable(GL::TEXTURE_2D)
-  GL.shade_model(GL::SMOOTH)
-  GL.matrix_mode(GL::PROJECTION)
-  GL.blend_func(GL::SRC_ALPHA,GL::ONE_MINUS_SRC_ALPHA)
-  GL.load_identity
+  LibGL.clear_color(0.0,0.0,0.0,0.0)
+  LibGL.clear_depth(1.0)
+  LibGL.depth_func(LibGL::LESS)
+  LibGL.enable(LibGL::DEPTH_TEST)
+  LibGL.enable(LibGL::TEXTURE_2D)
+  LibGL.shade_model(LibGL::SMOOTH)
+  LibGL.matrix_mode(LibGL::PROJECTION)
+  LibGL.blend_func(LibGL::SRC_ALPHA,LibGL::ONE_MINUS_SRC_ALPHA)
+  LibGL.load_identity
   GLU.perspective(45.0,Nya.width/Nya.height,0.1,100.0)
 
-  GL.matrix_mode(GL::MODELVIEW)
+  LibGL.matrix_mode(LibGL::MODELVIEW)
   Nya::SceneManager.load_from_file("res/testscene2.xml")
   while true
     Nya::Event.send(:update,Nya::Event.new)
@@ -70,7 +70,7 @@ begin
 
 
     render_loop
-    GL.flush
+    LibGL.flush
     LibSDL2.gl_swap_window(Nya.window)
   end
 

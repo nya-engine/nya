@@ -62,9 +62,9 @@ module Nya
 
     def render(tag : String? = nil)
       @children.each do |ch|
-        GL.push_matrix
+        LibGL.push_matrix
         ch.render tag
-        GL.pop_matrix
+        LibGL.pop_matrix
       end
     end
   end
@@ -132,17 +132,17 @@ module Nya
       return unless matches_tag? tag
       comp = find_component_of?(Nya::Render::ShaderProgram)
       comp.use! unless comp.nil?
-      GL.matrix_mode GL::MODELVIEW
-      GL.push_matrix
-      GL.rotatef(@rotation.x, 1.0, 0.0, 0.0)
-      GL.rotatef(@rotation.y, 0.0, 1.0, 0.0)
-      GL.rotatef(@rotation.z, 0.0, 0.0, 1.0)
-      GL.translatef(*@position.to_gl)
+      LibGL.matrix_mode LibGL::MODELVIEW
+      LibGL.push_matrix
+      LibGL.rotatef(@rotation.x, 1.0, 0.0, 0.0)
+      LibGL.rotatef(@rotation.y, 0.0, 1.0, 0.0)
+      LibGL.rotatef(@rotation.z, 0.0, 0.0, 1.0)
+      LibGL.translatef(*@position.to_gl)
       super
       @components.each &.render(tag)
       comp.unuse! unless comp.nil?
-      GL.matrix_mode GL::MODELVIEW
-      GL.pop_matrix
+      LibGL.matrix_mode LibGL::MODELVIEW
+      LibGL.pop_matrix
     end
 
     def update

@@ -62,19 +62,19 @@ module Nya::Render
       stype ||= detect_type text
       Nya.log.debug "Type is #{stype}", "Shader"
 
-      shid = GL.create_shader stype.to_i
+      shid = LibGL.create_shader stype.to_i
       Nya.log.debug "Allocated ID : 0x#{shid.to_s(16)}", "Shader"
 
       utext = text.to_unsafe
 
 
-      GL.shader_source shid, 1, pointerof(utext), nil
-      GL.compile_shader shid
+      LibGL.shader_source shid, 1, pointerof(utext), nil
+      LibGL.compile_shader shid
 
-      GL.get_shaderiv shid, GL::COMPILE_STATUS, out comp_ok
-      GL.get_shaderiv shid, GL::INFO_LOG_LENGTH, out log_l
+      LibGL.get_shaderiv shid, LibGL::COMPILE_STATUS, out comp_ok
+      LibGL.get_shaderiv shid, LibGL::INFO_LOG_LENGTH, out log_l
       bytes = Bytes.new(log_l)
-      GL.get_shader_info_log shid, log_l, out len, bytes
+      LibGL.get_shader_info_log shid, log_l, out len, bytes
 
       String.new(bytes).split("\n").each do |ln|
         if comp_ok != 0
@@ -97,15 +97,15 @@ module Nya::Render
         return @@program_cache[ckey]
       end
       Nya.log.debug "Linking shader program", "Shader"
-      pid = GL.create_program
+      pid = LibGL.create_program
       Nya.log.debug "Allocated ID : #{pid}", "Shader"
-      shaders.each{ |s| GL.attach_shader pid, s }
-      GL.link_program pid
+      shaders.each{ |s| LibGL.attach_shader pid, s }
+      LibGL.link_program pid
 
-      GL.get_programiv pid, GL::LINK_STATUS, out link_ok
-      GL.get_programiv pid, GL::INFO_LOG_LENGTH, out log_l
+      LibGL.get_programiv pid, LibGL::LINK_STATUS, out link_ok
+      LibGL.get_programiv pid, LibGL::INFO_LOG_LENGTH, out log_l
       log = Bytes.new(log_l)
-      GL.get_program_info_log pid, log_l, out len, log
+      LibGL.get_program_info_log pid, log_l, out len, log
       String.new(log).split("\n").each do |ln|
         if link_ok == 0
           Nya.log.error ln, "GL"

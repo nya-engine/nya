@@ -11,20 +11,20 @@ module Nya::Render
       property coord, normal, texture_coord, color
       serializable coord, normal, texture_coord, color, as: CrystalEdge::Vector3
       def render
-        GL.vertex3d(@coord.x, @coord.y, @coord.z)
+        LibGL.vertex3d(@coord.x, @coord.y, @coord.z)
         unless @normal.nil?
           n = @normal.not_nil!
-          GL.normal3d(n.x, n.y, n.z)
+          LibGL.normal3d(n.x, n.y, n.z)
         end
 
         if @texture_coord
           t = @texture_coord.not_nil!
-          GL.tex_coord3d(t.x, t.y, t.z)
+          LibGL.tex_coord3d(t.x, t.y, t.z)
         elsif @color
           c = @color.not_nil!
-          GL.color3d(c.x, c.y, c.z)
+          LibGL.color3d(c.x, c.y, c.z)
         else
-          GL.color3d(@coord.x, @coord.y, @coord.z)
+          LibGL.color3d(@coord.x, @coord.y, @coord.z)
         end
       end
 
@@ -43,9 +43,9 @@ module Nya::Render
       @vertices = [] of Vertex
       serializable_array vertices, of: Vertex
       def render
-        GL.begin_(GL::POLYGON)
+        LibGL.begin_(LibGL::POLYGON)
         vertices.each &.render
-        GL.end_
+        LibGL.end_
       end
 
       def initialize(@vertices)

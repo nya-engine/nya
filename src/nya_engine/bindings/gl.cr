@@ -1,5 +1,5 @@
 @[Link("GL")]
-lib GL
+lib LibGL
   # <editor-fold> Enum
   VERSION_1_1 = 1
   VERSION_1_2 = 1

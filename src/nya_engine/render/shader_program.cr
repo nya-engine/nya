@@ -22,11 +22,11 @@ module Nya::Render
     end
 
     def use!
-      GL.use_program @program
+      LibGL.use_program @program
     end
 
     def unuse!
-      GL.use_program 0
+      LibGL.use_program 0
     end
 
     def apply(&block)

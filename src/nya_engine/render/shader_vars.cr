@@ -28,9 +28,9 @@ module Nya::Render
       macro apply_value(p,n,fsign,*v)
         case self.kind
         when "uniform"
-          GL.uniform{{fsign.id}}(GL.get_uniform_location({{p}}, {{n}}), {{*v}})
+          LibGL.uniform{{fsign.id}}(LibGL.get_uniform_location({{p}}, {{n}}), {{*v}})
         when "attibute"
-          GL.vertex_attrib{{fsign.id}}(GL.get_attrib_location({{p}}, {{n}}), {{*v}})
+          LibGL.vertex_attrib{{fsign.id}}(LibGL.get_attrib_location({{p}}, {{n}}), {{*v}})
         else
           Nya.log.error "Cannot apply {{@type}} : Invalid kind : #{self.kind}", "Shader"
         end

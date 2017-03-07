@@ -8,7 +8,7 @@ module Nya
 
       def awake
         Nya.camera_list << self
-        GL.enable(GL::SCISSOR_TEST)
+        LibGL.enable(LibGL::SCISSOR_TEST)
       end
 
       @depth = 1.0
@@ -19,16 +19,16 @@ module Nya
 
 
       protected def set_projection_matrix! : Void
-        GL.matrix_mode(GL::PROJECTION)
-        GL.load_identity
+        LibGL.matrix_mode(LibGL::PROJECTION)
+        LibGL.load_identity
         vp = @viewport * CrystalEdge::Vector2.new(Nya.width, Nya.height)
-        GL.viewport(vp.x.to_i, vp.y.to_i, vp.width.to_i, vp.height.to_i)
-        GL.scissor(vp.x.to_i, vp.y.to_i, vp.width.to_i, vp.height.to_i)
+        LibGL.viewport(vp.x.to_i, vp.y.to_i, vp.width.to_i, vp.height.to_i)
+        LibGL.scissor(vp.x.to_i, vp.y.to_i, vp.width.to_i, vp.height.to_i)
         GLU.perspective(@angle_of_view, Nya.width/Nya.height, @near, @far)
-        GL.rotatef(-parent.rotation.x, 1.0, 0.0, 0.0)
-        GL.rotatef(-parent.rotation.y, 0.0, 1.0, 0.0)
-        GL.rotatef(-parent.rotation.z, 0.0, 0.0, 1.0)
-        GL.translatef(*(-parent.position).to_gl)
+        LibGL.rotatef(-parent.rotation.x, 1.0, 0.0, 0.0)
+        LibGL.rotatef(-parent.rotation.y, 0.0, 1.0, 0.0)
+        LibGL.rotatef(-parent.rotation.z, 0.0, 0.0, 1.0)
+        LibGL.translatef(*(-parent.position).to_gl)
       end
 
       property depth, near, far, angle_of_view, viewport
@@ -38,8 +38,8 @@ module Nya
       def render!
         return unless enabled?
         set_projection_matrix!
-        GL.matrix_mode GL::MODELVIEW
-        GL.load_identity
+        LibGL.matrix_mode LibGL::MODELVIEW
+        LibGL.load_identity
         SceneManager.render @tag
       end
 
