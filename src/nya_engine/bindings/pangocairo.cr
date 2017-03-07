@@ -1,5 +1,5 @@
 @[Link(ldflags: "-lpangocairo-1.0 -lpango-1.0 -lcairo -lgobject-2.0 -lglib-2.0 -L/usr/lib/x86_64-linux-gnu/")]
-lib PangoCairo
+lib LibPangoCairo
   type Cairo = Void
   type CairoSurface = Void
 
