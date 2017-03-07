@@ -1,5 +1,5 @@
 @[Link("openal")]
-lib AL
+lib LibAL
   NONE = 0
   FALSE = 0
   TRUE = 1
