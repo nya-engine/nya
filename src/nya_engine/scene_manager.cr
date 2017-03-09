@@ -5,7 +5,7 @@ module Nya
     @@current_scene : AbsScene?
 
     def self.current_scene
-      @@current_scene
+      @@current_scene.not_nil!
     end
 
     def self.current_scene=(s)

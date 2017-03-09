@@ -1,18 +1,23 @@
 require "../bindings/ode"
 require "crystaledge"
+require "./geom"
 
 module Nya
   module Physics
-    class Body
-      @world_id : LibODE::Worldid
-      @body_id : LibODE::Bodyid
+    class Body < Nya::Component
+      property geom : Geom = Geom.new
+      serializable geom, as: Geom
+      @body_id : LibODE::Bodyid? = nil
 
-      def initialize(@world_id)
-        @body_id = LibODE.body_create(@world_id)
+      setter body_id
+      def body_id
+        @body_id.not_nil!
       end
 
-      def add_force(f : CrystalEdge::Vector3)
-        LibODE.body_add_force(@body_id, f.x, f.y, f.z)
+      def awake
+        @body_id = LibODE.body_create(SceneManager.current_scene.world_id)
+        geom.data = ::Box(self).box(self)
+        geom.apply(@body_id)
       end
     end
   end

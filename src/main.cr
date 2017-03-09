@@ -18,6 +18,8 @@ def render_loop
   end
 end
 
+alias PhysCallback = LibODE::Geomid, LibODE::Geomid ->
+
 begin
   raise LibSDL2.get_error.to_s if LibSDL2.init(LibSDL2::INIT_VIDEO) < 0
 
@@ -44,7 +46,25 @@ begin
 
   LibGL.matrix_mode(LibGL::MODELVIEW)
   Nya::SceneManager.load_from_file("res/testscene2.xml")
+
+  phys_cb = ->(o1 : LibODE::Geomid, o2 : LibODE::Geomid) do
+    dptr1, dptr2 = LibODE.geom_get_data(o1), LibODE.geom_get_data(o2)
+    Nya::Event.send :physics_near_cb, Nya::Physics::NearEvent.new(
+      Box(Nya::Physics::Geom).unbox(dptr1),
+      Box(Nya::Physics::Geom).unbox(dptr2)
+    )
+  end
+
   while true
+
+    LibODE.space_collide(
+      Nya::SceneManager.current_scene.space_id,
+      Box(PhysCallback).box(phys_cb),
+      ->(ptr : Void*, o1 : LibODE::Geomid, o2 : LibODE::Geomid) do
+        Box(PhysCallback).unbox(ptr).call(o1,o2)
+      end
+    )
+
     Nya::Event.send(:update, Nya::Event.new)
     update_loop
     while LibSDL2.poll_event(out evt) != 0
