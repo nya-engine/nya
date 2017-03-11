@@ -4,8 +4,8 @@ require "crystaledge"
 WP_CENTERED = 0x2FFF0000
 
 def update_loop
-  Nya::Time.update
   Nya::SceneManager.update
+  Nya::Time.update
 end
 
 def render_loop
