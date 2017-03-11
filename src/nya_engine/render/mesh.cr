@@ -107,9 +107,6 @@ module Nya::Render
     end
 
     def update
-      parent.rotation.x += Nya::Time.delta_time * 100
-      parent.rotation.y += Nya::Time.delta_time * 100
-      parent.rotation.z += Nya::Time.delta_time * 100
     end
 
     def render(tag : String? = nil)

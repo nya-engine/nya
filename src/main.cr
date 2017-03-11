@@ -16,6 +16,7 @@ def render_loop
   unless err.nil?
     Nya.log.error err.to_s, "GL"
   end
+  Nya::Time.render
 end
 
 alias PhysCallback = LibODE::Geomid, LibODE::Geomid ->
@@ -37,10 +38,13 @@ begin
   LibGL.clear_depth(1.0)
   LibGL.depth_func(LibGL::LESS)
   LibGL.enable(LibGL::DEPTH_TEST)
+  LibGL.enable(LibGL::ALPHA_TEST)
+  LibGL.alpha_func(LibGL::GREATER, 0.5)
   LibGL.enable(LibGL::TEXTURE_2D)
   LibGL.shade_model(LibGL::SMOOTH)
   LibGL.matrix_mode(LibGL::PROJECTION)
   LibGL.blend_func(LibGL::SRC_ALPHA, LibGL::ONE_MINUS_SRC_ALPHA)
+  #LibGL.blend_func(LibGL::ONE, LibGL::ONE)
   LibGL.load_identity
   LibGLU.perspective(45.0, Nya.width/Nya.height, 0.1, 100.0)
 

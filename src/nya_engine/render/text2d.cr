@@ -20,7 +20,7 @@ module Nya
       def text=(t)
         @text = t
         pango = Pango.render_text(@text, @font)
-        if @size.x + @size.y == 0.0
+        if @size.x + @size.y == 0.0 || @texture_id != 0
           @size = pango.size
         end
         LibGL.delete_textures(1, pointerof(@texture_id))
@@ -30,7 +30,7 @@ module Nya
       def font=(f)
         @font = f
         pango = Pango.render_text(@text, @font)
-        if @size.x + @size.y == 0.0
+        if @size.x + @size.y == 0.0 || @texture_id != 0
           @size = pango.size
         end
         LibGL.delete_textures(1, pointerof(@texture_id))

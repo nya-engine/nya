@@ -40,6 +40,8 @@ module Nya
         channels*tsize.x
       ))
 
+      LibPangoCairo.set_source_rgba(rendering_context, 0, 0, 0, 0)
+      LibPangoCairo.paint rendering_context
       LibPangoCairo.set_source_rgba(rendering_context, 1, 1, 1, 1)
 
       LibPangoCairo.show_layout(rendering_context, layout)
@@ -50,7 +52,6 @@ module Nya
 
       LibGL.tex_parameteri(LibGL::TEXTURE_2D, LibGL::TEXTURE_MIN_FILTER, LibGL::LINEAR)
       LibGL.tex_parameteri(LibGL::TEXTURE_2D, LibGL::TEXTURE_MAG_FILTER, LibGL::LINEAR)
-
       LibGL.tex_image2d(
         LibGL::TEXTURE_2D,
         0,

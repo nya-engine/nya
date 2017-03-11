@@ -9,7 +9,7 @@ module Nya
     end
 
     def self.render
-      @@last_rtime = ::Time.now.to_f
+      @@last_rtime = ::Time.now.epoch_f
     end
 
     def self.scale=(v : Float64)

@@ -14,6 +14,11 @@
         <Nya_Render_Camera id="cam0">
           <property name="far">10000.0</property>
         </Nya_Render_Camera>
+        <Nya_Render_Text2D>
+          <property name="font">Ubuntu Bold 12</property>
+          <property name="text">NaN</property>
+        </Nya_Render_Text2D>
+        <Nya_Misc_DebugInfo />
       </property>
       <property name="children">
 
