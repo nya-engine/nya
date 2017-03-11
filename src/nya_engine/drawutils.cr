@@ -62,18 +62,11 @@ module Nya
     end
 
     def self.draw_texture(x, y, w, h : Float64, t : UInt32, c : Tuple(Float64, Float64, Float64))
-      #LibGL.matrix_mode(LibGL::PROJECTION)
-      #LibGL.push_matrix
-      #LibGL.load_identity
-      #LibGL.matrix_mode(LibGL::MODELVIEW)
-      #LibGL.push_matrix
-      #LibGL.load_identity
-
-      #LibGL.clear(LibGL::COLOR_BUFFER_BIT)
       va = un_project(CrystalEdge::Vector3.new(x, y, -20.0))
       vb = un_project(CrystalEdge::Vector3.new(x + w, y + h, -20.0))
       LibGL.push_matrix
       LibGL.translatef(0.0, 0.0, va.z)
+      LibGL.enable(LibGL::TEXTURE_2D)
       LibGL.bind_texture(LibGL::TEXTURE_2D, t)
       LibGL.color3d(*c)
 
@@ -88,8 +81,7 @@ module Nya
         LibGL.vertex2d(va.x, va.y)
       end
       LibGL.pop_matrix
-      #LibGL.matrix_mode(LibGL::PROJECTION)
-      #LibGL.pop_matrix
+      LibGL.disable(LibGL::TEXTURE_2D)
     end
   end
 end
