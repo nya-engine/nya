@@ -19,21 +19,28 @@ module Nya
 
       def text=(t)
         @text = t
+        pango = Pango.render_text(@text, @font)
+        if @size.x + @size.y == 0.0
+          @size = pango.size
+        end
+        LibGL.delete_textures(1, pointerof(@texture_id))
+        @texture_id = pango.texture_id
       end
 
       def font=(f)
         @font = f
+        pango = Pango.render_text(@text, @font)
+        if @size.x + @size.y == 0.0
+          @size = pango.size
+        end
+        LibGL.delete_textures(1, pointerof(@texture_id))
+        @texture_id = pango.texture_id
       end
 
       def update
       end
 
       def awake
-        pango = Pango.render_text(@text, @font)
-        if @size.x + @size.y == 0.0
-          @size = pango.size
-        end
-        @texture_id = pango.texture_id
         Nya.log.debug "Awake text : #{@texture_id}", "Text2D"
       end
 
