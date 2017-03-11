@@ -6,6 +6,7 @@ lib LibPangoCairo
   SCALE = 1024
 
   enum CairoFormat
+    INVALID
     ARGB32
     RGB24
     A8
@@ -20,6 +21,7 @@ lib LibPangoCairo
   fun create = "cairo_create"(surface : CairoSurface*) : Cairo*
   fun create_surf = "cairo_image_surface_create"(format : CairoFormat, w : Int32, h : Int32) : CairoSurface*
   fun create_layout = "pango_cairo_create_layout"(ctx : Cairo*) : PangoLayout*
+  fun paint = "cairo_paint"(ctx : Cairo*)
 
   fun destroy_surface = "cairo_surface_destroy"(c : CairoSurface*) : Void
   fun destroy = "cairo_destroy"(c : Cairo*) : Void

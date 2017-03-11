@@ -9,29 +9,6 @@ module Nya
       LibGL.end_
     end
 
-    def self.draw_texture(x, y, w, h : Float64, t : UInt32, c : Tuple(Float64, Float64, Float64), z : Float64)
-      LibGL.matrix_mode(LibGL::MODELVIEW)
-      LibGL.push_matrix
-      LibGL.load_identity
-      LibGL.clear(LibGL::COLOR_BUFFER_BIT)
-      # LibGL.ortho(x,y,w,h,-z,z*2)
-      LibGL.translatef(0.0, 0.0, z)
-      LibGL.bind_texture(LibGL::TEXTURE_2D, t)
-      LibGL.color3d(*c)
-
-      draw do
-        LibGL.tex_coord2d(0.0, 0.0)
-        LibGL.vertex2d(x, y + h)
-        LibGL.tex_coord2d(1.0, 0.0)
-        LibGL.vertex2d(x + w, y + h)
-        LibGL.tex_coord2d(1.0, 1.0)
-        LibGL.vertex2d(x + w, y)
-        LibGL.tex_coord2d(0.0, 1.0)
-        LibGL.vertex2d(x, y)
-      end
-      LibGL.pop_matrix
-    end
-
     def self.un_project(v : CrystalEdge::Vector3) : CrystalEdge::Vector3
       mm = uninitialized Float64[16]
       pm = uninitialized Float64[16]
