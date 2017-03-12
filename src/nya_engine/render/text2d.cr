@@ -1,5 +1,5 @@
 require "../pangocairo"
-require "../drawutils"
+require "./drawutils"
 
 module Nya
   module Render
@@ -57,7 +57,7 @@ module Nya
 
       def render(tag : String? = nil)
         return if !tag.nil? && !self.tag.nil? && tag.to_s != self.tag.to_s
-        ::Nya::DrawUtils.draw_texture(
+        DrawUtils.draw_texture(
           @position.x,
           @position.y,
           @size.x,

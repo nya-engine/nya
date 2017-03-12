@@ -1,7 +1,7 @@
-require "./bindings/gl"
-require "./bindings/glu"
+require "../bindings/gl"
+require "../bindings/glu"
 
-module Nya
+module Nya::Render
   class DrawUtils
     def self.draw(mode = LibGL::QUADS, &block : -> Void)
       LibGL.begin_(mode)
