@@ -1,4 +1,5 @@
 require "./render/*"
+require "./bindings/sdl2"
 
 module Nya
   @@width = 640.0
