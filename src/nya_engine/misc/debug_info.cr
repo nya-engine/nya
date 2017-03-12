@@ -18,8 +18,8 @@ module Nya
       end
 
       def render(t)
-        return if @text.nil?
-        @text.not_nil!.text = "dT : #{@last_utime}\n dTr : #{Nya::Time.render_delta}\n UPS: #{@last_utime == 0 ? "NaN" : 1/@last_utime}"
+        return if @text.nil? || !matches_tag? t || !enabled?
+        @text.not_nil!.text = "dT : #{@last_utime.round(3)}\ndTr : #{Nya::Time.render_delta.round(3)}\nUPS: #{@last_utime == 0 ? "NaN" : (1/@last_utime).to_i}"
       end
     end
   end
