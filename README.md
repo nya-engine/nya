@@ -8,7 +8,7 @@ Inspired by Unity3D and X-Ray Engine
 
 Install dependences :
 * `crystal`
-* `libLibSDL2-dev`
+* `libsdl2-dev`
 * `libpangocairo-dev`
 * `libode-dev` - for ODE bindings
 
@@ -16,5 +16,5 @@ Install dependences :
   git clone https://github.com/unn4m3d/crystal_sdl_test/
   cd crystal_sdl_test
   crystal deps
-  crystal ./src/main.cr
+  crystal test.cr
 ```
