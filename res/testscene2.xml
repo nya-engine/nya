@@ -17,6 +17,9 @@
         <Nya_Render_Text2D>
           <property name="font">Ubuntu Bold 12</property>
           <property name="text">NaN</property>
+          <property name="color">
+            <Nya_Color name="red" />
+          </property>
         </Nya_Render_Text2D>
         <Nya_Misc_DebugInfo />
       </property>

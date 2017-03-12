@@ -10,6 +10,10 @@ module Nya
       @position = CrystalEdge::Vector2.new(0.0, 0.0)
       @size = CrystalEdge::Vector2.new(0.0, 0.0)
       @font = "Ubuntu Bold 12"
+      @autosize = true
+      property autosize
+
+      attribute autosize, as: Bool, nilable: false
 
       property color, position, size, text, font
 
@@ -17,24 +21,31 @@ module Nya
       serializable color, as: Color
       serializable text, font, as: String
 
-      def text=(t)
-        @text = t
-        pango = Pango.render_text(@text, @font)
-        if @size.x + @size.y == 0.0 || @texture_id != 0
-          @size = pango.size
+      private def refresh_text!(ntxt, nfnt, nclr)
+        if ntxt != @text || nfnt != @font || nclr != @color
+          pango = Pango.render_text(ntxt, nfnt, @color)
+          if @autosize
+            @size = pango.size
+          end
+          LibGL.delete_textures(1, pointerof(@texture_id))
+          @texture_id = pango.texture_id
         end
-        LibGL.delete_textures(1, pointerof(@texture_id))
-        @texture_id = pango.texture_id
+      end
+
+      def text=(t)
+        refresh_text! t, @font, @color
+        @text = t
       end
 
       def font=(f)
+        refresh_text! @text, f, @color
         @font = f
-        pango = Pango.render_text(@text, @font)
-        if @size.x + @size.y == 0.0 || @texture_id != 0
-          @size = pango.size
-        end
-        LibGL.delete_textures(1, pointerof(@texture_id))
-        @texture_id = pango.texture_id
+      end
+
+      def color=(c)
+        refresh_text! @text, @font, c
+        Nya.log.info "Set color : #{c.r} #{c.g} #{c.b} #{c.a}"
+        @color = c
       end
 
       def update
@@ -51,8 +62,7 @@ module Nya
           @position.y,
           @size.x,
           @size.y,
-          @texture_id,
-          @color.to_gl
+          @texture_id
         )
       end
     end

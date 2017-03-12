@@ -1,6 +1,8 @@
 require "./storage/*"
 
 module Nya
+  alias RawRGBA = Tuple(Float64, Float64, Float64, Float64)
+
   class Color
     @@predef = Hash(String, Color).new
 
@@ -26,8 +28,11 @@ module Nya
     def name=(n : String)
       if @@predef.has_key? n
         {% for name in %w(r g b a) %}
-          {{name.id}} = @@predef[n].{{name.id}}
+          self.{{name.id}} = @@predef[n].{{name.id}}
         {% end %}
+        Nya.log.debug "Found color #{n}", "Color"
+      else
+        Nya.log.warn "Cannot find color #{n}", "Color"
       end
     end
 
@@ -72,5 +77,12 @@ module Nya
 
     predef white, 255u8, 255u8, 255u8
     predef black, 0u8, 0u8, 0u8
+    predef red, 255u8, 0u8, 0u8
+
+    def_equals r, g, b, a
+
+    def !=(other : self)
+      !(other == self)
+    end
   end
 end

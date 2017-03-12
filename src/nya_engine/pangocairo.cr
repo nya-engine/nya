@@ -15,7 +15,12 @@ module Nya
       return (CrystalEdge::Vector2.new(w.to_f64, h.to_f64)) / (LibPangoCairo::SCALE.to_f64)
     end
 
-    def self.render_text(text : String, font : String, channels = 4u8)
+    @[AlwaysInline]
+    def self.render_text(txt, fnt, fg : Nya::Color, bg : Nya::Color = Nya::Color.new(0u8,0u8,0u8,0u8))
+      render_text txt, fnt, fg.to_gl4, bg.to_gl4
+    end
+
+    def self.render_text(text : String, font : String, color : RawRGBA = {1.0, 1.0, 1.0, 1.0}, bg : RawRGBA = {0.0, 0.0, 0.0, 0.0})
       # Create a context
       temp_surface = LibPangoCairo.create_surf(LibPangoCairo::CairoFormat::ARGB32, 0, 0)
       context = LibPangoCairo.create(temp_surface)
@@ -30,19 +35,19 @@ module Nya
       LibPangoCairo.free_font_desc(desc)
 
       tsize = get_text_size(layout)
-      buffer = Array(UInt32).build((tsize.x*tsize.y*channels).to_i) { 0 }
+      buffer = Array(UInt32).build((tsize.x*tsize.y*4).to_i) { 0 }
 
       rendering_context = LibPangoCairo.create(LibPangoCairo.create_surf_for_data(
         buffer,
         LibPangoCairo::CairoFormat::ARGB32,
         tsize.x,
         tsize.y,
-        channels*tsize.x
+        4*tsize.x
       ))
 
-      LibPangoCairo.set_source_rgba(rendering_context, 0, 0, 0, 0)
+      LibPangoCairo.set_source_rgba(rendering_context, *bg)
       LibPangoCairo.paint rendering_context
-      LibPangoCairo.set_source_rgba(rendering_context, 1, 1, 1, 1)
+      LibPangoCairo.set_source_rgba(rendering_context, *color)
 
       LibPangoCairo.show_layout(rendering_context, layout)
 

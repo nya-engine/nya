@@ -38,7 +38,6 @@ begin
   LibGL.clear_depth(1.0)
   LibGL.depth_func(LibGL::LESS)
   LibGL.enable(LibGL::DEPTH_TEST)
-  LibGL.enable(LibGL::ALPHA_TEST)
   LibGL.alpha_func(LibGL::GREATER, 0.5)
   LibGL.enable(LibGL::TEXTURE_2D)
   LibGL.shade_model(LibGL::SMOOTH)
