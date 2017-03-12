@@ -23,7 +23,7 @@ module Nya
 
       private def refresh_text!(ntxt, nfnt, nclr)
         if ntxt != @text || nfnt != @font || nclr != @color
-          pango = Pango.render_text(ntxt, nfnt, @color)
+          pango = Pango.render_text(ntxt, nfnt, nclr)
           if @autosize
             @size = pango.size
           end
