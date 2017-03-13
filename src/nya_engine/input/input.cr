@@ -22,11 +22,11 @@ module Nya
     end
 
     def self.key?(kcode : Keycode)
-      @@keymap[kcode]
+      @@keymap[kcode]?
     end
 
     def self.key?(kcode)
-      kc = Keycode.from_value(kcode.to_s.upcase)
+      kc = Keycode.parse(kcode.to_s.upcase)
       key? kc
     end
 
