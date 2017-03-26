@@ -102,7 +102,8 @@ module Nya
     property parent
     property components, position, rotation
     serializable_array components, of: Nya::Component
-    serializable position, rotation, as: CrystalEdge::Vector3
+    serializable position, as: CrystalEdge::Vector3
+    serializable rotation, as: CrystalEdge::Vector3
 
     def absolute_rotation
       rot = @rotation
@@ -116,7 +117,7 @@ module Nya
       pos = @position
       unless @parent.nil?
         pos = pos
-          .rotate(CrystalEdge::Quaternion.from_euler @parent.not_nil!.rotation) + @parent.not_nil!.absolute_position
+          .rotate(Quaternion.from_euler @parent.not_nil!.rotation) + @parent.not_nil!.absolute_position
       end
       pos
     end

@@ -22,9 +22,7 @@
           </property>
         </Nya_Render_Text2D>
         <Nya_Misc_DebugInfo />
-      </property>
-      <property name="children">
-
+        <Nya_Misc_CameraController velocity="100.0" />
       </property>
     </Nya_GameObject>
 
