@@ -10,10 +10,6 @@ module Nya::Render
     end
 
     def self.un_project(v : CrystalEdge::Vector2) : CrystalEdge::Vector3
-      z = uninitialized Float32
-
-
-
       mm = uninitialized Float64[16]
       pm = uninitialized Float64[16]
       vp = uninitialized Int32[4]
@@ -21,7 +17,7 @@ module Nya::Render
       LibGL.get_doublev(LibGL::PROJECTION_MATRIX, pm)
       LibGL.get_integerv(LibGL::VIEWPORT, vp)
 
-      
+
       z = 0.1f32
       ox = uninitialized Float64
       oy = uninitialized Float64
@@ -38,9 +34,7 @@ module Nya::Render
         pointerof(oy).as(Pointer(Void)),
         pointerof(oz).as(Pointer(Void))
       )
-      vec = CrystalEdge::Vector3.new(ox, oy, oz)
-      # puts vec.to_s
-      vec
+      CrystalEdge::Vector3.new(ox, oy, oz)
     end
 
     def self.draw_texture(x, y, w, h : Float64, t : UInt32)
