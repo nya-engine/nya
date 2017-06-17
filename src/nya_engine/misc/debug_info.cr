@@ -19,7 +19,7 @@ module Nya
 
       def render(t)
         return if @text.nil? || !matches_tag? t || !enabled?
-        @text.not_nil!.text = "dT : #{@last_utime.round(3)}\ndTr : #{Nya::Time.render_delta.round(3)}\nUPS: #{@last_utime == 0 ? "NaN" : (1/@last_utime).to_i}"
+        @text.not_nil!.text = "dT : #{@last_utime.round(3)}\ndTr : #{Nya::Time.render_delta.round(3)}\nUPS: #{@last_utime == 0 ? "NaN" : (1/@last_utime).to_i}\n#{parent.position.to_s}"
       end
     end
   end
