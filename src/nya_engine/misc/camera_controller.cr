@@ -6,12 +6,12 @@ module Nya
       attribute velocity, as: Float64, nilable: false
 
       private def delta_p
-        CrystalEdge::Vector3.new(0.0,0.0,1.0).rotate(Nya.to_rad(parent.rotation)) * Nya::Time.delta_time * @velocity
+        CrystalEdge::Vector3.new(0.0,0.0,-1.0).rotate(Nya.to_rad parent.rotation) * Nya::Time.delta_time * @velocity
       end
 
       def update
-        parent.position -= delta_p if Nya::Input.key? "W"
-
+        parent.position += delta_p if Nya::Input.key? "W"
+        parent.position -= delta_p if Nya::Input.key? "S"
 
         parent.rotation.y -= Nya::Time.delta_time * @velocity if Nya::Input.key? "D"
         parent.rotation.y += Nya::Time.delta_time * @velocity if Nya::Input.key? "A"
