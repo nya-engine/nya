@@ -45,7 +45,7 @@ describe Nya::Serializable do
 end
 
 describe Nya::Render::ShaderCompiler do
-      it "detects shader type" do
-        Nya::Render::ShaderCompiler.detect_type("\n\n//@type geome\n\n").should eq(Nya::Render::ShaderType::Geometry)
-      end
+  it "detects shader type" do
+    Nya::Render::ShaderCompiler.detect_type("\n\n//@type geome\n\n").should eq(Nya::Render::ShaderType::Geometry)
+  end
 end
