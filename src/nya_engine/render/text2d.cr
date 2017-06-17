@@ -53,6 +53,10 @@ module Nya
 
       def awake
         Nya.log.debug "Awake text : #{@texture_id}", "Text2D"
+
+        Nya::Event.subscribe :key_up do |e|
+          DrawUtils.log_pts @position.x, @position.y, @size.x, @size.y
+        end
       end
 
       def render(tag : String? = nil)
