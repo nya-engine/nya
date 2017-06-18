@@ -1,89 +1,46 @@
 require "../object"
+require "models"
 
-module Nya::Render
-  class Mesh < Nya::Component
-    class Vertex
-      include Nya::Serializable
-      @coord : CrystalEdge::Vector3
-      @normal : CrystalEdge::Vector3?
-      @texture_coord : CrystalEdge::Vector3?
-      @color : CrystalEdge::Vector3?
-      property coord, normal, texture_coord, color
-      serializable coord, normal, texture_coord, color, as: CrystalEdge::Vector3
+module Models
+  struct Vertex
+    @[AlwaysInline]
+    def render
+      LibGL.vertex3d *coord.to_gl
 
-      def render
-        LibGL.vertex3d(@coord.x, @coord.y, @coord.z)
-        unless @normal.nil?
-          n = @normal.not_nil!
-          LibGL.normal3d(n.x, n.y, n.z)
-        end
-
-        if @texture_coord
-          t = @texture_coord.not_nil!
-          LibGL.tex_coord3d(t.x, t.y, t.z)
-        elsif @color
-          c = @color.not_nil!
-          LibGL.color3d(c.x, c.y, c.z)
-        else
-          LibGL.color3d(@coord.x, @coord.y, @coord.z)
-        end
+      unless normal.nil?
+        LibGL.normal3d *normal.not_nil!.to_gl
       end
 
-      def initialize(@coord, @normal = nil, @texture_coord = nil, @color = nil)
-      end
-
-      def initialize
-        @coord = CrystalEdge::Vector3.new(0.0, 0.0, 0.0)
-        @normal = @texture_coord = @color = nil
+      if texcoord.nil?
+        LibGL.color3d *coord.to_gl
+      else
+        LibGL.tex_coord3d *texcoord.not_nil!.to_gl
       end
     end
+  end
 
-    class Face
-      include Nya::Serializable
-      property vertices : Array(Vertex)
-      @vertices = [] of Vertex
-      serializable_array vertices, of: Vertex
-
-      def render
-        LibGL.begin_(LibGL::POLYGON)
-        vertices.each &.render
+  struct Shape
+    def render
+      faces.each do |f|
+        LibGL.begin_ LibGL::POLYGON
+        f.each &.render
         LibGL.end_
       end
-
-      def initialize(@vertices)
-      end
-
-      def initialize
-      end
+      subshapes.each &.render
     end
+  end
+end
 
-    class Shape
-      include Nya::Serializable
+module Nya::Render
+  include Models
 
-      property faces = [] of Face
-      property name = "$root"
-      property subshapes = [] of Shape
-      serializable_array faces, of: Face
-      serializable_array subshapes, of: Shape
-      attribute name, as: String, nilable: false
-
-      def render
-        @faces.each &.render
-        @subshapes.each &.render
-      end
-
-      def initialize(@name, @faces, @subshapes)
-      end
-
-      def initialize
-      end
-    end
+  class Mesh < Nya::Component
 
     include Nya::Serializable
 
     property shapes = {} of String => Shape
     @filename : String? = nil
-    serializable_hash shapes, of: Shape
+
     attribute filename, as: String, nilable: false
 
     def filename=(f)
@@ -104,6 +61,8 @@ module Nya::Render
     def awake
       super
       Nya.log.unknown "#{@filename} loaded : #{@shapes.values.size} shapes", "Mesh"
+      Nya.log.unknown "First 10 shapes' faces' count : #{@shapes.first(10).map(&.last.faces.size)}", "Mesh"
+      GC.collect
     end
 
     def update

@@ -2,7 +2,7 @@ name: nya_engine
 version: 0.1.0
 
 authors:
-  -  <>
+  - unn4m3d <smelnikov871@gmail.com>
 
 dependencies:
   crystaledge:
@@ -11,5 +11,11 @@ dependencies:
     github: unn4m3d/chunked
   obj:
     github: unn4m3d/obj
+  stumpy_loader:
+    github: unn4m3d/stumpy_loader
+  stumpy_png:
+    github: stumpycr/stumpy_png
+  models:
+    github: unn4m3d/models
 
 license: MIT

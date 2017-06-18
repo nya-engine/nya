@@ -1,48 +1,7 @@
 require "obj"
 require "tempfile"
 require "./loader"
-
-module OBJ
-  class Vertex
-    def convert_to_nya(mtl = "")
-      # TODO : Use color from material
-      Nya::Render::Mesh::Vertex.new(
-        @coord,
-        @normal,
-        @texcoord
-      )
-    end
-  end
-
-  class Face
-    def convert_to_nya(mtl = "")
-      Nya::Render::Mesh::Face.new(
-        @vertices.map &.convert_to_nya(mtl)
-      )
-    end
-  end
-
-  class Group
-    def convert_to_nya(mtl = "")
-      mtl = @material if mtl.empty?
-      Nya::Render::Mesh::Shape.new(
-        @name,
-        @faces.map(&.convert_to_nya(mtl)),
-        [] of Nya::Render::Mesh::Shape
-      )
-    end
-  end
-
-  class NamedObject
-    def convert_to_nya
-      Nya::Render::Mesh::Shape.new(
-        @name,
-        @faces.map(&.convert_to_nya(@material)),
-        @groups.map(&.convert_to_nya(@material))
-      )
-    end
-  end
-end
+require "benchmark"
 
 module Nya::Render
   class Mesh::OBJLoader < Nya::Render::Mesh::Loader
@@ -66,11 +25,13 @@ module Nya::Render
             c.backtrace.each { |loc| Nya.log.error loc, "OBJParser" }
           end
         end
-        Tempfile.open("nya_obj_parser") do |f|
-          parser.debug! f
-          Nya.log.info "Parser state has been saved to #{f.path}"
-        end
-        mesh.shapes = Hash(String, Shape).zip(parser.objects.keys, parser.objects.values.map &.convert_to_nya)
+        {% if flag? :obj_parser_debug %}
+          Tempfile.open("nya_obj_parser") do |f|
+            parser.debug! f
+            Nya.log.info "Parser state has been saved to #{f.path}"
+          end
+        {% end %}
+        Nya.log.debug Benchmark.measure{ mesh.shapes = parser.objects }
       end
 
       mesh

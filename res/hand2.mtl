@@ -1,0 +1,16 @@
+# File exported by Artec Group 3D Scanning Solutions
+# www.artec-group.com
+
+newmtl material_0
+Ka 1 1 1
+Kd 1 1 1
+Ks 1 1 1
+Ns 1000
+map_Kd hand2_0.png
+
+newmtl material_1
+Ka 1 1 1
+Kd 1 1 1
+Ks 1 1 1
+Ns 1000
+
