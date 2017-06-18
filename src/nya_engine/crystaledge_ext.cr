@@ -3,7 +3,7 @@ require "./bindings/ode"
 require "./storage/serialization"
 
 module CrystalEdge
-  class Vector2
+  struct Vector2
     include Nya::Serializable
 
     serializable x, y, as: Float64
@@ -18,7 +18,7 @@ module CrystalEdge
     end
   end
 
-  class Vector3
+  struct Vector3
     include Nya::Serializable
 
     serializable x, y, z, as: Float64
@@ -38,7 +38,7 @@ module CrystalEdge
     end
   end
 
-  class Vector4
+  struct Vector4
     include Nya::Serializable
 
     serializable x, y, z, w, as: Float64
@@ -59,7 +59,7 @@ module CrystalEdge
     end
   end
 
-  class Quaternion
+  struct Quaternion
     include Nya::Serializable
 
     serializable x, y, z, w, as: Float64
