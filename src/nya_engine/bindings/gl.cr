@@ -823,6 +823,8 @@ lib LibGL
   # </editor-fold>
 
   # <editor-fold> Shader attributes
+  fun bind_attrib_location = "glBindAttribLocation"(p : UInt32, idx : UInt32, name : UInt8*)
+
   {% for i in [1, 2, 3, 4] %}
     fun vertex_attrib{{i.id}}f = "glVertexAttrib{{i.id}}f"(idx : UInt32,
       {% for idx in (0...i) %}

@@ -99,6 +99,9 @@ module Nya::Render
       pid = LibGL.create_program
       Nya.log.debug "Allocated ID : #{pid}", "Shader"
       shaders.each { |s| LibGL.attach_shader pid, s }
+
+      LibGL.bind_attrib_location pid, 0, "position"
+
       LibGL.link_program pid
 
       LibGL.get_programiv pid, LibGL::LINK_STATUS, out link_ok
