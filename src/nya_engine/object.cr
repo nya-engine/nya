@@ -124,7 +124,7 @@ module Nya
 
     def render(tag : String? = nil)
       return unless matches_tag? tag
-      comp = find_component_of?(Nya::Render::ShaderProgram)
+      comp = find_components_by_type_name(Nya::Render::ShaderProgram).first?
       comp.use! unless comp.nil?
       LibGL.matrix_mode LibGL::MODELVIEW
       LibGL.push_matrix
@@ -153,7 +153,9 @@ module Nya
     end
 
     def find_components_of(type : Component.class)
-      @components.select(&.class.===(type)).map { |x| type.cast x }
+      @components.select do |x|
+        x.class === type
+      end.map { |x| type.cast x }
     end
 
     def find_component_of?(type)
