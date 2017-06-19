@@ -883,6 +883,7 @@ lib LibGL
   fun gen_buffers = "glGenBuffers"(size : UInt32, buf : UInt32*)
   fun bind_buffer = "glBindBuffer"(t : UInt32, b : UInt32)
   fun buffer_data = "glBufferData"(t : UInt32, s : UInt64, data : Void*, usage : UInt32)
+  fun delete_buffers = "glDeleteBuffers"(size : UInt32, buf : UInt32*)
   # </editor-fold>
 
 
