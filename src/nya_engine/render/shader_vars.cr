@@ -1,4 +1,5 @@
 require "../storage/serialization"
+require "stumpy_loader"
 
 # <editor-fold> Status
 # [x] bool
@@ -120,6 +121,29 @@ module Nya::Render
         apply_value p, n, "4f", self.z, self.y, self.z, @w
       end
     end
+    # </editor-fold>
+
+    # <editor-fold> Samplers
+    class Sampler < Var
+      attribute src, as: String, nilable: true
+      property src = ""
+      property tex_id = 0u32
+    end
+
+    {% for d in (1..3) %}
+      class Sampler{{d}}D < Sampler
+        register
+        also_known_as :glsl_sampler{{d}}d
+
+        def src=(x)
+          @tex_id = DrawUtils.load_texture src, LibGL::TEXTURE_{{d}}D
+        end
+
+        def apply(p, n)
+          apply_value p, n, "1i", @tex_id
+        end
+      end
+    {% end %}
     # </editor-fold>
   end
 end
