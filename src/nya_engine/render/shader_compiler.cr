@@ -100,7 +100,9 @@ module Nya::Render
       Nya.log.debug "Allocated ID : #{pid}", "Shader"
       shaders.each { |s| LibGL.attach_shader pid, s }
 
-      LibGL.bind_attrib_location pid, 0, "position"
+      LibGL.bind_attrib_location pid, 0, "nya_Position"
+      LibGL.bind_attrib_location pid, 1, "nya_Normal"
+      LibGL.bind_attrib_location pid, 2, "nya_TexCoord"
 
       LibGL.link_program pid
 
