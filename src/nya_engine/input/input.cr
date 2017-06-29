@@ -2,6 +2,7 @@ require "./events"
 require "bit_array"
 
 module Nya
+  # Input helper methods
   module Input
     @@keymap = Hash(Keycode, Bool).new
 
@@ -21,10 +22,12 @@ module Nya
       end
     end
 
+    # Returns true if given key is pressed
     def self.key?(kcode : Keycode)
       @@keymap[kcode]?
     end
 
+    # ditto
     def self.key?(kcode)
       kc = Keycode.parse(kcode.to_s.upcase)
       key? kc
@@ -48,10 +51,12 @@ module Nya
       end
     end
 
+    # Returns true if the given mouse button is pressed
     def self.mouse?(button : UInt8)
       @@mouse[button]
     end
 
+    # ditto
     @[AlwaysInline]
     def self.mouse?(b)
       mouse? b.to_u8
