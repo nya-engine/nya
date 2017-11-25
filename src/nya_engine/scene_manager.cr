@@ -6,13 +6,13 @@ module Nya
 
     # Returns current scene object.
     # Raises an exception if current scene is nil
-    def current_scene
-      @current_scene.not_nil!
+    def self.current_scene
+      @@current_scene.not_nil!
     end
 
     # Sets the current scene
-    def current_scene=(s)
-      @current_scene = s
+    def self.current_scene=(s)
+      @@current_scene = s
     end
 
     # Renders current scene with `tag` (Tag is used for selective rendering)
@@ -25,9 +25,14 @@ module Nya
     end
 
     # Updates current scene
-    def update
+    def self.update
       return if current_scene.nil?
       current_scene.not_nil!.update
+    end
+
+    def self.render(tag)
+      return if current_scene.nil?
+      current_scene.not_nil!.render tag
     end
 
     # Loads current scene from file

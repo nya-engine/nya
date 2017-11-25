@@ -178,11 +178,6 @@ module Nya
       @components.each &.awake
     end
 
-    def awake
-      super
-      @components.each &.awake
-    end
-
     def find_components_of(type : Component.class)
       @components.select do |x|
         x.class === type
