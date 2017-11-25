@@ -42,7 +42,7 @@ module Nya
 
     Nya::Event.subscribe_typed :mouse_button_up, as: MouseButtonEvent do |e|
       if e.nil?
-        Nya.log.warn "MBDown hook received Non-MB event", "Input"
+        Nya.log.warn "MBUp hook received Non-MB event", "Input"
       else
         @@mouse[e.button] = false
       end
