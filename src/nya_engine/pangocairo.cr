@@ -3,6 +3,7 @@ require "./bindings/gl"
 require "crystaledge"
 
 module Nya
+  # :nodoc:
   class Pango
     property texture_id : UInt32
     property size : CrystalEdge::Vector2

@@ -4,27 +4,33 @@ module Nya
   class SceneManager
     @@current_scene : AbsScene?
 
-    def self.current_scene
-      @@current_scene.not_nil!
+    # Returns current scene object.
+    # Raises an exception if current scene is nil
+    def current_scene
+      @current_scene.not_nil!
     end
 
-    def self.current_scene=(s)
-      @@current_scene = s
+    # Sets the current scene
+    def current_scene=(s)
+      @current_scene = s
     end
 
-    def self.render(tag : String? = nil)
-      if @@current_scene.nil?
+    # Renders current scene with `tag` (Tag is used for selective rendering)
+    def render(tag : String? = nil)
+      if @current_scene.nil?
         Nya.log.warn "Scene is nil"
       else
         @@current_scene.not_nil!.render tag
       end
     end
 
-    def self.update
+    # Updates current scene
+    def update
       return if current_scene.nil?
       current_scene.not_nil!.update
     end
 
+    # Loads current scene from file
     def self.load_from_file(filename : String)
       Nya.log.debug "Trying to load scene from #{filename}", "SceneManager"
       Storage::Reader.read_file filename do |file|
