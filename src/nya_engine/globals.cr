@@ -22,7 +22,7 @@ module Nya
     LibSDL2.set_window_title @@window.not_nil!, str
   end
 
-  def self.fullscreen!(flags = SDL::WINDOW_FULLSCREEN)
+  def self.fullscreen!(flags = LibSDL2::WINDOW_FULLSCREEN)
     LibSDL2.set_window_fullscreen @@window.not_nil!, flags
   end
 end

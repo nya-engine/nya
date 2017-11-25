@@ -1,10 +1,14 @@
 require "./**"
 
 module Nya
+  # An engine class
   class Engine
+    # :nodoc:
     WP_CENTERED = 0x2FFF0000
 
+    # :nodoc:
     alias PhysCallback = LibODE::Geomid, LibODE::Geomid ->
+
     @phys_cb : PhysCallback
 
     def initialize(title, w, h)
@@ -37,6 +41,9 @@ module Nya
       end
     end
 
+    # Update engine state.
+    #
+    # Run this in a loop
     def frame!
       LibODE.space_collide(
         Nya::SceneManager.current_scene.space_id,
@@ -78,8 +85,8 @@ module Nya
       Nya::SceneManager.update
       Nya::Time.update
     end
-
-    def render_loop
+    
+    private def render_loop
       LibGL.clear_color(0.0, 0.0, 0.0, 1.0)
       LibGL.clear(LibGL::COLOR_BUFFER_BIT | LibGL::DEPTH_BUFFER_BIT)
       Nya.camera_list.each &.render!
@@ -90,6 +97,7 @@ module Nya
       Nya::Time.render
     end
 
+    # :nodoc:
     def finalize
       LibSDL2.quit
     end

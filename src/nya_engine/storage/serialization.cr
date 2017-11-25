@@ -25,10 +25,12 @@ module Nya
         @@deserialize_{{@type.name.gsub(/::/, "_").id}} = Array(Proc(self, XML::Node, Void?)).new
         @@serialize_{{@type.name.gsub(/::/, "_").id}} = Array(Proc(self, XML::Builder, Void?)).new
 
+        # :nodoc:
         def self.serialize_{{@type.name.gsub(/::/, "_").id}}
           @@serialize_{{@type.name.gsub(/::/, "_").id}}
         end
 
+        # :nodoc:
         def self.deserialize_{{@type.name.gsub(/::/, "_").id}}
           @@deserialize_{{@type.name.gsub(/::/, "_").id}}
         end
@@ -45,6 +47,7 @@ module Nya
           self
         end
 
+        # :nodoc:
         def serialize_inner(xml : XML::Builder)
           super xml
           {{@type}}.serialize_{{@type.name.gsub(/::/, "_").id}}.each &.call(self, xml)

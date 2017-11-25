@@ -1,12 +1,16 @@
 module Nya
+  # Status of event
   enum EventStatus
     ACTIVE
     DEAD
   end
 
+  # Event handler class
   class EventHandler
     @proc : Event ->
     @id : Int64
+
+    # Handler ID
     getter id
 
     def initialize(&proc : Event ->)
@@ -14,28 +18,35 @@ module Nya
       @proc = proc
     end
 
+    # Call handler
     def call(e : Event)
       @proc.call e unless e.status == EventStatus::DEAD
     end
   end
 
+  # Base class for events
   class Event
     @@events = Hash(String, Array(EventHandler)).new
     @@id = 0i64
 
     @status = EventStatus::ACTIVE
+
+    # Status of event
     property status
 
+    # :nodoc:
     def self.print!
       Nya.log.debug "Registered handlers for #{@@events.keys.size} event types", "Event"
     end
 
+    # :nodoc:
     def self.id
       i = @@id
       @@id += 1
       i
     end
 
+    # Subscribe handler to event types (`events`)
     def self.subscribe(*events, handler)
       events.each do |e|
         @@events[e.to_s] ||= Array(EventHandler).new
@@ -43,6 +54,7 @@ module Nya
       end
     end
 
+    # Subscribe proc to event types
     def self.subscribe(*events, &handler : Event ->)
       events.each do |e|
         @@events[e.to_s] ||= Array(EventHandler).new
@@ -50,18 +62,21 @@ module Nya
       end
     end
 
+    # Unsubscribe handler
     def self.unsubscribe(handler : EventHandler)
       @@events.each do |k, v|
         v.delete_if { |elem| elem.id == handler.id }
       end
     end
 
+    # Unsubscribe handler by `ID`
     def self.unsubscribe(id : Int64)
       @@events.each do |k, v|
         v.delete_if { |elem| elem.id == id }
       end
     end
 
+    # Fire an event
     def self.send(name, event : Event)
       if @@events.has_key? name.to_s
         @@events[name.to_s].each do |h|
@@ -70,6 +85,7 @@ module Nya
       end
     end
 
+    # Helper macro to automatically cast event passed to handler
     macro subscribe_typed(*args, as t, &proc)
       {% name = proc.args.first %}
       ::Nya::Event.subscribe {{*args}} do |%evt|
@@ -79,6 +95,7 @@ module Nya
     end
   end
 
+  # Helper class to wrap low level SDL events
   class EventWrapper(T) < Event
     property inner : T
 

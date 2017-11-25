@@ -4,6 +4,7 @@ require "crystaledge"
 
 module Nya
   module Render
+    # Camera component
     class Camera < Component
       def awake
         Nya.camera_list << self
@@ -16,6 +17,7 @@ module Nya
       @angle_of_view = 45.0
       @viewport = Rect.new(0.0, 0.0, 1.0, 1.0)
 
+      # :nodoc:
       protected def set_projection_matrix! : Void
         LibGL.matrix_mode(LibGL::PROJECTION)
         LibGL.load_identity
@@ -30,6 +32,7 @@ module Nya
       end
 
       property depth, near, far, angle_of_view, viewport
+
       serializable depth, near, far, angle_of_view, as: Float64
       serializable viewport, as: Rect
 
