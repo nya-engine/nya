@@ -114,15 +114,6 @@ module Nya
     def parent?
       @parent
     end
-
-    def awake
-    end
-
-    def update
-    end
-
-    def render
-    end
   end
 end
 
@@ -184,6 +175,11 @@ module Nya
       @children.each &.as(GameObject).parent=(self)
       super
       @components.each &.parent=(self)
+      @components.each &.awake
+    end
+
+    def awake
+      super
       @components.each &.awake
     end
 

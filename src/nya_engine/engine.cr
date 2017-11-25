@@ -19,10 +19,11 @@ module Nya
       LibSDL2.gl_set_attribute(LibSDL2::GLattr::GLBLUESIZE, 6)
       LibSDL2.gl_set_attribute(LibSDL2::GLattr::GLGREENSIZE, 6)
 
-      Nya.window = LibSDL2.create_window("Cube", WP_CENTERED, WP_CENTERED, w, h, LibSDL2::WindowFlags::WINDOWSHOWN | LibSDL2::WindowFlags::WINDOWOPENGL)
-      @gl_ctx = LibSDL2.gl_create_context(Nya.window)
+      @window = LibSDL2.create_window("Cube", WP_CENTERED, WP_CENTERED, w, h, LibSDL2::WindowFlags::WINDOWSHOWN | LibSDL2::WindowFlags::WINDOWOPENGL)
+      raise LibSDL2.get_error.as(String) if @window.null?
+      @gl_ctx = LibSDL2.gl_create_context(@window)
 
-      raise LibSDL2.get_error.as(String) if Nya.window?.is_a?(Nil) || Nya.window.not_nil!.null?
+      raise LibSDL2.get_error.as(String) if @gl_ctx.null?
 
       LibGL.clear_color(0.0, 0.0, 0.0, 0.0)
       LibGL.clear_depth(1.0)
@@ -78,14 +79,14 @@ module Nya
 
       render_loop
       LibGL.flush
-      LibSDL2.gl_swap_window(Nya.window)
+      LibSDL2.gl_swap_window(@window)
     end
 
     def update_loop
       Nya::SceneManager.update
       Nya::Time.update
     end
-    
+
     private def render_loop
       LibGL.clear_color(0.0, 0.0, 0.0, 1.0)
       LibGL.clear(LibGL::COLOR_BUFFER_BIT | LibGL::DEPTH_BUFFER_BIT)
