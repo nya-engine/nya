@@ -200,9 +200,5 @@ module Nya
     def find_component_of(type)
       find_component_of?(type).not_nil!
     end
-
-    def find_components_by_type_name(type : Component.class)
-      @components.select(&.class.name.==(type.name)).map { |x| type.cast x }
-    end
   end
 end
