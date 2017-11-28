@@ -6,7 +6,7 @@ module Nya
       @text : Nya::Render::Text2D? = nil
       @last_utime = 0.0
       def awake
-        @text = parent.find_components_by_type_name(Nya::Render::Text2D).first?
+        @text = parent.find_component_of?(Nya::Render::Text2D)
 
         if @text.nil?
           Nya.log.warn "Cannot load Text2D for debugging", "DebugInfo"

@@ -38,7 +38,8 @@
         <Nya_Render_Mesh filename="res/hand2.obj" />
         <Nya_Render_ShaderProgram>
           <property name="filenames">
-            <item>res/debug.frag</item>
+            <item>res/test.vert</item>
+            <item>res/test.frag</item>
           </property>
         </Nya_Render_ShaderProgram>
       </property>

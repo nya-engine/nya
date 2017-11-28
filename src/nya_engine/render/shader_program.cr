@@ -28,7 +28,7 @@ module Nya::Render
 
     def unuse!
       ::Nya.shader_stack.pop unless ::Nya.shader_stack.empty?
-      LibGL.use_program ::Nya.shader_stack.last?.to_u32
+      LibGL.use_program ::Nya.shader_stack.last? || 0u32
     end
 
     def apply(&block)

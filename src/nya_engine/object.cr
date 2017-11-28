@@ -156,7 +156,7 @@ module Nya
 
     def render(tag : String? = nil)
       return unless matches_tag? tag
-      comp = find_components_by_type_name(Nya::Render::ShaderProgram).first?
+      comp = find_component_of?(Nya::Render::ShaderProgram)
       comp.use! unless comp.nil?
       LibGL.matrix_mode LibGL::MODELVIEW
       LibGL.push_matrix
@@ -201,7 +201,7 @@ module Nya
       {% unless U < Component %}
         {% raise "Cannot find non-component classes" %}
       {% end %}
-      @components.find(&.ancestor_or_same?(U)).as(U)
+      @components.find(&.ancestor_or_same?(U)).as?(U)
     end
 
     def find_component_of(type)
