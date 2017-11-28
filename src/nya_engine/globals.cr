@@ -25,4 +25,8 @@ module Nya
   def self.fullscreen!(flags = LibSDL2::WINDOW_FULLSCREEN)
     LibSDL2.set_window_fullscreen @@window.not_nil!, flags
   end
+
+  @@shader_stack = Deque(UInt32).new
+
+  class_property shader_stack
 end
