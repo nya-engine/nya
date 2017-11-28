@@ -184,17 +184,24 @@ module Nya
       @components.each &.awake
     end
 
-    def find_components_of(type : U.class) forall U
+    def find_components_of(type : U.class) : Array(U) forall U
       {% unless U < Component %}
         {% raise "Cannot find non-component classes" %}
       {% end %}
-      @components.select do |x|
-        x.ancestor_or_same? U
-      end.map(&.as(U))
+      @components.compact_map do |x|
+        if x.ancestor_or_same? U
+          x.as(U)
+        else
+          nil
+        end
+      end
     end
 
-    def find_component_of?(type)
-      find_components_of(type).first?
+    def find_component_of?(type : U.class) forall U
+      {% unless U < Component %}
+        {% raise "Cannot find non-component classes" %}
+      {% end %}
+      @components.find(&.ancestor_or_same?(U)).as(U)
     end
 
     def find_component_of(type)
