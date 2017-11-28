@@ -44,3 +44,15 @@ class Prop
 	@someprop = SomeProp.new
 	serializable someprop, as: SomeProp
 end
+
+class SampleComponent < Nya::Component
+	def foo
+		:foo
+	end
+end
+
+class AnotherComponent < SampleComponent
+	def foo
+		:bar
+	end
+end

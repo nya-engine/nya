@@ -14,6 +14,8 @@ module Nya
 
     # Post-initializes this object
     abstract def awake
+
+    abstract def ancestor_or_same?(t : U.class) forall U
   end
 
   # Base class for all in-game objects
@@ -53,6 +55,10 @@ module Nya
     #
     # Override this method to implement custom render logic.
     def render(tag : String? = nil)
+    end
+
+    def ancestor_or_same?(u : U.class) forall U
+      return {{@type <= U}}
     end
   end
 
@@ -178,10 +184,13 @@ module Nya
       @components.each &.awake
     end
 
-    def find_components_of(type : Component.class)
+    def find_components_of(type : U.class) forall U
+      {% unless U < Component %}
+        {% raise "Cannot find non-component classes" %}
+      {% end %}
       @components.select do |x|
-        x.class === type
-      end.map { |x| type.cast x }
+        x.ancestor_or_same? U
+      end.map(&.as(U))
     end
 
     def find_component_of?(type)

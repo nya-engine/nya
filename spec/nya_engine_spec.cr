@@ -49,3 +49,13 @@ describe Nya::Render::ShaderCompiler do
     Nya::Render::ShaderCompiler.detect_type("\n\n//@type geome\n\n").should eq(Nya::Render::ShaderType::Geometry)
   end
 end
+
+describe Nya::GameObject do
+  it "finds components" do
+    obj = Nya::GameObject.new
+    obj.components << SampleComponent.new
+    obj.find_component_of(SampleComponent).foo.should eq(:foo)
+    obj.components[0] = AnotherComponent.new
+    obj.find_component_of(SampleComponent).foo.should eq(:bar)
+  end
+end
