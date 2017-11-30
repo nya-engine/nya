@@ -5,6 +5,7 @@ module Nya::Render
     @@shader_cache = Hash(String, UInt32).new
     @@program_cache = Hash(String, UInt32).new
     @@preprocessor_cache = Hash(String, String).new
+    REQUIRE_REGEX = %r(^\s*//\s*@require (?<name>.+))
 
     def self.flush_cache!
       Nya.log.warn "Flushing shader and shader program cache"
@@ -14,33 +15,37 @@ module Nya::Render
     end
 
     def self.preprocess(text : String)
-      text.split("\n").map do |line|
-        if md = line.match /^\s*\/\/\s*@require (?<name>.+)/
-          Storage::Reader.read_to_end(md["name"])
-        else
-          line
-        end
-      end.join("\n")
+      while text =~ REQUIRE_REGEX
+        text = text.split("\n").map do |line|
+          if md = line.match REQUIRE_REGEX
+            Storage::Reader.read_to_end(md["name"])
+          else
+            line
+          end
+        end.join("\n")
+      end
+      text
     end
 
     def self.detect_type(text)
       md = text.match(/\/\/@type (?<type>.*)/)
-      tp = ShaderType::Vertex
       if md
-        tp = case md["type"].downcase
-             when /^frag/
-               ShaderType::Fragment
-             when /^tess.*c/
-               ShaderType::TessControl
-             when /^tess.*e/
-               ShaderType::TessEvaluation
-             when /^geom/
-               ShaderType::Geometry
-             else
-               ShaderType::Vertex
-             end
+        case md["type"].downcase
+        when /^frag/
+          ShaderType::Fragment
+        when /^tess.*c/
+          ShaderType::TessControl
+        when /^tess.*e/
+          ShaderType::TessEvaluation
+        when /^geom/
+          ShaderType::Geometry
+        else
+          Nya.log.warn "Unknown shader type #{md["type"]}, assuming vertex shader", "Shader"
+          ShaderType::Vertex
+        end
+      else
+        ShaderType::Vertex
       end
-      tp
     end
 
     def self.compile(filename : String, stype : ShaderType? = nil)
@@ -54,9 +59,7 @@ module Nya::Render
       if @@preprocessor_cache.has_key? filename
         text = @@preprocessor_cache[filename]
       else
-        while text =~ /\/\/\s*@require/
-          text = preprocess text
-        end
+        text = preprocess text
       end
       @@preprocessor_cache[filename] = text
       stype ||= detect_type text
@@ -78,7 +81,7 @@ module Nya::Render
       String.new(bytes).split("\n").each do |ln|
         if comp_ok != 0
           Nya.log.debug ln, "GL"
-        else
+        elsif log_l > 0
           Nya.log.error ln, "GL"
         end
       end
@@ -113,8 +116,8 @@ module Nya::Render
       String.new(log).split("\n").each do |ln|
         if link_ok == 0
           Nya.log.error ln, "GL"
-        else
-          Nya.log.debug ln, "GL"
+        elsif log_l > 0
+          Nya.log.warn ln, "GL"
         end
       end
 
@@ -125,10 +128,12 @@ module Nya::Render
     end
 
     def self.parse_vars(filename : String)
-      unless @@preprocessor_cache.has_key? filename
-        Nya.log.warn "Compiling shader #{filename} as it has been not compiled yet", "Shader"
+      text = if @@preprocessor_cache.has_key? filename
+        @@preprocessor_cache[filename]
+      else
+        Nya.log.warn "Preprocessing shader #{filename} as it has been not preprocessed yet", "Shader"
+        @@preprocessor_cache[filename] = preprocess Storage::Reader.read_to_end(filename)
       end
-      text = @@preprocessor_cache[filename]
       text.split("\n").compact_map do |line|
         md = line.match(/^[^\/]*(?<kind>attribute|uniform)\s*(?<type>[a-z0-9A-Z]+)\s*(?<name>.+);/)
         if md.nil?
