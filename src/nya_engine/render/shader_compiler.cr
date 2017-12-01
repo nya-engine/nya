@@ -1,12 +1,14 @@
 require "../log"
 
 module Nya::Render
+  # GLSL shader compiler
   class ShaderCompiler
     @@shader_cache = Hash(String, UInt32).new
     @@program_cache = Hash(String, UInt32).new
     @@preprocessor_cache = Hash(String, String).new
     REQUIRE_REGEX = %r(^\s*//\s*@require (?<name>.+))
 
+    # Flushes preprocessor, compiler and linker cache
     def self.flush_cache!
       Nya.log.warn "Flushing shader and shader program cache"
       [@@shader_cache,
@@ -14,6 +16,8 @@ module Nya::Render
        @@preprocessor_cache].each &.clear
     end
 
+    # Preprocesses shader
+    # In fact, that only replaces `@require file` with the contents of the `file`
     def self.preprocess(text : String)
       while text =~ REQUIRE_REGEX
         text = text.split("\n").map do |line|
@@ -27,6 +31,12 @@ module Nya::Render
       text
     end
 
+    # Detects shader type using `//@type shader_type` directive
+    # `frag*` - fragment shader
+    # `tess*c*` - tesselation control shader
+    # `tess*e*` - tesselation evaluation shader
+    # `geom*` - geometry shader
+    # Shader with other type is considered vertex shader 
     def self.detect_type(text)
       md = text.match(/\/\/@type (?<type>.*)/)
       if md

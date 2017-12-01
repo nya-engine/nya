@@ -1,4 +1,5 @@
 module Nya::Render
+  # Wrapper enum for OpenGL drawing mode
   enum Mode
     QUADS          = LibGL::QUADS
     TRIANGLES      = LibGL::TRIANGLES
