@@ -1,0 +1,8 @@
+language: crystal
+addons:
+  apt:
+    packages:
+      - libgl1-mesa-dev
+      - libsdl2-dev
+      - libode-dev
+      - libpangocairo-dev
