@@ -2,13 +2,16 @@ require "../bindings/gl"
 require "../bindings/glu"
 
 module Nya::Render
+  # Low level drawing utilities
   class DrawUtils
+    # Calls `block` wrapped in glBegin and glEnd
     def self.draw(mode = LibGL::QUADS, &block : -> Void)
       LibGL.begin_(mode)
       block.call
       LibGL.end_
     end
 
+    # Unprojects screen point to world coordinates
     def self.un_project(v : CrystalEdge::Vector2) : CrystalEdge::Vector3
       mm = uninitialized Float64[16]
       pm = uninitialized Float64[16]
@@ -37,6 +40,7 @@ module Nya::Render
       CrystalEdge::Vector3.new(ox, oy, oz)
     end
 
+    # Draws OpenGL texture `t` on screen coordinates `x` and `y` with width `w` and height `h`
     def self.draw_texture(x, y, w, h : Float64, t : UInt32)
       LibGL.push_matrix
       va = un_project(CrystalEdge::Vector2.new(x, y))
@@ -60,6 +64,7 @@ module Nya::Render
       LibGL.disable(LibGL::ALPHA_TEST)
     end
 
+    # :nodoc:
     def self.log_pts(x,y,w,h)
       va = un_project(CrystalEdge::Vector2.new(x, y))
       vb = un_project(CrystalEdge::Vector2.new(x + w, y + h))

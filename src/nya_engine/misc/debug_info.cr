@@ -1,5 +1,6 @@
 module Nya
   module Misc
+    # Simple component that writes some debug info on screen
     class DebugInfo < Component
       attribute debug, as: Bool, nilable: false
       property debug = false

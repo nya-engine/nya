@@ -1,5 +1,6 @@
 module Nya
   module Misc
+    # Simple camera controller component
     class CameraController < Component
       property velocity
       @velocity = 100.0

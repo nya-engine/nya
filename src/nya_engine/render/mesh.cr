@@ -1,8 +1,12 @@
 require "../object"
 require "models"
 
+# Extension for `models` shard
 module Models
+  # Vertex structure
   struct Vertex
+    # Renders vertex using OpenGL subroutines
+    # Prefer use vertex buffers as they are much faster on models with many vertices
     @[AlwaysInline]
     def render!
       LibGL.vertex3d *coord.to_gl
@@ -18,6 +22,7 @@ module Models
       end
     end
 
+    # :nodoc:
     @[AlwaysInline]
     private def place_at(buffer, offset, vec)
       x, y, z = vec.not_nil!.to_gl
@@ -26,17 +31,23 @@ module Models
       buffer[offset + 2] = z
     end
 
+    # :nodoc:
     @[AlwaysInline]
     def normal_to_buffer(buffer, offset)
       place_at buffer, offset, normal unless normal.nil?
     end
 
+    # :nodoc:
     @[AlwaysInline]
     def texcoord_to_buffer(buffer, offset)
       place_at buffer,offset, texcoord unless texcoord.nil?
     end
 
-    def to_buffer(buffer : Slice(Float64), offset, un, ut)
+    # Places vertex to `buffer` with `offset`.
+    # `un` is for Use normals
+    # `ut` is for Use Texture coords
+    # Disabling normals and texcoords saves memory, about 33% each
+    def to_buffer(buffer : Slice(Float64), offset, un : Bool, ut : Bool)
       place_at buffer, offset, coord
 
       if un && ut
@@ -52,16 +63,21 @@ module Models
     end
   end
 
+  # Shape structure
   class Shape
     @buffer = 0u32
     @count = 0i32
     @use_normal = false
     @use_texcoord = false
 
+    # Returns a stride ( = number of floating-point 64-bit numbers used to represent each vertex)
     def stride
       3 + (@use_normal ? 3 : 0)  + (@use_texcoord ? 3 : 0)
     end
 
+    # Renders shape using vertex buffers
+    # Generates a vertex buffer if it's not generated yet
+    # Prefer generating buffer with `generate_buffer!` in any non-critical moment, for example, right after loading a model.
     def render!
       if @buffer == 0
         faces.each do |f|
@@ -95,6 +111,7 @@ module Models
       end
     end
 
+    # Generates a vertex buffer with shape data
     def generate_buffer!
       # Delete old buffer
       # TODO : Use new buffer only if size is changed
@@ -148,6 +165,7 @@ end
 module Nya::Render
   include Models
 
+  # Mesh component
   class Mesh < Nya::Component
 
     include Nya::Serializable
@@ -157,6 +175,7 @@ module Nya::Render
 
     attribute filename, as: String, nilable: false
 
+    # Separate setter for filename used to load a model
     def filename=(f)
       # return if f.to_s.empty?
       mesh = Loader.load_from f.to_s
