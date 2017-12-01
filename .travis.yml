@@ -5,4 +5,6 @@ addons:
       - libgl1-mesa-dev
       - libsdl2-dev
       - libode-dev
-      - libpangocairo-dev
+      - libpangocairo-1.0.0
+      - libpango1.0-dev
+      - libcairo2-dev
