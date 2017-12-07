@@ -78,7 +78,7 @@ module Nya::Render
       Nya.log.debug "Type is #{stype}", "Shader"
 
       shid = LibGL.create_shader stype.to_i
-      Nya.log.debug "Allocated ID : 0x#{shid.to_s(16)}", "Shader"
+      Nya.log.debug "Allocated ID : 0x#{shid.to_s(16)} (#{shid})", "Shader"
 
       utext = text.to_unsafe
 
@@ -90,10 +90,9 @@ module Nya::Render
       bytes = Bytes.new(log_l)
       LibGL.get_shader_info_log shid, log_l, out len, bytes
 
-      String.new(bytes).split("\n").each do |ln|
-        if comp_ok != 0
-          Nya.log.debug ln, "GL"
-        elsif log_l > 0
+
+      if log_l > 0
+        String.new(bytes).split("\n").each do |ln|
           Nya.log.error ln, "GL"
         end
       end
@@ -113,7 +112,7 @@ module Nya::Render
       end
       Nya.log.debug "Linking shader program", "Shader"
       pid = LibGL.create_program
-      Nya.log.debug "Allocated ID : #{pid}", "Shader"
+      Nya.log.debug "Allocated ID : 0x#{pid.to_s(16)} (#{pid})", "Shader"
       shaders.each { |s| LibGL.attach_shader pid, s }
 
       LibGL.bind_attrib_location pid, 0, "nya_Position"
