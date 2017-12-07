@@ -58,4 +58,12 @@ describe Nya::GameObject do
     obj.components[0] = AnotherComponent.new
     obj.find_component_of(SampleComponent).foo.should eq(:bar)
   end
+
+  it "finds objects recursively" do
+    obj = Nya::GameObject.new
+    obj.components << SampleComponent.new
+    obj.children << Nya::GameObject.new
+    3.times { obj.children!.first.components << AnotherComponent.new }
+    obj.find_in_children(SampleComponent).map(&.foo).should eq([:foo, :bar, :bar, :bar])
+  end
 end
