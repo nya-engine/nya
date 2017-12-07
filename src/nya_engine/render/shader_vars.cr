@@ -99,6 +99,7 @@ module Nya::Render
     # </editor-fold>
 
     # <editor-fold> FP vectors
+
     class Vec2 < Var
       property x = 0f32
       property y = 0f32
@@ -123,7 +124,7 @@ module Nya::Render
 
     class Vec4 < Vec3
       property w = 0f32
-      attribute z, as: Float32, nilable: false
+      attribute w, as: Float32, nilable: false
       also_known_as glsl_v4
 
       def apply(p, n)
