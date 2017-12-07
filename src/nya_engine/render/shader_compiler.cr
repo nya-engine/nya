@@ -36,7 +36,7 @@ module Nya::Render
     # `tess*c*` - tesselation control shader
     # `tess*e*` - tesselation evaluation shader
     # `geom*` - geometry shader
-    # Shader with other type is considered vertex shader 
+    # Shader with other type is considered vertex shader
     def self.detect_type(text)
       md = text.match(/\/\/@type (?<type>.*)/)
       if md
@@ -58,6 +58,8 @@ module Nya::Render
       end
     end
 
+    # Compiles shader
+    # If `stype` is not set, it is detected automatically using `detect_type`
     def self.compile(filename : String, stype : ShaderType? = nil)
       ckey = "#{filename}$#{stype}"
       if @@shader_cache.has_key? ckey
@@ -102,6 +104,7 @@ module Nya::Render
       shid
     end
 
+    # Links a shader program
     def self.link(shaders : Array(UInt32))
       ckey = shaders.join(";")
       if @@program_cache.has_key? ckey
@@ -137,6 +140,7 @@ module Nya::Render
       pid
     end
 
+    # :nodoc:
     def self.parse_vars(filename : String)
       text = if @@preprocessor_cache.has_key? filename
         @@preprocessor_cache[filename]

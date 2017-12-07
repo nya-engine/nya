@@ -22,9 +22,14 @@ require "../storage/serialization"
 module Nya::Render
   module ShaderVars
     # <editor-fold> Base classes
+
+    # Abstract shader variable class
     abstract class AbsVar
+
+      # Applies variable to a shader program
       abstract def apply(program : UInt32, name : String) : Void
 
+      # :nodoc:
       macro apply_value(p, n, fsign, *v)
         case self.kind
         when "uniform"
@@ -37,6 +42,7 @@ module Nya::Render
       end
     end
 
+    # Base class for variables. Needed for Serializable to work
     class Var < AbsVar
       include Serializable
       property kind : String = "uniform"
@@ -49,6 +55,8 @@ module Nya::Render
     # </editor-fold>
 
     # <editor-fold> Primitives
+
+    # Boolean value (also has an alias `glsl_bool`)
     class Bool < Var
       property value : String = ""
       attribute value, as: String, nilable: true
@@ -66,6 +74,7 @@ module Nya::Render
       end
     end
 
+    # 32bit integer value (also has an alias `glsl_int`)
     class Int < Var
       property value : Int32 = 0
       attribute value, as: Int32, nilable: false
@@ -76,6 +85,7 @@ module Nya::Render
       end
     end
 
+    # 32bot floating point value (also has an alias `glsl_float`)
     class Float < Var
       property value : Float32 = 0f32
       attribute value, as: Float32, nilable: false
