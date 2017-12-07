@@ -55,8 +55,17 @@ describe Nya::GameObject do
     obj = Nya::GameObject.new
     obj.components << SampleComponent.new
     obj.find_component_of(SampleComponent).foo.should eq(:foo)
+    obj.find_component_of?(AnotherComponent).should eq(nil)
     obj.components[0] = AnotherComponent.new
     obj.find_component_of(SampleComponent).foo.should eq(:bar)
+  end
+
+  it "raises when there is no such component" do
+    obj = Nya::GameObject.new
+    obj.components << SampleComponent.new
+    expect_raises do
+      obj.find_component_of(AnotherComponent)
+    end
   end
 
   it "finds objects recursively" do
