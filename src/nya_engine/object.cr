@@ -188,6 +188,7 @@ module Nya
       @components.each &.awake
     end
 
+    # Find all components of given type in this GameObject
     def find_components_of(type : U.class) : Array(U) forall U
       {% unless U < Component %}
         {% raise "Not a component class"}
@@ -201,6 +202,8 @@ module Nya
       end
     end
 
+    # Find component of given type in this GameObject
+    # Returns nil if there's no such component
     def find_component_of?(type : U.class) forall U
       {% unless U < Component %}
         {% raise "Not a component class"}
@@ -208,13 +211,15 @@ module Nya
       @components.find(&.ancestor_or_same?(U)).as?(U)
     end
 
+    # Find component of given type
+    # Raises an exception if there is no such component
     def find_component_of(type)
       find_component_of?(type).not_nil!
     end
 
-    # Find components recursively
+    # Find components of given type recursively
     # WARNING! This may be slow on big object structures, consider doing it in a separate fiber in that cases
-    def find_in_children(type : U.class) forall U
+    def find_in_children(type : U.class) : Array(U) forall U
       {% unless U < Component %}
         {% raise "Not a component class"}
       {% end %}
