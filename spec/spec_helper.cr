@@ -1,4 +1,13 @@
 require "spec"
+require "../src/nya_engine/log"
+
+{% unless flag? :nya_debug %}
+	tfile = Tempfile.new("nya_log")
+	Nya.log = Logger.new(tfile)
+
+	puts "Nya engine log is saved to #{tfile.path}"
+{% end %}
+
 require "../src/nya_engine/storage/serialization"
 require "../src/nya_engine"
 require "../src/nya_engine/render/shader_compiler"
