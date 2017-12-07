@@ -145,6 +145,10 @@ module Nya
       rot
     end
 
+    def children!
+      @children.compact_map(&.as(GameObject))
+    end
+
     def absolute_position
       pos = @position
       unless @parent.nil?
@@ -186,7 +190,7 @@ module Nya
 
     def find_components_of(type : U.class) : Array(U) forall U
       {% unless U < Component %}
-        {% raise "Cannot find non-component classes" %}
+        {% raise "Not a component class"}
       {% end %}
       @components.compact_map do |x|
         if x.ancestor_or_same? U
@@ -199,13 +203,24 @@ module Nya
 
     def find_component_of?(type : U.class) forall U
       {% unless U < Component %}
-        {% raise "Cannot find non-component classes" %}
+        {% raise "Not a component class"}
       {% end %}
       @components.find(&.ancestor_or_same?(U)).as?(U)
     end
 
     def find_component_of(type)
       find_component_of?(type).not_nil!
+    end
+
+    # Find components recursively
+    # WARNING! This may be slow on big object structures, consider doing it in a separate fiber in that cases
+    def find_in_children(type : U.class) forall U
+      {% unless U < Component %}
+        {% raise "Not a component class"}
+      {% end %}
+      find_components_of(type) + children!.reduce([] of U) do |memo, e|
+        memo + e.find_in_children type
+      end
     end
   end
 end
