@@ -16,6 +16,9 @@ module Nya
     # Returns space ID of this scene
     abstract def space_id : LibODE::Spaceid
 
+    # Returns array of components found recursively
+    abstract def find_components_of(type : U.class) : Array(U) forall U
+
   end
 
   class Scene < AbsScene
@@ -49,6 +52,13 @@ module Nya
     def awake
       Nya.log.debug "Scene direct children : #{@root.size}", "SceneManager"
       @root.each &.awake
+    end
+
+    def find_components_of(type : U.class) : Array(U) forall U
+      {% unless U < Component %}
+        {% raise "Non-component class" %}
+      {% end %}
+      @root.reduce([] of U) { |memo, e| memo + e.find_in_children type }
     end
   end
 end
