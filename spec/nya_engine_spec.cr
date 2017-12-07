@@ -76,3 +76,17 @@ describe Nya::GameObject do
     obj.find_in_children(SampleComponent).map(&.foo).should eq([:foo, :bar, :bar, :bar])
   end
 end
+
+describe Nya::Scene do
+  it "finds components" do
+    obj1 = Nya::GameObject.new
+    obj2 = Nya::GameObject.new
+
+    obj1.components << SampleComponent.new
+    obj2.components << SampleComponent.new << AnotherComponent.new
+
+    scene = Nya::Scene.new [obj1, obj2]
+
+    scene.find_components_of(SampleComponent).map(&.foo).should eq([:foo, :foo, :bar])
+  end
+end
