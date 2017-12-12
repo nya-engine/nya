@@ -1677,6 +1677,7 @@ lib LibSDL2
   fun get_window_brightness = "SDL_GetWindowBrightness"(window : Window*) : Float32
   fun set_window_gamma_ramp = "SDL_SetWindowGammaRamp"(window : Window*, red : Void*, green : Void*, blue : Void*) : Int16
   fun get_window_gamma_ramp = "SDL_GetWindowGammaRamp"(window : Window*, red : Void*, green : Void*, blue : Void*) : Int16
+  fun set_window_resizable = "SDL_SetWindowResizable"(window : Window*, r : Bool ) : Void
   fun destroy_window = "SDL_DestroyWindow"(window : Window*) : Void
   fun is_screen_saver_enabled = "SDL_IsScreenSaverEnabled" : Bool
   fun enable_screen_saver = "SDL_EnableScreenSaver" : Void
