@@ -91,10 +91,7 @@ module Nya
       LibGL.clear_color(0.0, 0.0, 0.0, 1.0)
       LibGL.clear(LibGL::COLOR_BUFFER_BIT | LibGL::DEPTH_BUFFER_BIT)
       Nya.camera_list.each &.render!
-      err = Nya.gl_error?
-      unless err.nil?
-        Nya.log.error err.to_s, "GL"
-      end
+      Nya.gl_check_error
       Nya::Time.render
     end
 
