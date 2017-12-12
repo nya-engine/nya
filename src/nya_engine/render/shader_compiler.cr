@@ -119,6 +119,14 @@ module Nya::Render
       LibGL.bind_attrib_location pid, 1, "nya_Normal"
       LibGL.bind_attrib_location pid, 2, "nya_TexCoord"
 
+      link_program! pid
+
+      @@program_cache[ckey] = pid
+      pid
+    end
+
+    # :nodoc:
+    def self.link_program!(pid, silent = false)
       LibGL.link_program pid
 
       LibGL.get_programiv pid, LibGL::LINK_STATUS, out link_ok
@@ -128,15 +136,13 @@ module Nya::Render
       String.new(log).split("\n").each do |ln|
         if link_ok == 0
           Nya.log.error ln, "GL"
-        elsif log_l > 0
+        elsif log_l > 0 && !silent
           Nya.log.warn ln, "GL"
         end
       end
 
       raise "Cannot link shader program. See log for more details" if link_ok == 0
-      Nya.log.debug "Linked successfully", "Shader"
-      @@program_cache[ckey] = pid
-      pid
+      Nya.log.debug "Linked successfully", "Shader" unless silent
     end
 
     # :nodoc:
