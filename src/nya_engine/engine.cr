@@ -85,6 +85,7 @@ module Nya
 
     def update_loop
       Nya::SceneManager.update
+      Nya::Event.update
       Nya::Time.update
     end
 
