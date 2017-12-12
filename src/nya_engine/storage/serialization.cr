@@ -36,6 +36,7 @@ module Nya
         end
         NYA_REGISTERED = true
 
+        # :nodoc:
         def deserialize(xml : XML::Node)
 
           {% if @type.superclass < ::Nya::Serializable %}
@@ -177,6 +178,7 @@ module Nya
       {% end %}
     end
 
+    # Declares a property serializable as XML attribute
     macro attribute(name, as tp, nilable nl)
       register
 	    @@serialize_{{@type.name.gsub(/::/, "_").id}} << ->(s : self, xml : XML::Builder) do
@@ -208,7 +210,7 @@ module Nya
         {% end %}
       end
     end
-
+    
     macro serializable_hash(*names, of type)
       {% for name in names %}
         @@deserialize_{{@type.name.gsub(/::/, "_").id}} << ->(s : self, xml : XML::Node) do
