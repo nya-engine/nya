@@ -24,6 +24,26 @@ module Nya
     end
   end
 
+  # :nodoc:
+  class ChannelWrapper(T)
+    @channel : Channel(T)
+
+    def initialize(@channel)
+    end
+
+    def initialize
+      @channel = Channel(T).new
+    end
+
+    property channel
+
+    def +(value : T)
+      @channel.send value
+    end
+
+    forward_missing_to @channel
+  end
+
   # Base class for events
   class Event
     @@events = Hash(String, Array(EventHandler)).new
@@ -92,6 +112,25 @@ module Nya
         {{name.id}} = %evt.as?({{t}})
         {{proc.body}}
       end
+    end
+
+    alias Message = {event: Event, name: String}
+    alias AtomicChannel = Atomic(ChannelWrapper(Message))
+    @@async_events = AtomicChannel.new ChannelWrapper(Message).new
+
+    # Send an event that will be triggered from update fiber
+    def self.send_async(name, e : Event)
+      @@async_events.add Message.new(event: e, name: name)
+      Fiber.yield
+    end
+
+    # :nodoc:
+    def self.update
+      until @@async_events.get.empty?
+        evt = @@async_events.get.receive
+        send evt[:name], evt[:event]
+      end
+      Fiber.yield
     end
   end
 
