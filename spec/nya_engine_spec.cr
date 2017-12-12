@@ -48,6 +48,16 @@ describe Nya::Render::ShaderCompiler do
   it "detects shader type" do
     Nya::Render::ShaderCompiler.detect_type("\n\n//@type geome\n\n").should eq(Nya::Render::ShaderType::Geometry)
   end
+
+  it "detects shader type by filename extension" do
+    Nya::Render::ShaderCompiler.detect_type("kekekekekekekekekek", "shader.vert").should eq(Nya::Render::ShaderType::Vertex)
+    Nya::Render::ShaderCompiler.detect_type("kekus", "shader.frag").should eq(Nya::Render::ShaderType::Fragment)
+  end
+
+  it "prefers type detected by directives over extension" do
+    Nya::Render::ShaderCompiler.detect_type("//@type vertex", "shader.frag").should eq(Nya::Render::ShaderType::Vertex)
+    Nya::Render::ShaderCompiler.detect_type("//@type tess_control", "shader.geom").should eq(Nya::Render::ShaderType::TessControl)
+  end
 end
 
 describe Nya::GameObject do

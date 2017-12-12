@@ -31,29 +31,39 @@ module Nya::Render
       text
     end
 
-    # Detects shader type using `//@type shader_type` directive
+    # :nodoc:
+    protected def self.type_from_s(str)
+      case str.downcase
+      when /^frag/
+        ShaderType::Fragment
+      when /^tess.*c/
+        ShaderType::TessControl
+      when /^tess.*e/
+        ShaderType::TessEvaluation
+      when /^geom/
+        ShaderType::Geometry
+      when /^vert/
+        ShaderType::Vertex
+      else
+        Nya.log.warn "Unknown shader type #{str}, assuming vertex shader", "Shader"
+        ShaderType::Vertex
+      end
+    end
+
+    # Detects shader type using `//@type shader_type` directive and file extension
     # `frag*` - fragment shader
     # `tess*c*` - tesselation control shader
     # `tess*e*` - tesselation evaluation shader
     # `geom*` - geometry shader
     # Shader with other type is considered vertex shader
-    def self.detect_type(text)
+    def self.detect_type(text, filename : String? = nil)
       md = text.match(/\/\/@type (?<type>.*)/)
       if md
-        case md["type"].downcase
-        when /^frag/
-          ShaderType::Fragment
-        when /^tess.*c/
-          ShaderType::TessControl
-        when /^tess.*e/
-          ShaderType::TessEvaluation
-        when /^geom/
-          ShaderType::Geometry
-        else
-          Nya.log.warn "Unknown shader type #{md["type"]}, assuming vertex shader", "Shader"
-          ShaderType::Vertex
-        end
+        type_from_s md["type"]
+      elsif filename
+        type_from_s File.extname(filename.not_nil!).lchop('.')
       else
+        Nya.log.warn "Cannot detect shader type, assuming vertex shader", "Shader"
         ShaderType::Vertex
       end
     end
