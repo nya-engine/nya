@@ -1,1 +1,0 @@
-require "./nya_engine/*"
