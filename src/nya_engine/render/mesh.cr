@@ -1,5 +1,6 @@
 require "../object"
 require "models"
+require "./shader_compiler"
 
 # Extension for `models` shard
 module Models
@@ -76,7 +77,7 @@ module Models
     end
 
     # Renders shape using vertex buffers
-    # Generates a vertex buffer if it's not generated yet
+    # Renders each vertex separately if buffer is not generated
     # Prefer generating buffer with `generate_buffer!` in any non-critical moment, for example, right after loading a model.
     def render!
       if @buffer == 0
@@ -106,10 +107,24 @@ module Models
           LibGL.tex_coord_pointer 3, LibGL::DOUBLE, raw_stride, Pointer(Void).new(offset * sizeof(Float64))
         end
 
+        if Nya.shader_stack.last?
+          program = Nya.shader_stack.last
+          LibGL.bind_attrib_location program, 0, "nya_Position"
+          LibGL.bind_attrib_location program, 1, "nya_Normal" if @use_normal
+
+          if @use_texcoord
+            LibGL.bind_attrib_location program, (@use_normal ? 2 : 1), "nya_TexCoord"
+          end
+
+          Nya::Render::ShaderCompiler.link_program! program, true
+        end
+
         LibGL.draw_arrays(LibGL::TRIANGLES, 0, @count)
         subshapes.each &.render!
       end
     end
+
+    getter? use_normal, use_texcoord
 
     # Generates a vertex buffer with shape data
     def generate_buffer!
