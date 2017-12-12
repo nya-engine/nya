@@ -6,12 +6,17 @@ module Nya
     # :nodoc:
     WP_CENTERED = 0x2FFF0000
 
+    # Main engine fiber name
+    FIBER_NAME = "Nya Engine"
+
     # :nodoc:
     alias PhysCallback = LibODE::Geomid, LibODE::Geomid ->
 
     @phys_cb : PhysCallback
 
     def initialize(title, w, h)
+      Fiber.current.name = FIBER_NAME
+
       raise LibSDL2.get_error.to_s if LibSDL2.init(LibSDL2::INIT_VIDEO) < 0
 
       LibSDL2.gl_set_attribute(LibSDL2::GLattr::GLDOUBLEBUFFER, 1)

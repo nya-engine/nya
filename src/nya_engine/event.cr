@@ -96,8 +96,11 @@ module Nya
       end
     end
 
-    # Fire an event
+    # Fire an event. Calls #send_async if called not from engine main fiber
     def self.send(name, event : Event)
+      if Fiber.current.name != Nya::Engine::FIBER_NAME
+        send_async name, event
+      end
       if @@events.has_key? name.to_s
         @@events[name.to_s].each do |h|
           h.call event
@@ -114,13 +117,18 @@ module Nya
       end
     end
 
-    alias Message = {event: Event, name: String}
+    # :nodoc:
+    record Message, name : String, event : Event
+
+    # :nodoc:
     alias AtomicChannel = Atomic(ChannelWrapper(Message))
+
+    # :nodoc:
     @@async_events = AtomicChannel.new ChannelWrapper(Message).new
 
     # Send an event that will be triggered from update fiber
     def self.send_async(name, e : Event)
-      @@async_events.add Message.new(event: e, name: name)
+      @@async_events.add Message.new(event: e.as(Event), name: name.to_s)
       Fiber.yield
     end
 
@@ -128,7 +136,7 @@ module Nya
     def self.update
       until @@async_events.get.empty?
         evt = @@async_events.get.receive
-        send evt[:name], evt[:event]
+        send evt.name, evt.event
       end
       Fiber.yield
     end
