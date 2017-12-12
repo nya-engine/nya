@@ -21,6 +21,7 @@ module Nya
 
       @window = LibSDL2.create_window("Cube", WP_CENTERED, WP_CENTERED, w, h, LibSDL2::WindowFlags::WINDOWSHOWN | LibSDL2::WindowFlags::WINDOWOPENGL)
       raise LibSDL2.get_error.as(String) if @window.null?
+      LibSDL2.set_window_resizable(@window, LibSDL2::Bool::TRUE)
       @gl_ctx = LibSDL2.gl_create_context(@window)
 
       raise LibSDL2.get_error.as(String) if @gl_ctx.null?
