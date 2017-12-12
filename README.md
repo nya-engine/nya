@@ -1,6 +1,6 @@
 # nya_engine
 
-[![Build Status](https://travis-ci.org/unn4m3d/crystal_sdl_test.svg?branch=master)](https://travis-ci.org/unn4m3d/crystal_sdl_test)
+[![Build Status](https://travis-ci.org/unn4m3d/nya_engine.svg?branch=master)](https://travis-ci.org/unn4m3d/nya_engine)
 
 NyaEngine : 3D Game Engine written in [crystal](https://crystal-lang.org/) \[**Work in progress**\]
 
@@ -15,8 +15,8 @@ Install dependences :
 * `libode-dev` - for ODE bindings
 
 ```sh
-  git clone https://github.com/unn4m3d/crystal_sdl_test/
-  cd crystal_sdl_test
+  git clone https://github.com/unn4m3d/nya_engine/
+  cd nya_engine
   crystal deps
   crystal test.cr
 ```
