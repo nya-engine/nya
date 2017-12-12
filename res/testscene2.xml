@@ -35,7 +35,7 @@
         </CrystalEdge_Vector3>
       </property>
       <property name="components">
-        <Nya_Render_Mesh filename="res/hand2.obj" />
+        <Nya_Render_Mesh filename="res/cornell_box.obj" />
         <Nya_Render_ShaderProgram>
           <property name="filenames">
             <item>res/test.vert</item>
