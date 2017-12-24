@@ -10,7 +10,7 @@ module Nya
         @geom_id.not_nil!
       end
 
-      attribute density, as: Float64, nilable: false
+      attribute density : Float64
 
       def apply(body_id) : LibODE::Geomid
         raise "Cannot use raw Geom"
@@ -25,9 +25,7 @@ module Nya
       property x, y, z : Float64
       @x, @y, @z = 0.0, 0.0, 0.0
 
-      attribute x, as: Float64, nilable: false
-      attribute z, as: Float64, nilable: false
-      attribute y, as: Float64, nilable: false
+      attribute x : Float64, y : Float64, z : Float64
 
       def apply(bid)
         space = SceneManager.current_scene.space_id

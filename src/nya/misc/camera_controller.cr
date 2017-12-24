@@ -4,7 +4,7 @@ module Nya
     class CameraController < Component
       property velocity
       @velocity = 100.0
-      attribute velocity, as: Float64, nilable: false
+      attribute velocity : Float64
 
       private def delta_p
         CrystalEdge::Vector3.new(0.0,0.0,-1.0).rotate(Nya.to_rad parent.rotation) * Nya::Time.delta_time * @velocity

@@ -13,13 +13,12 @@ module Nya
       @autosize = true
       property autosize
 
-      attribute autosize, as: Bool, nilable: false
+      attribute autosize : Bool
 
       property color, position, size, text, font
 
-      serializable position, size, as: CrystalEdge::Vector2
-      serializable color, as: Color
-      serializable text, font, as: String
+      serializable position : CrystalEdge::Vector2, size : CrystalEdge::Vector2
+      serializable color : Color, text : String, font : String
 
       private def refresh_text!(ntxt, nfnt, nclr)
         if ntxt != @text || nfnt != @font || nclr != @color

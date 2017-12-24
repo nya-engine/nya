@@ -1,4 +1,4 @@
-require "../storage/serialization"
+require "nya_serializable"
 
 module Nya
   module Render
@@ -11,7 +11,7 @@ module Nya
 
       include ::Nya::Serializable
       property x, y, width, height
-      serializable x, y, width, height, as: Float64
+      serializable x : Float64, y : Float64, width : Float64, height : Float64
 
       def max_x
         @x + @width

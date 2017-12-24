@@ -188,7 +188,7 @@ module Nya::Render
     property shapes = {} of String => Shape
     @filename : String? = nil
 
-    attribute filename, as: String, nilable: false
+    attribute filename : String
 
     # Separate setter for filename used to load a model
     def filename=(f)

@@ -6,7 +6,7 @@ module Nya
   module Physics
     class Body < Nya::Component
       property geom : Geom = Geom.new
-      serializable geom, as: Geom
+      serializable geom : Geom
       @body_id : LibODE::Bodyid? = nil
 
       setter body_id

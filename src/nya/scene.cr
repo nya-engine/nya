@@ -38,7 +38,7 @@ module Nya
     def initialize
     end
 
-    serializable_array root, of: GameObject
+    serializable root : Array(GameObject)
 
     def update
       @root.each &.update

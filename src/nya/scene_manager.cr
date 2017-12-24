@@ -1,4 +1,4 @@
-require "./storage/*"
+require "./storage"
 
 module Nya
   class SceneManager

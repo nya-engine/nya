@@ -1,4 +1,4 @@
-require "./storage/*"
+require "./storage"
 
 module Nya
   # Abstract base class for objects
@@ -22,9 +22,7 @@ module Nya
   class Object
     include Nya::Serializable
 
-    attribute tag, as: String, nilable: true
-    attribute id, as: String, nilable: true
-    attribute enabled, as: Bool, nilable: false
+    attribute tag : String, id : String, enabled : Bool
 
     @tag : String? = nil
     @id : String? = nil
@@ -68,7 +66,7 @@ module Nya
 
     property children
 
-    serializable_array children, of: Object
+    serializable children : Array(Object)
 
     def initialize(@children)
     end
@@ -133,9 +131,7 @@ module Nya
     @parent : GameObject? = nil
     property parent
     property components, position, rotation
-    serializable_array components, of: Nya::Component
-    serializable position, as: CrystalEdge::Vector3
-    serializable rotation, as: CrystalEdge::Vector3
+    serializable components : Array(Component), position : CrystalEdge::Vector3, rotation : CrystalEdge::Vector3
 
     def absolute_rotation
       rot = @rotation

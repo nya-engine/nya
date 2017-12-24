@@ -1,4 +1,4 @@
-require "../storage/serialization"
+require "nya_serializable"
 
 # <editor-fold> Status
 # [x] bool
@@ -46,7 +46,7 @@ module Nya::Render
     class Var < AbsVar
       include Serializable
       property kind : String = "uniform"
-      attribute kind, as: String, nilable: true
+      attribute kind : String
 
       def apply(p, n)
       end
@@ -58,26 +58,20 @@ module Nya::Render
 
     # Boolean value (also has an alias `glsl_bool`)
     class Bool < Var
-      property value : String = ""
-      attribute value, as: String, nilable: true
+      property value = false
+      attribute value : Bool
       also_known_as glsl_bool
 
       def apply(p, n)
-        value = case @value
-                when "yes" || "true" || "1"
-                  1
-                else
-                  0
-                end
-
-        apply_value p, n, "1i", value
+        val = @value ? 1 : 0
+        apply_value p, n, "1i", val
       end
     end
 
     # 32bit integer value (also has an alias `glsl_int`)
     class Int < Var
       property value : Int32 = 0
-      attribute value, as: Int32, nilable: false
+      attribute value : Int32
       also_known_as glsl_int
 
       def apply(p, n)
@@ -88,7 +82,7 @@ module Nya::Render
     # 32bot floating point value (also has an alias `glsl_float`)
     class Float < Var
       property value : Float32 = 0f32
-      attribute value, as: Float32, nilable: false
+      attribute value : Float32
       also_known_as glsl_float
 
       def apply(p, n)
@@ -103,8 +97,7 @@ module Nya::Render
     class Vec2 < Var
       property x = 0f32
       property y = 0f32
-      attribute x, as: Float32, nilable: false
-      attribute y, as: Float32, nilable: false
+      attribute x : Float32, y : Float32
       also_known_as glsl_v2
 
       def apply(p, n)
@@ -114,7 +107,7 @@ module Nya::Render
 
     class Vec3 < Vec2
       property z = 0f32
-      attribute z, as: Float32, nilable: false
+      attribute z : Float32
       also_known_as glsl_v3
 
       def apply(p, n)
@@ -124,7 +117,7 @@ module Nya::Render
 
     class Vec4 < Vec3
       property w = 0f32
-      attribute w, as: Float32, nilable: false
+      attribute w : Float32
       also_known_as glsl_v4
 
       def apply(p, n)

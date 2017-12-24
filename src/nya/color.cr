@@ -1,4 +1,5 @@
-require "./storage/*"
+require "./storage"
+require "nya_serializable"
 
 module Nya
   alias RawRGBA = Tuple(Float64, Float64, Float64, Float64)
@@ -36,8 +37,8 @@ module Nya
       end
     end
 
-    serializable r, g, b, a, as: UInt8
-    attribute name, as: String, nilable: true
+    serializable r : UInt8, g : UInt8, b : UInt8, a : UInt8
+    attribute name : String
 
     def to_gl
       {

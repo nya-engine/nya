@@ -9,6 +9,7 @@ dependencies:
     github: unn4m3d/crystaledge
   chunked:
     github: unn4m3d/chunked
+    tag: v0.1.1-alpha
   obj:
     github: unn4m3d/obj
     tag: 0.1.0-alpha
@@ -18,5 +19,7 @@ dependencies:
     github: stumpycr/stumpy_png
   models:
     github: unn4m3d/models
+  nya_serializable:
+    github: unn4m3d/nya_serializable #
 
 license: MIT

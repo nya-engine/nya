@@ -2,7 +2,7 @@ module Nya
   module Misc
     # Simple component that writes some debug info on screen
     class DebugInfo < Component
-      attribute debug, as: Bool, nilable: false
+      attribute debug : Bool
       property debug = false
       @text : Nya::Render::Text2D? = nil
       @last_utime = 0.0

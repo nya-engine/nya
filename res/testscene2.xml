@@ -1,48 +1,51 @@
 <!-- Test scene -->
-<Nya_Scene id="testscene">
-  <property name="name">Test Scene</property>
-  <property name="root">
-    <Nya_GameObject id="text">
-      <property name="position">
-        <CrystalEdge_Vector3>
-          <property name="x">0.0</property>
-          <property name="y">0.0</property>
-          <property name="z">500.0</property>
-        </CrystalEdge_Vector3>
-      </property>
-      <property name="components">
-        <Nya_Render_Camera id="cam0">
-          <property name="far">10000.0</property>
-        </Nya_Render_Camera>
-        <Nya_Render_Text2D>
-          <property name="font">Ubuntu Bold 12</property>
-          <property name="text">NaN</property>
-          <property name="color">
-            <Nya_Color name="red" />
-          </property>
-        </Nya_Render_Text2D>
-        <Nya_Misc_DebugInfo />
-        <Nya_Misc_CameraController velocity="100.0" />
-      </property>
-    </Nya_GameObject>
-
-    <Nya_GameObject>
-      <property name="position">
-        <CrystalEdge_Vector3>
-          <property name="x">0.0</property>
-          <property name="y">0.0</property>
-          <property name="z">0.0</property>
-        </CrystalEdge_Vector3>
-      </property>
-      <property name="components">
-        <Nya_Render_Mesh filename="res/cornell_box.obj" />
-        <Nya_Render_ShaderProgram>
-          <property name="filenames">
-            <item>res/test.vert</item>
-            <item>res/test.frag</item>
-          </property>
-        </Nya_Render_ShaderProgram>
-      </property>
-    </Nya_GameObject>
-  </property>
-</Nya_Scene>
+<Nya:Scene id="testscene">
+  <name>Test Scene</name>
+  <root>
+    <item>
+      <Nya:GameObject id="text">
+        <position>
+          <CrystalEdge:Vector3>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>500.0</z>
+          </CrystalEdge:Vector3>
+        </position>
+        <components>
+          <Nya_Render:Camera id="cam0">
+            <far>10000.0</far>
+          </Nya_Render:Camera>
+          <Nya_Render:Text2D>
+            <font>Ubuntu Bold 12</font>
+            <text>NaN</font>
+            <color>
+              <Nya:Color name="red" />
+            </color>
+          </Nya_Render:Text2D>
+          <Nya_Misc:DebugInfo />
+          <Nya_Misc:CameraController velocity="100.0" />
+        </components>
+      </Nya:GameObject>
+    </item>
+    <item>
+      <Nya:GameObject id="mesh">
+        <position>
+          <CrystalEdge:Vector3>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+          </CrystalEdge:Vector3>
+        </position>
+        <components>
+          <Nya_Render:Mesh filename="res/cornell_box.obj" />
+          <Nya_Render:ShaderProgram>
+            <filenames>
+              <item>res/test.vert</item>
+              <item>res/test.frag</item>
+            </filenames>
+          </Nya_Render:ShaderProgram>
+        </components>
+      </Nya:GameObject>
+    </item>
+  </root>
+</Nya:Scene>

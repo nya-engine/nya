@@ -33,8 +33,7 @@ module Nya
 
       property depth, near, far, angle_of_view, viewport
 
-      serializable depth, near, far, angle_of_view, as: Float64
-      serializable viewport, as: Rect
+      serializable depth : Float64, near : Float64, far : Float64, angle_of_view : Float64, viewport : Rect
 
       def render!
         return unless enabled?

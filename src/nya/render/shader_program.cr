@@ -9,8 +9,7 @@ module Nya::Render
     @properties = Hash(String, Nya::Render::ShaderVars::Var).new
 
     property shaders, filenames, program, properties
-    serializable_array filenames, of: String
-    serializable_hash properties, of: Nya::Render::ShaderVars::Var
+    serializable filenames : Array(String), properties : Hash(String, Nya::Render::ShaderVars::Var)
 
     def awake
       @program = ShaderCompiler.link(

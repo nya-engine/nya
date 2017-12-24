@@ -1,12 +1,12 @@
 require "crystaledge"
 require "./bindings/ode"
-require "./storage/serialization"
+require "nya_serializable"
 
 module CrystalEdge
   struct Vector2
     include Nya::Serializable
 
-    serializable x, y, as: Float64
+    serializable x : Float64, y : Float64
 
     def initialize
       @x = 0.0
@@ -21,7 +21,7 @@ module CrystalEdge
   struct Vector3
     include Nya::Serializable
 
-    serializable x, y, z, as: Float64
+    serializable x : Float64, y : Float64, z : Float64
 
     def initialize
       @x = 0.0
@@ -41,7 +41,7 @@ module CrystalEdge
   struct Vector4
     include Nya::Serializable
 
-    serializable x, y, z, w, as: Float64
+    serializable x : Float64, y : Float64, z : Float64, w : Float64
 
     def initialize
       @x = 0.0
@@ -62,7 +62,7 @@ module CrystalEdge
   struct Quaternion
     include Nya::Serializable
 
-    serializable x, y, z, w, as: Float64
+    serializable x : Float64, y : Float64, z : Float64, z : Float64
 
     def initialize
       @x = 0.0

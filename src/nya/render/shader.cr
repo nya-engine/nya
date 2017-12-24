@@ -1,10 +1,8 @@
 require "./shader_type"
-require "../storage/*"
+require "../storage"
 
 module Nya::Render
   class Shader
-    include Nya::Serializable
-
     @shader = 0u32
     property shader
 
