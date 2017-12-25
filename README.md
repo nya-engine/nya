@@ -8,15 +8,41 @@ Inspired by Unity3D and X-Ray Engine
 
 # How to test
 
-Install dependences :
-* `crystal`
-* `libsdl2-dev`
-* `libpangocairo-dev`
-* `libode-dev` - for ODE bindings
+Install dependencies :
+
+* OpenGL
+* OpenAL
+* Open Dynamics Engine
+* SDL2
+* Pango and Cairo
+* Crystal (tested on 0.24.1)
+
+Then run engine test:
 
 ```sh
-  git clone https://github.com/unn4m3d/nya_engine/
-  cd nya_engine
+  git clone https://github.com/unn4m3d/nya/
+  cd nya
   crystal deps
+  crystal spec
   crystal test.cr
 ```
+
+# Todo list
+
+* [ ] Separate server (physics, events, etc.) and client (audio, video, input, etc.)
+* [ ] Models
+  * [ ] Materials
+    * [ ] Support for MTL files
+  * [ ] Textures
+    * [ ] PNG
+    * [ ] TGA
+    * [ ] DDS
+    * [ ] BMP
+  * [x] Support for Wavefront OBJ
+  * [ ] Support for more model formats
+    * [ ] OGF (probably)
+* [ ] Physics (ODE)
+* [ ] Windows support (requires windows support in crystal)
+* [ ] Modular video and audio drivers
+  * [ ] DirectX support (requires windows support)
+* [ ] Audio
