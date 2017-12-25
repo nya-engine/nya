@@ -9,10 +9,10 @@ dependencies:
     github: unn4m3d/crystaledge
   chunked:
     github: unn4m3d/chunked
-    tag: v0.1.1-alpha
+    version: "~> 0.1.1"
   obj:
     github: unn4m3d/obj
-    tag: 0.1.0-alpha
+    version: "~> 0.1.0"
   stumpy_loader:
     github: unn4m3d/stumpy_loader
   stumpy_png:
@@ -21,6 +21,7 @@ dependencies:
     github: unn4m3d/models
   nya_serializable:
     github: unn4m3d/nya_serializable
+    version: "~> 0.2.2"
   version:
     github: unn4m3d/version
 
