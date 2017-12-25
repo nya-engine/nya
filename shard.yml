@@ -12,12 +12,13 @@ dependencies:
   chunked:
     github: unn4m3d/chunked
   obj:
-    git: https://github.com/unn4m3d/obj
+    github: unn4m3d/obj
     version: "~> 0.2.0"
   stumpy_loader:
     github: unn4m3d/stumpy_loader
   stumpy_png:
     github: stumpycr/stumpy_png
+    version: "~> 4.2.0"
   models:
     github: unn4m3d/models
     branch: dev/materials
