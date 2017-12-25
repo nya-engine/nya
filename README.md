@@ -17,6 +17,8 @@ Install dependencies :
 * Pango and Cairo
 * Crystal (tested on 0.24.1)
 
+On Gentoo, this can be done using `emerge -a dev-games/ode media-libs/libsdl2 media-libs/openal media-libs/mesa x11-libs/pango x11-libs/cairo dev-lang/crystal`
+
 Then run engine test:
 
 ```sh
