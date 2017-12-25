@@ -46,3 +46,8 @@ Then run engine test:
 * [ ] Modular video and audio drivers
   * [ ] DirectX support (requires windows support)
 * [ ] Audio
+* [ ] Scripting
+  * [ ] Automatic bindings
+  * [ ] Language support
+    * [ ] Lua
+    * [ ] Ruby
