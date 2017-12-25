@@ -1,4 +1,4 @@
-# nya_engine
+# nya
 
 [![Build Status](https://travis-ci.org/unn4m3d/nya_engine.svg?branch=master)](https://travis-ci.org/unn4m3d/nya_engine)
 
