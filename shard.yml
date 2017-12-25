@@ -4,25 +4,42 @@ version: 0.1.1
 authors:
   - unn4m3d <smelnikov871@gmail.com>
 
+description: 3D Game Engine written in crystal (work in progress)
+
 dependencies:
   crystaledge:
     github: unn4m3d/crystaledge
   chunked:
     github: unn4m3d/chunked
-    version: "~> 0.1.1"
   obj:
-    github: unn4m3d/obj
-    version: "~> 0.1.0"
+    git: https://github.com/unn4m3d/obj
+    version: "~> 0.2.0"
   stumpy_loader:
     github: unn4m3d/stumpy_loader
   stumpy_png:
     github: stumpycr/stumpy_png
   models:
     github: unn4m3d/models
+    branch: dev/materials
   nya_serializable:
     github: unn4m3d/nya_serializable
-    version: "~> 0.2.2"
   version:
     github: unn4m3d/version
 
+libraries:
+  libode: "*"
+  libpangocairo: "*"
+  libpango: "*"
+  libcairo: "*"
+  libglib: "*"
+  libgobject: "*"
+  libGL: "*"
+  libopenal: "*"
+  libGLU: "*"
+  libSDL2: "*"
+
 license: MIT
+
+targets:
+  test:
+    main: test.cr

@@ -11,7 +11,7 @@ module Nya::Render
       mesh = Mesh.new
       Nya.log.info "Loading mesh #{file}", "OBJLoader"
       Storage::Reader.read_file(file) do |f|
-        parser = OBJ::OBJParser.new f, true
+        parser = OBJ::OBJParser.new f, file, true
         begin
           parser.parse!
         rescue e : Exception
