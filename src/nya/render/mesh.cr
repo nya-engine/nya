@@ -1,6 +1,7 @@
 require "../object"
 require "models"
 require "./shader_compiler"
+require "./shader_vars"
 
 # Extension for `models` shard
 module Models
@@ -76,6 +77,18 @@ module Models
       3 + (@use_normal ? 3 : 0)  + (@use_texcoord ? 3 : 0)
     end
 
+    private def color(r,g,b)
+      var = Nya::Render::ShaderVars::Vec3.new
+      var.x, var.y, var.z = r.to_f32, g.to_f32, b.to_f32
+      var
+    end
+
+    private def float(x)
+      var = Nya::Render::ShaderVars::Float.new
+      var.value = x.to_f32
+      var
+    end
+
     # Renders shape using vertex buffers
     # Renders each vertex separately if buffer is not generated
     # Prefer generating buffer with `generate_buffer!` in any non-critical moment, for example, right after loading a model.
@@ -109,6 +122,16 @@ module Models
 
         if Nya.shader_stack.last?
           program = Nya.shader_stack.last
+
+          unless @material.nil?
+            @material.not_nil!.colors.each do |k, v|
+              color(v.x, v.y, v.z).apply(program, "nya_Color_#{k}")
+            end
+
+            float(@material.not_nil!.dissolvance).apply(program, "nya_Dissolvance")
+
+            # TODO: Maps and Reflection
+          end
           LibGL.bind_attrib_location program, 0, "nya_Position"
           LibGL.bind_attrib_location program, 1, "nya_Normal" if @use_normal
 
