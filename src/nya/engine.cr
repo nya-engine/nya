@@ -31,6 +31,8 @@ module Nya
 
       raise LibSDL2.get_error.as(String) if @gl_ctx.null?
 
+      print_versions!
+
       LibGL.clear_color(0.0, 0.0, 0.0, 0.0)
       LibGL.clear_depth(1.0)
       LibGL.depth_func(LibGL::LESS)
