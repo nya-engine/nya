@@ -11,16 +11,34 @@ module Nya::Render
       LibGL.end_
     end
 
+
+    def self.get_matrix(mat, type : U.class) : U forall U
+      matrix = uninitialized U
+      {% if U.type_vars.first <= Int %}
+        LibGL.get_integerv(mat, matrix)
+      {% else %}
+        LibGL.get_doublev(mat, matrix)
+      {% end %}
+      matrix
+    end
+
+    def self.get_modelview_matrix
+      get_matrix LibGL::MODELVIEW_MATRIX, StaticArray(Float64, 16)
+    end
+
+    def self.get_projection_matrix
+      get_matrix LibGL::PROJECTION_MATRIX, StaticArray(Float64, 16)
+    end
+
+    def self.get_viewport
+      get_matrix LibGL::VIEWPORT, StaticArray(Int32, 4)
+    end
+
     # Unprojects screen point to world coordinates
     def self.un_project(v : CrystalEdge::Vector2) : CrystalEdge::Vector3
-      mm = uninitialized Float64[16]
-      pm = uninitialized Float64[16]
-      vp = uninitialized Int32[4]
-      LibGL.get_doublev(LibGL::MODELVIEW_MATRIX, mm)
-      LibGL.get_doublev(LibGL::PROJECTION_MATRIX, pm)
-      LibGL.get_integerv(LibGL::VIEWPORT, vp)
-
-
+      mm = get_modelview_matrix
+      pm = get_projection_matrix
+      vp = get_viewport
       z = 0.1f32
       ox = uninitialized Float64
       oy = uninitialized Float64
