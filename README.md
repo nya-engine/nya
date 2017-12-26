@@ -52,4 +52,5 @@ Then run engine test:
   * [ ] Automatic bindings
   * [ ] Language support
     * [ ] Lua
-    * [ ] Ruby
+    * [ ] Ruby
+* [ ] Specify version requirements for dependencies 
