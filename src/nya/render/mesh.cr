@@ -89,6 +89,12 @@ module Models
       var
     end
 
+    private def texture(file)
+      var = Nya::Render::ShaderVars::Sampler3D.new
+      var.src = file
+      var
+    end
+
     # Renders shape using vertex buffers
     # Renders each vertex separately if buffer is not generated
     # Prefer generating buffer with `generate_buffer!` in any non-critical moment, for example, right after loading a model.
@@ -129,8 +135,13 @@ module Models
             end
 
             float(@material.not_nil!.dissolvance).apply(program, "nya_Dissolvance")
+            float(1.0 - @material.not_nil!.dissolvance).apply(program, "nya_Transparency")
 
-            # TODO: Maps and Reflection
+            @material.not_nil!.maps.each do |k,v|
+              texture(v).apply(program, "nya_Map_#{k}")
+            end
+
+            # TODO: Reflection
           end
           LibGL.bind_attrib_location program, 0, "nya_Position"
           LibGL.bind_attrib_location program, 1, "nya_Normal" if @use_normal
