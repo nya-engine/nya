@@ -129,7 +129,7 @@ module Nya::Render
 
     # <editor-fold> Samplers
     class Sampler < Var
-      attribute src, as: String, nilable: true
+      attribute src : String
       property src = ""
       property tex_id = 0u32
     end
