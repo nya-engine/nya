@@ -1,3 +1,4 @@
+require "stumpy_loader"
 require "./nya/*"
 
 macro nya_versions(const)
@@ -33,3 +34,5 @@ end
 def print_versions!
   nya_versions
 end
+
+stumpy_load!

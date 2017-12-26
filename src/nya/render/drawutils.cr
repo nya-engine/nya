@@ -71,5 +71,27 @@ module Nya::Render
       Nya.log.debug va.to_s
       Nya.log.debug vb.to_s
     end
+
+    def self.load_texture(path, type)
+      canvas = StumpyLoader.load(path)
+      tex = 0u32
+      LibGL.gen_textures 1, pointerof(tex)
+      LibGL.bind_texture type, tex
+      LibGL.tex_image2d(
+        type,
+        0,
+        LibGL::RGBA,
+        canvas.width,
+        canvas.height,
+        0,
+        LibGL::RGBA,
+        LibGL::UNSIGNED_BYTE,
+        canvas.to_gl
+      )
+      LibGL.tex_parameteri(type, LibGL::TEXTURE_MIN_FILTER, LibGL::LINEAR)
+      LibGL.tex_parameteri(type, LibGL::TEXTURE_MAG_FILTER, LibGL::LINEAR_MIPMAP_LINEAR)
+      #LibGL.generate_mipmap type
+      tex
+    end
   end
 end
