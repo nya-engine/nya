@@ -37,11 +37,11 @@
           </CrystalEdge:Vector3>
         </position>
         <components>
-          <Nya_Render:Mesh filename="res/cornell_box.obj" />
+          <Nya_Render:Mesh filename="res/models/cornell_box.obj" />
           <Nya_Render:ShaderProgram>
             <filenames>
-              <item>res/test.vert</item>
-              <item>res/test.frag</item>
+              <item>res/shaders/test.vert</item>
+              <item>res/shaders/test.frag</item>
             </filenames>
           </Nya_Render:ShaderProgram>
         </components>
