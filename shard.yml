@@ -9,6 +9,7 @@ description: 3D Game Engine written in crystal (work in progress)
 dependencies:
   crystaledge:
     github: unn4m3d/crystaledge
+    version: "~> 0.2.0"
   chunked:
     github: unn4m3d/chunked
   obj:

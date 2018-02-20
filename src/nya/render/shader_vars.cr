@@ -149,5 +149,29 @@ module Nya::Render
       end
     {% end %}
     # </editor-fold>
+
+    {% for size in (3..4) %}
+      class Matrix{{size}} < Var
+        register
+        also_known_as :glsl_mat{{size}}
+        property inner = StaticArray(Float64, {{size**2}}).new(0.0)
+
+        serializable inner : StaticArray(Float64, {{size**2}})
+
+        macro apply_matrix(p, n, s, *v)
+          case self.kind
+          when "uniform"
+            LibGL.uniform_matrix\{{s.id}}(LibGL.get_uniform_location(\{{p}}, \{{n}}), 1, false, \{{*v}})
+          else
+            Nya.log.error "Cannot apply {{@type}} : Invalid kind : #{self.kind}", "Shader"
+          end
+        end
+
+        def apply(p, n)
+          value = inner.map(&.to_f32)
+          apply_matrix p, n, "{{size}}fv", value
+        end
+      end
+    {% end %}
   end
 end

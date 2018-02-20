@@ -874,6 +874,13 @@ lib LibGL
     {% end %}
   {% end %}
 
+  {% for i in (2..4) %}
+    {% for j in (2..4) %}
+      {% suffix = (i == j ? "#{i}fv" : "#{i}x#{j}fv").id %}
+      fun uniform_matrix{{suffix}} = "glUniformMatrix{{suffix}}"(idx : UInt32, count : UInt32, transpose : Bool, ptr : Pointer(Float32)) : Void
+    {% end %}
+  {% end %}
+
   fun get_uniform_location = "glGetUniformLocation"(prog : UInt32, name : UInt8*) : UInt32
   fun get_attrib_location = "glGetAttribLocation"(prog : UInt32, name : UInt8*) : UInt32
   # </editor-fold>

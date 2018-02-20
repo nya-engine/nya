@@ -95,6 +95,12 @@ module Models
       var
     end
 
+    private def mat4(arr : StaticArray(Float64, 16))
+      var = Nya::Render::ShaderVars::Matrix4.new
+      var.inner = arr
+      var
+    end
+
     # Renders shape using vertex buffers
     # Renders each vertex separately if buffer is not generated
     # Prefer generating buffer with `generate_buffer!` in any non-critical moment, for example, right after loading a model.
@@ -150,7 +156,14 @@ module Models
             LibGL.bind_attrib_location program, (@use_normal ? 2 : 1), "nya_TexCoord"
           end
 
+          mat4(Nya::Render::DrawUtils.get_modelview_matrix).apply(program, "nya_ModelView")
+          mat4(Nya::Render::DrawUtils.get_projection_matrix).apply(program, "nya_Projection")
+
           Nya::Render::ShaderCompiler.link_program! program, true
+        else
+          mat = @material.not_nil!
+          col = mat.colors["Ka"]? || mat.colors.first_value? || CrystalEdge::Vector3.new(0.0, 0.0, 0.0)
+          LibGL.color4d(*col.values, mat.dissolvance)
         end
 
         LibGL.draw_arrays(LibGL::TRIANGLES, 0, @count)

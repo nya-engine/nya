@@ -21,6 +21,7 @@ module Nya::Render
     end
 
     def use!
+      return unless enabled?
       ::Nya.shader_stack.push @program
       LibGL.use_program @program
     end
