@@ -14,7 +14,7 @@ dependencies:
     github: unn4m3d/chunked
   obj:
     github: unn4m3d/obj
-    commit: 713773863d70278a356f6286230d1653ca61eafe
+    version: ~> 0.2.1
   stumpy_loader:
     github: unn4m3d/stumpy_loader
   stumpy_png:
@@ -22,7 +22,6 @@ dependencies:
     version: "~> 4.2.0"
   models:
     github: unn4m3d/models
-    branch: dev/materials
   nya_serializable:
     github: unn4m3d/nya_serializable
   version:
