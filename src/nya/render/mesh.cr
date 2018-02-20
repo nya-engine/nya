@@ -180,6 +180,10 @@ module Models
               material k, floats
             end
           end
+
+          material LibGL::SHININESS, mat.specular_exponent
+
+          
         end
 
         LibGL.draw_arrays(LibGL::TRIANGLES, 0, @count)
