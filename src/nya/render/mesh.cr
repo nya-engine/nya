@@ -101,6 +101,14 @@ module Models
       var
     end
 
+    private def material(pname, value : Array(Float32))
+      LibGL.materialfv(LibGL::FRONT_AND_BACK, pname, value)
+    end
+
+    private def material(pname, value : Float32)
+      LibGL.materialf(LibGL::FRONT_AND_BACK, pname, value)
+    end
+
     # Renders shape using vertex buffers
     # Renders each vertex separately if buffer is not generated
     # Prefer generating buffer with `generate_buffer!` in any non-critical moment, for example, right after loading a model.
@@ -160,10 +168,18 @@ module Models
           mat4(Nya::Render::DrawUtils.get_projection_matrix).apply(program, "nya_Projection")
 
           Nya::Render::ShaderCompiler.link_program! program, true
-        else
+        elsif !mat.nil?
           mat = @material.not_nil!
-          col = mat.colors["Ka"]? || mat.colors.first_value? || CrystalEdge::Vector3.new(0.0, 0.0, 0.0)
-          LibGL.color4d(*col.values, mat.dissolvance)
+          #col = mat.colors["Ka"]? || mat.colors.first_value? || CrystalEdge::Vector3.new(0.0, 0.0, 0.0)
+          #LibGL.color4d(*col.values, mat.dissolvance)
+
+          {LibGL::AMBIENT => "Ka", LibGL::DIFFUSE => "Kd", LibGL::SPECULAR => "Ks"}.each do |k, v|
+            if mat.colors.has_key? v
+              col = mat.colors[v]
+              floats = [col.x, col.y, col.z, 1.0 - mat.dissolvance].map &.to_f32
+              material k, floats
+            end
+          end
         end
 
         LibGL.draw_arrays(LibGL::TRIANGLES, 0, @count)
