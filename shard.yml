@@ -24,6 +24,7 @@ dependencies:
     github: unn4m3d/models
   nya_serializable:
     github: unn4m3d/nya_serializable
+    version: ~> 0.2.4
   version:
     github: unn4m3d/version
 
