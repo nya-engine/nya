@@ -793,6 +793,30 @@ lib LibGL
   OES_EGL_IMAGE                       =          1
   # </editor-fold>
 
+  DEBUG_SOURCE_API             = 0x8246
+  DEBUG_SOURCE_WINDOW_SYSTEM   = 0x8247
+  DEBUG_SOURCE_SHADER_COMPILER = 0x8248
+  DEBUG_SOURCE_THIRD_PARTY     = 0x8249
+  DEBUG_SOURCE_APPLICATION     = 0x824A
+  DEBUG_SOURCE_OTHER           = 0x824B
+
+  DEBUG_TYPE_ERROR               = 0x824C
+  DEBUG_TYPE_DEPRECATED_BEHAVIOR = 0x824D
+  DEBUG_TYPE_UNDEFINED_BEHAVIOR  = 0x824E
+  DEBUG_TYPE_PORTABILITY         = 0x824F
+  DEBUG_TYPE_PERFORMANCE         = 0x8250
+  DEBUG_TYPE_OTHER               = 0x8251
+  DEBUG_TYPE_MARKER              = 0x8268
+  DEBUG_TYPE_PUSH_GROUP          = 0x8269
+  DEBUG_TYPE_POP_GROUP           = 0x826A
+
+  DEBUG_OUTPUT             = 0x92E0
+  DEBUG_OUTPUT_SYNCHRONOUS = 0x8242
+
+  alias DebugProc = Int32, Int32, UInt32, Int32, Int32, UInt8*, Void* ->
+
+  fun debug_message_callback = "glDebugMessageCallback"(DebugProc, Void*)
+
   # <editor-fold> Shaders
   FRAGMENT_SHADER        = 0x8B30
   VERTEX_SHADER          = 0x8B31
@@ -894,8 +918,6 @@ lib LibGL
   fun buffer_data = "glBufferData"(t : UInt32, s : UInt64, data : Void*, usage : UInt32)
   fun delete_buffers = "glDeleteBuffers"(size : UInt32, buf : UInt32*)
   # </editor-fold>
-
-
 
   fun clear_index = "glClearIndex"(c : Float32) : Void
   fun clear_color = "glClearColor"(red : Float32, green : Float32, blue : Float32, alpha : Float32) : Void
@@ -1127,8 +1149,8 @@ lib LibGL
   fun shade_model = "glShadeModel"(mode : UInt16) : Void
   fun lightf = "glLightf"(light : UInt16, pname : UInt16, param : Float32) : Void
   fun lighti = "glLighti"(light : UInt16, pname : UInt16, param : Int16) : Void
-  fun lightfv = "glLightfv"(light : UInt16, pname : UInt16, params : Void*) : Void
-  fun lightiv = "glLightiv"(light : UInt16, pname : UInt16, params : Void*) : Void
+  fun lightfv = "glLightfv"(light : UInt32, pname : UInt32, params : Void*) : Void
+  fun lightiv = "glLightiv"(light : UInt32, pname : UInt32, params : Void*) : Void
   fun get_lightfv = "glGetLightfv"(light : UInt16, pname : UInt16, params : Void*) : Void
   fun get_lightiv = "glGetLightiv"(light : UInt16, pname : UInt16, params : Void*) : Void
   fun light_modelf = "glLightModelf"(pname : UInt16, param : Float32) : Void
