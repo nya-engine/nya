@@ -168,7 +168,7 @@ module Models
           mat4(Nya::Render::DrawUtils.get_projection_matrix).apply(program, "nya_Projection")
 
           Nya::Render::ShaderCompiler.link_program! program, true
-        elsif !mat.nil?
+        elsif !@material.nil?
           mat = @material.not_nil!
           #col = mat.colors["Ka"]? || mat.colors.first_value? || CrystalEdge::Vector3.new(0.0, 0.0, 0.0)
           #LibGL.color4d(*col.values, mat.dissolvance)
@@ -181,9 +181,9 @@ module Models
             end
           end
 
-          material LibGL::SHININESS, mat.specular_exponent
+          material LibGL::SHININESS, mat.specular_exponent.to_f32
 
-          
+
         end
 
         LibGL.draw_arrays(LibGL::TRIANGLES, 0, @count)

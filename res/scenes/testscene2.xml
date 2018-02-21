@@ -38,12 +38,19 @@
         </position>
         <components>
           <Nya_Render:Mesh filename="res/models/cornell_box.obj" />
-          <Nya_Render:ShaderProgram>
-            <filenames>
-              <item>res/shaders/test.vert</item>
-              <item>res/shaders/test.frag</item>
-            </filenames>
-          </Nya_Render:ShaderProgram>
+        </components>
+      </Nya:GameObject>
+      <Nya:GameObject id="light">
+        <position>
+          <CrystalEdge:Vector3>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>-10.0</z>
+          </CrystalEdge:Vector3>
+        </position>
+        <components>
+          <Nya_Render:Light mode="POINT">
+          </Nya_Render:Light>
         </components>
       </Nya:GameObject>
     </item>
