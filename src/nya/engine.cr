@@ -9,10 +9,65 @@ module Nya
     # Main engine fiber name
     FIBER_NAME = "Nya Engine"
 
+    enum DebugSource
+      API = LibGL::DEBUG_SOURCE_API
+      WINDOW_SYSTEM = LibGL::DEBUG_SOURCE_WINDOW_SYSTEM
+      SHADER_COMPILER = LibGL::DEBUG_SOURCE_SHADER_COMPILER
+      THIRD_PARTY = LibGL::DEBUG_SOURCE_THIRD_PARTY
+      APPLICATION = LibGL::DEBUG_SOURCE_APPLICATION
+      OTHER = LibGL::DEBUG_SOURCE_OTHER
+      DONT_CARE = LibGL::DONT_CARE
+    end
+
+    enum DebugType
+      ERROR = LibGL::DEBUG_TYPE_ERROR
+      DEPRECATED_BEHAVIOUR = LibGL::DEBUG_TYPE_DEPRECATED_BEHAVIOR
+      UNDEFINED_BEHAVIOUR = LibGL::DEBUG_TYPE_UNDEFINED_BEHAVIOR
+      PORTABILITY = LibGL::DEBUG_TYPE_PORTABILITY
+      PERFORMANCE= LibGL::DEBUG_TYPE_PERFORMANCE
+      MARKER = LibGL::DEBUG_TYPE_MARKER
+      PUSH_GROUP = LibGL::DEBUG_TYPE_PUSH_GROUP
+      POP_GROUP = LibGL::DEBUG_TYPE_POP_GROUP
+      OTHER = LibGL::DEBUG_TYPE_OTHER
+      DONT_CARE = LibGL::DONT_CARE
+
+      def to_severity
+        case self
+        when .error?
+          Logger::Severity::ERROR
+        when .portability?, .performance?, .undefined_behaviour?, .deprecated_behaviour?
+          Logger::Severity::WARN
+        when .marker?
+          Logger::Severity::DEBUG
+        else
+          Logger::Severity::UNKNOWN
+        end
+      end
+    end
+
     # :nodoc:
     alias PhysCallback = LibODE::Geomid, LibODE::Geomid ->
 
+    # :nodoc:
+    alias DebugCallback = Int32, Int32, UInt32, Int32, Int32, UInt8*, Void* ->
+
     @phys_cb : PhysCallback
+    @debug_cb = DebugCallback.new do |source, type, id, severity, length, msg, param |
+      this = Box(self).unbox(param)
+      this.debug source, type, id, severity, String.new(msg, length)
+    end
+
+    private def set_debug_callback!
+      LibGL.debug_message_callback @debug_cb, Box(self).box(self)
+      Nya.log.debug "GL Debug callback set!", "Nya"
+    end
+
+    def debug(s, t, i, sev, msg)
+      src = DebugSource.from_value s
+      type = DebugType.from_value t
+      raise msg if type.error?
+      Nya.log.log type.to_severity, msg, src.to_s
+    end
 
     def initialize(title, w, h)
       Fiber.current.name = FIBER_NAME
@@ -33,10 +88,14 @@ module Nya
 
       print_versions!
 
+      Nya.log.info "Max GL lights : #{Render::Light.max_lights}"
+
       LibGL.clear_color(0.0, 0.0, 0.0, 0.0)
       LibGL.clear_depth(1.0)
       LibGL.depth_func(LibGL::LESS)
       LibGL.enable(LibGL::DEPTH_TEST)
+      LibGL.enable(LibGL::COLOR_MATERIAL)
+      LibGL.enable LibGL::LIGHTING
       LibGL.alpha_func(LibGL::GREATER, 0.1)
       LibGL.shade_model(LibGL::SMOOTH)
       LibGL.blend_func(LibGL::SRC_ALPHA, LibGL::ONE_MINUS_SRC_ALPHA)
@@ -48,6 +107,11 @@ module Nya
           Box(Nya::Physics::Geom).unbox(dptr2)
         )
       end
+
+      LibGL.enable LibGL::DEBUG_OUTPUT
+      LibGL.enable LibGL::DEBUG_OUTPUT_SYNCHRONOUS
+
+      set_debug_callback!
     end
 
     # Update engine state.
