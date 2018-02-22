@@ -36,7 +36,8 @@ module Nya::Render
         when "uniform"
           LibGL.uniform{{fsign.id}}(LibGL.get_uniform_location({{p}}, {{n}}), {{*v}})
         when "attibute"
-          LibGL.vertex_attrib{{fsign.id}}(LibGL.get_attrib_location({{p}}, {{n}}), {{*v}})
+          {% fs = (fsign =~ /i$/ ? "_i" + fsign : fsign) %}
+          LibGL.vertex_attrib{{fs.id}}(LibGL.get_attrib_location({{p}}, {{n}}), {{*v}})
         else
           Nya.log.error "Cannot apply {{@type}} : Invalid kind : #{self.kind}", "Shader"
         end
@@ -161,7 +162,7 @@ module Nya::Render
         macro apply_matrix(p, n, s, *v)
           case self.kind
           when "uniform"
-            LibGL.uniform_matrix\{{s.id}}(LibGL.get_uniform_location(\{{p}}, \{{n}}), 1, false, \{{*v}})
+            LibGL.uniform_matrix\{{s.id}}(LibGL.get_uniform_location(\{{p}}, \{{n}}), 1, LibGL::FALSE, \{{*v}})
           else
             Nya.log.error "Cannot apply {{@type}} : Invalid kind : #{self.kind}", "Shader"
           end

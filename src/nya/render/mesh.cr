@@ -115,9 +115,9 @@ module Models
     def render!
       if @buffer == 0
         faces.each do |f|
-          LibGL.begin_ LibGL::POLYGON
+          LibGL.begin LibGL::POLYGON
           f.each &.render!
-          LibGL.end_
+          LibGL._end
         end
         subshapes.each &.render!
       else

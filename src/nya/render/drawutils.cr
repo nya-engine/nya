@@ -6,9 +6,9 @@ module Nya::Render
   class DrawUtils
     # Calls `block` wrapped in glBegin and glEnd
     def self.draw(mode = LibGL::QUADS, &block : -> Void)
-      LibGL.begin_(mode)
+      LibGL.begin(mode)
       block.call
-      LibGL.end_
+      LibGL._end
     end
 
 

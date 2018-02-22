@@ -49,7 +49,7 @@ module Nya
     alias PhysCallback = LibODE::Geomid, LibODE::Geomid ->
 
     # :nodoc:
-    alias DebugCallback = Int32, Int32, UInt32, Int32, Int32, UInt8*, Void* ->
+    alias DebugCallback = LibGL::Gldebugproc
 
     @phys_cb : PhysCallback
     @debug_cb = DebugCallback.new do |source, type, id, severity, length, msg, param |

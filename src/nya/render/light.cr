@@ -61,8 +61,8 @@ module Nya::Render
       return unless enabled?
       LibGL.lightfv(gl_light, LibGL::POSITION, (parent.position.to_gl + { @mode.directional? ? 0 : 1 }).map(&.to_f32).to_a)
       LibGL.lightfv(gl_light, LibGL::AMBIENT, @ambient.to_gl4.map(&.to_f32).to_a)
-      LibGL.lightfv(gl_light, LibGL::SPECULAR, @specular.to_gl4.to_a)
-      LibGL.lightfv(gl_light, LibGL::DIFFUSE, @diffuse.to_gl4.to_a)
+      LibGL.lightfv(gl_light, LibGL::SPECULAR, @specular.to_gl4.map(&.to_f32).to_a)
+      LibGL.lightfv(gl_light, LibGL::DIFFUSE, @diffuse.to_gl4.map(&.to_f32).to_a)
     end
   end
 end
