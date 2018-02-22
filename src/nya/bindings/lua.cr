@@ -1,6 +1,5 @@
 @[Link("lua")]
 lib LibLua
-  alias State = Void
   fun newstate = lua_newstate(f : Alloc, ud : Void*) : State
   alias Alloc = (Void*, Void*, LibC::SizeT, LibC::SizeT -> Void*)
   type State = Void*
@@ -43,7 +42,7 @@ lib LibLua
   fun pushlstring = lua_pushlstring(l : State, s : LibC::Char*, l : LibC::SizeT)
   fun pushstring = lua_pushstring(l : State, s : LibC::Char*)
   fun pushvfstring = lua_pushvfstring(l : State, fmt : LibC::Char*, argp : VaList) : LibC::Char*
-  alias VaList = LibC::VaList
+  alias VaList = Void*
   fun pushfstring = lua_pushfstring(l : State, fmt : LibC::Char*, ...) : LibC::Char*
   fun pushcclosure = lua_pushcclosure(l : State, fn : CFunction, n : LibC::Int)
   fun pushboolean = lua_pushboolean(l : State, b : LibC::Int)
