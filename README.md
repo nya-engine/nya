@@ -1,6 +1,6 @@
 # nya
 
-[![Build Status](https://travis-ci.org/unn4m3d/nya_engine.svg?branch=master)](https://travis-ci.org/unn4m3d/nya_engine)
+[![Build Status](https://travis-ci.org/unn4m3d/nya.svg?branch=master)](https://travis-ci.org/unn4m3d/nya)
 
 NyaEngine : 3D Game Engine written in [crystal](https://crystal-lang.org/) \[**Work in progress**\]
 
@@ -53,5 +53,5 @@ Then run engine test:
   * [ ] Language support
     * [ ] Lua
     * [ ] Ruby
-* [ ] Specify version requirements for dependencies 
+* [ ] Specify version requirements for dependencies
 * [ ] Packaging tool
