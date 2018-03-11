@@ -22,7 +22,7 @@ On Gentoo, this can be done using `emerge -a dev-games/ode media-libs/libsdl2 me
 Then run engine test:
 
 ```sh
-  git clone https://github.com/unn4m3d/nya/
+  git clone https://github.com/nya-engine/nya/
   cd nya
   crystal deps
   crystal spec
