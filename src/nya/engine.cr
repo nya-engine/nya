@@ -38,9 +38,9 @@ module Nya
         when .portability?, .performance?, .undefined_behaviour?, .deprecated_behaviour?
           Logger::Severity::WARN
         when .marker?
-          Logger::Severity::DEBUG
+          Logger::Severity::INFO
         else
-          Logger::Severity::UNKNOWN
+          Logger::Severity::DEBUG
         end
       end
     end
@@ -71,6 +71,8 @@ module Nya
 
     def initialize(title, w, h)
       Fiber.current.name = FIBER_NAME
+
+      Nya.log.level = Logger::INFO
 
       raise LibSDL2.get_error.to_s if LibSDL2.init(LibSDL2::INIT_VIDEO) < 0
 
