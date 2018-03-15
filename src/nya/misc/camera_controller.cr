@@ -10,6 +10,10 @@ module Nya
         CrystalEdge::Vector3.new(0.0,0.0,-1.0).rotate(Nya.to_rad parent.rotation) * Nya::Time.delta_time * @velocity
       end
 
+      private def delta_h
+        CrystalEdge::Vector3.new(@velocity * Nya::Time.delta_time, 0.0, 0.0)
+      end
+
       private def delta_v
         CrystalEdge::Vector3.new(0.0, @velocity * Nya::Time.delta_time, 0.0)
       end
@@ -20,6 +24,15 @@ module Nya
 
         parent.rotation -= delta_v if Nya::Input.key? "D"
         parent.rotation += delta_v if Nya::Input.key? "A"
+
+        parent.rotation += delta_h if Nya::Input.key? "R"
+        parent.rotation -= delta_h if Nya::Input.key? "F"
+      end
+
+      def awake
+        Nya::Event.subscribe_typed :key_up, as: Nya::Input::KeyboardEvent do |_|
+          Nya.log.info "rotation #{parent.rotation} (#{delta_h})"
+        end
       end
     end
   end
