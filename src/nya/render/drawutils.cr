@@ -58,24 +58,29 @@ module Nya::Render
       CrystalEdge::Vector3.new(ox, oy, oz)
     end
 
+    private def self.v2(x, y)
+      CrystalEdge::Vector2.new(x, y)
+    end
+
     # Draws OpenGL texture `t` on screen coordinates `x` and `y` with width `w` and height `h`
     def self.draw_texture(x, y, w, h : Float64, t : UInt32)
       LibGL.push_matrix
       va = un_project(CrystalEdge::Vector2.new(x, y))
       vb = un_project(CrystalEdge::Vector2.new(x + w, y + h))
-      LibGL.translatef(0.0, 0.0, va.z)
+      pts = [v2(x,y + h), v2(x + w, y + h), v2(x + w, y), v2(x, y)].map{ |x| un_project x }
+      #LibGL.translatef(0.0, 0.0, va.z)
       LibGL.enable(LibGL::TEXTURE_2D)
       LibGL.enable(LibGL::ALPHA_TEST)
       LibGL.bind_texture(LibGL::TEXTURE_2D, t)
       draw do
         LibGL.tex_coord2d(0.0, 0.0)
-        LibGL.vertex2d(va.x, vb.y)
+        LibGL.vertex3d(*pts[0].to_gl)
         LibGL.tex_coord2d(1.0, 0.0)
-        LibGL.vertex2d(vb.x, vb.y)
+        LibGL.vertex3d(*pts[1].to_gl)
         LibGL.tex_coord2d(1.0, 1.0)
-        LibGL.vertex2d(vb.x, va.y)
+        LibGL.vertex3d(*pts[2].to_gl)
         LibGL.tex_coord2d(0.0, 1.0)
-        LibGL.vertex2d(va.x, va.y)
+        LibGL.vertex3d(*pts[3].to_gl)
       end
       LibGL.pop_matrix
       LibGL.disable(LibGL::TEXTURE_2D)
