@@ -4,6 +4,6 @@ module Nya
     property rotation = CrystalEdge::Vector3.new(0.0,0.0,0.0)
     property scale = CrystalEdge::Vector3.new(0.0,0.0,0.0)
 
-    property parent : Transform? = nil
+    property parent_transform : Transform? = nil
   end
 end
