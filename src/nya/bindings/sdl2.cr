@@ -1652,10 +1652,10 @@ lib LibSDL2
   fun set_window_icon = "SDL_SetWindowIcon"(window : Window*, icon : Void*) : Void
   fun set_window_data = "SDL_SetWindowData"(window : Window*, name : UInt8*, userdata : Void*) : Void*
   fun get_window_data = "SDL_GetWindowData"(window : Window*, name : UInt8*) : Void*
-  fun set_window_position = "SDL_SetWindowPosition"(window : Window*, x : Int16, y : Int16) : Void
+  fun set_window_position = "SDL_SetWindowPosition"(window : Window*, x : Int32, y : Int32) : Void
   fun get_window_position = "SDL_GetWindowPosition"(window : Window*, x : Void*, y : Void*) : Void
-  fun set_window_size = "SDL_SetWindowSize"(window : Window*, w : Int16, h : Int16) : Void
-  fun get_window_size = "SDL_GetWindowSize"(window : Window*, w : Void*, h : Void*) : Void
+  fun set_window_size = "SDL_SetWindowSize"(window : Window*, w : Int32, h : Int32) : Void
+  fun get_window_size = "SDL_GetWindowSize"(window : Window*, w : Int32*, h : Int32*) : Void
   fun set_window_minimum_size = "SDL_SetWindowMinimumSize"(window : Window*, min_w : Int16, min_h : Int16) : Void
   fun get_window_minimum_size = "SDL_GetWindowMinimumSize"(window : Window*, w : Void*, h : Void*) : Void
   fun set_window_maximum_size = "SDL_SetWindowMaximumSize"(window : Window*, max_w : Int16, max_h : Int16) : Void

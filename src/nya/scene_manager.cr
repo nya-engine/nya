@@ -40,11 +40,11 @@ module Nya
       Nya.log.debug "Trying to load scene from #{filename}", "SceneManager"
       Storage::Reader.read_file filename do |file|
         obj = XML.parse file
-        Nya.camera_list = [] of Nya::Render::Camera
+        Engine.instance.camera_list = [] of Nya::Render::Camera
         @@current_scene = Scene.deserialize(obj.first_element_child.not_nil!).as(Scene)
         @@current_scene.not_nil!.awake
       end
-      Nya.log.debug "#{Nya.camera_list.select(&.enabled?).size} camera(s) active", "SceneManager"
+      Nya.log.debug "#{Engine.instance.camera_list.select(&.enabled?).size} camera(s) active", "SceneManager"
       Nya::Event.print!
     end
   end

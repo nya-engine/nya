@@ -1,10 +1,8 @@
 require "../pangocairo"
-require "./drawutils"
 
 module Nya
   module Render
     class Text2D < ::Nya::Component
-      @texture_id = 0u32
       @color = Color.white
       @text = ""
       @position = CrystalEdge::Vector2.new(0.0, 0.0)
@@ -26,8 +24,8 @@ module Nya
           if @autosize
             @size = pango.size
           end
-          LibGL.delete_textures(1, pointerof(@texture_id))
-          @texture_id = pango.texture_id
+          @metadata = backend.create_object :texture if @metadata.nil?
+          backend.load_texture self.metadata, pango.size.x, pango.size.y, pango.buffer
         end
       end
 
@@ -50,18 +48,14 @@ module Nya
       def update
       end
 
-      def awake
-        Nya.log.debug "Awake text : #{@texture_id}", "Text2D"
-      end
-
       def render(tag : String? = nil)
         return if !tag.nil? && !self.tag.nil? && tag.to_s != self.tag.to_s
-        DrawUtils.draw_texture(
+        backend.draw_texture(
+          metadata,
           @position.x,
           @position.y,
           @size.x,
           @size.y,
-          @texture_id
         )
       end
     end

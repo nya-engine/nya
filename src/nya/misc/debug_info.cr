@@ -12,17 +12,6 @@ module Nya
         if @text.nil?
           Nya.log.warn "Cannot load Text2D for debugging", "DebugInfo"
         end
-
-        Event.subscribe_typed :key_down, as: Input::KeyboardEvent do |e|
-          if e.not_nil!.keycode.r?
-            Nya.log.debug "Flushing shader cache...", "DebugMode"
-            Nya::Render::ShaderCompiler.flush_cache!
-            shaders = Nya::SceneManager.current_scene.find_components_of(Nya::Render::ShaderProgram)
-            Nya.log.debug "Reloading #{shaders.size} shader(s)...", "DebugMode"
-            shaders.each &.awake
-            Nya.log.debug "Done!", "DebugMode"
-          end
-        end
       end
 
       def update
