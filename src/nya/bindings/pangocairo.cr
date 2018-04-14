@@ -17,7 +17,7 @@ lib LibPangoCairo
   type PangoFontDescription = Void
   type PangoLayout = Void
 
-  fun create_surf_for_data = "cairo_image_surface_create_for_data"(buf : UInt32*, format : CairoFormat, width : Int32, height : Int32, stride : Int32) : CairoSurface*
+  fun create_surf_for_data = "cairo_image_surface_create_for_data"(buf : UInt8*, format : CairoFormat, width : Int32, height : Int32, stride : Int32) : CairoSurface*
   fun create = "cairo_create"(surface : CairoSurface*) : Cairo*
   fun create_surf = "cairo_image_surface_create"(format : CairoFormat, w : Int32, h : Int32) : CairoSurface*
   fun create_layout = "pango_cairo_create_layout"(ctx : Cairo*) : PangoLayout*

@@ -1,18 +1,20 @@
 require "./spec_helper"
 
-describe Nya::Render::ShaderCompiler do
+alias GLSLCompiler = Nya::Render::Backends::GL::GLSLCompiler
+
+describe Nya::Render::Backends::GL::GLSLCompiler do
   it "detects shader type" do
-    Nya::Render::ShaderCompiler.detect_type("\n\n//@type geome\n\n").should eq(Nya::Render::ShaderType::Geometry)
+    GLSLCompiler.detect_type("\n\n//@type geome\n\n").should eq(Nya::Render::Backends::GL::ShaderType::Geometry)
   end
 
   it "detects shader type by filename extension" do
-    Nya::Render::ShaderCompiler.detect_type("kekekekekekekekekek", "shader.vert").should eq(Nya::Render::ShaderType::Vertex)
-    Nya::Render::ShaderCompiler.detect_type("kekus", "shader.frag").should eq(Nya::Render::ShaderType::Fragment)
+    GLSLCompiler.detect_type("kekekekekekekekekek", "shader.vert").should eq(Nya::Render::Backends::GL::ShaderType::Vertex)
+    GLSLCompiler.detect_type("kekus", "shader.frag").should eq(Nya::Render::Backends::GL::ShaderType::Fragment)
   end
 
   it "prefers type detected by directives over extension" do
-    Nya::Render::ShaderCompiler.detect_type("//@type vertex", "shader.frag").should eq(Nya::Render::ShaderType::Vertex)
-    Nya::Render::ShaderCompiler.detect_type("//@type tess_control", "shader.geom").should eq(Nya::Render::ShaderType::TessControl)
+    GLSLCompiler.detect_type("//@type vertex", "shader.frag").should eq(Nya::Render::Backends::GL::ShaderType::Vertex)
+    GLSLCompiler.detect_type("//@type tess_control", "shader.geom").should eq(Nya::Render::Backends::GL::ShaderType::TessControl)
   end
 end
 

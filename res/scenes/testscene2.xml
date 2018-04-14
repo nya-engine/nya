@@ -17,7 +17,7 @@
           </Nya_Render:Camera>
           <Nya_Render:Text2D>
             <font>Ubuntu Bold 12</font>
-            <text>NaN</font>
+            <text>NaN</text>
             <color>
               <Nya:Color name="red" />
             </color>
@@ -37,13 +37,20 @@
           </CrystalEdge:Vector3>
         </position>
         <components>
-          <Nya_Render:Mesh filename="res/cornell_box.obj" />
-          <Nya_Render:ShaderProgram>
-            <filenames>
-              <item>res/test.vert</item>
-              <item>res/test.frag</item>
-            </filenames>
-          </Nya_Render:ShaderProgram>
+          <Nya_Render:Mesh filename="res/models/cornell_box.obj" />
+        </components>
+      </Nya:GameObject>
+      <Nya:GameObject id="light">
+        <position>
+          <CrystalEdge:Vector3>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>-10.0</z>
+          </CrystalEdge:Vector3>
+        </position>
+        <components>
+          <Nya_Render:Light mode="POINT">
+          </Nya_Render:Light>
         </components>
       </Nya:GameObject>
     </item>

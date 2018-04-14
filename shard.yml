@@ -9,21 +9,23 @@ description: 3D Game Engine written in crystal (work in progress)
 dependencies:
   crystaledge:
     github: unn4m3d/crystaledge
+    version: "~> 0.2.0"
   chunked:
     github: unn4m3d/chunked
   obj:
     github: unn4m3d/obj
-    version: "~> 0.2.0"
+    version: ~> 0.2.1
   stumpy_loader:
     github: unn4m3d/stumpy_loader
+    version: "~> 0.1.1"
   stumpy_png:
     github: stumpycr/stumpy_png
     version: "~> 4.2.0"
   models:
     github: unn4m3d/models
-    branch: dev/materials
   nya_serializable:
     github: unn4m3d/nya_serializable
+    version: ~> 0.2.4
   version:
     github: unn4m3d/version
 

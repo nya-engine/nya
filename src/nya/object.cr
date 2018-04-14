@@ -32,7 +32,9 @@ module Nya
     getter? enabled
     property tag, id
 
-
+    def backend
+      Engine.instance.backend
+    end
 
     # Post-initializes this object
     #
@@ -91,11 +93,6 @@ module Nya
     #
     # Remember that you MUST call super in overridden method in order to make this work properly
     def render(tag : String? = nil)
-      @children.each do |ch|
-        LibGL.push_matrix
-        ch.render tag
-        LibGL.pop_matrix
-      end
     end
   end
 
@@ -104,8 +101,9 @@ module Nya
   # This class must be a superclass for all custom components (like Component in Unity3D)
   class Component < Object
     @parent : GameObject? = nil
+    @metadata : Render::Backend::Metadata? = nil
 
-    setter parent
+    setter parent, metadata
 
     # Returns parent of component
     #
@@ -118,6 +116,16 @@ module Nya
     def parent?
       @parent
     end
+
+    def metadata
+      @metadata.not_nil!
+    end
+
+    def metadata?
+      @metadata
+    end
+
+
   end
 end
 
@@ -142,7 +150,7 @@ module Nya
     end
 
     def children!
-      @children.compact_map(&.as(GameObject))
+      @children.compact_map(&.as?(GameObject))
     end
 
     def absolute_position
@@ -156,19 +164,13 @@ module Nya
 
     def render(tag : String? = nil)
       return unless matches_tag? tag
-      comp = find_component_of?(Nya::Render::ShaderProgram)
-      comp.use! unless comp.nil?
-      LibGL.matrix_mode LibGL::MODELVIEW
-      LibGL.push_matrix
-      LibGL.rotatef(@rotation.x, 1.0, 0.0, 0.0)
-      LibGL.rotatef(@rotation.y, 0.0, 1.0, 0.0)
-      LibGL.rotatef(@rotation.z, 0.0, 0.0, 1.0)
-      LibGL.translatef(*@position.to_gl)
-      super
-      @components.each &.render(tag)
-      comp.unuse! unless comp.nil?
-      LibGL.matrix_mode LibGL::MODELVIEW
-      LibGL.pop_matrix
+
+      backend.with_shader_program find_component_of?(Render::ShaderProgram) do
+        backend.draw_game_object self do
+          children!.each &.render(tag)
+          @components.each &.render(tag)
+        end
+      end
     end
 
     def update
