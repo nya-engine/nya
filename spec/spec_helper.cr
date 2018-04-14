@@ -8,7 +8,7 @@ require "../src/nya/log"
 	puts "Nya engine log is saved to #{tfile.path}"
 {% end %}
 require "../src/nya"
-require "../src/nya/render/shader_compiler"
+require "../src/nya/render/backends/gl/glsl_compiler"
 
 
 class SampleComponent < Nya::Component
