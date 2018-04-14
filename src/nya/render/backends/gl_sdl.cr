@@ -272,6 +272,8 @@ module Nya::Render::Backends
         offset += 3
         LibGL.tex_coord_pointer 3, LibGL::DOUBLE, meta.raw_stride, Pointer(Void).new(offset * sizeof(Float64))
       end
+
+      LibGL.draw_arrays(LibGL::TRIANGLES, 0, meta.count)
     end
 
     def draw_mesh(mesh : Mesh)
