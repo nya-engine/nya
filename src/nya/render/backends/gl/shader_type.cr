@@ -1,6 +1,6 @@
-require "../bindings/gl"
+require "../../../bindings/gl"
 
-module Nya::Render
+module Nya::Render::Backends::GL
   enum ShaderType
     Vertex         = LibGL::VERTEX_SHADER
     Fragment       = LibGL::FRAGMENT_SHADER

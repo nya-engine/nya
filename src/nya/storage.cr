@@ -10,6 +10,16 @@ module Nya
 
       @@instance : self? = nil
 
+      def self.instance
+        @@instance.not_nil!
+      end
+
+      def self.instance?
+        @@instance
+      end
+
+      class_setter instance
+
       protected def add_file(file : String)
         @readers[file] = CReader.new(File.open(file))
         @readers[file].index_chunks!
@@ -62,21 +72,21 @@ module Nya
       end
 
       def self.init(files)
-        @@instance = new files
+        self.instance = new files
       end
 
       def self.read_file(*args, &b : IO ->)
         init [] of String if @@instance.nil?
-        @@instance.not_nil!.read_file(*args, &b)
+        self.instance.read_file(*args, &b)
       end
 
       def self.read_file(name)
         init [] of String if @@instance.nil?
-        @@instance.not_nil!.read_file(name)
+        self.instance.read_file(name)
       end
 
       def self.exists?(n)
-        @@instance.exists? n
+        self.instance.exists? n
       end
     end
   end

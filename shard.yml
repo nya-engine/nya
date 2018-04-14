@@ -17,6 +17,7 @@ dependencies:
     version: ~> 0.2.1
   stumpy_loader:
     github: unn4m3d/stumpy_loader
+    version: "~> 0.1.1"
   stumpy_png:
     github: stumpycr/stumpy_png
     version: "~> 4.2.0"

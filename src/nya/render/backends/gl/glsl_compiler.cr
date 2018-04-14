@@ -1,8 +1,8 @@
-require "../log"
+require "../../../log"
 
-module Nya::Render
+module Nya::Render::Backends::GL
   # GLSL shader compiler
-  class ShaderCompiler
+  class GLSLCompiler
     @@shader_cache = Hash(String, UInt32).new
     @@program_cache = Hash(String, UInt32).new
     @@preprocessor_cache = Hash(String, String).new

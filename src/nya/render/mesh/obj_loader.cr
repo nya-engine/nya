@@ -1,7 +1,6 @@
 require "obj"
 require "tempfile"
 require "./loader"
-require "benchmark"
 
 module Nya::Render
   class Mesh::OBJLoader < Nya::Render::Mesh::Loader
@@ -15,6 +14,7 @@ module Nya::Render
         parser.custom_file_opener = ->(s : String) do
           Nya::Storage::Reader.read_file s
         end
+        parser.on_warning { |s| Nya.log.warn s, "OBJParser"}
         begin
           parser.parse!
         rescue e : Exception
@@ -34,7 +34,8 @@ module Nya::Render
             Nya.log.info "Parser state has been saved to #{f.path}"
           end
         {% end %}
-        Nya.log.debug Benchmark.measure{ mesh.shapes = parser.objects }
+
+        mesh.shapes = parser.objects
       end
 
       mesh

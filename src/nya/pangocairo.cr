@@ -5,10 +5,10 @@ require "crystaledge"
 module Nya
   # :nodoc:
   class Pango
-    property texture_id : UInt32
+    property buffer : Bytes
     property size : CrystalEdge::Vector2
 
-    def initialize(@texture_id, @size)
+    def initialize(@buffer, @size)
     end
 
     def self.get_text_size(layout : LibPangoCairo::PangoLayout*)
@@ -36,7 +36,7 @@ module Nya
       LibPangoCairo.free_font_desc(desc)
 
       tsize = get_text_size(layout)
-      buffer = Array(UInt32).build((tsize.x*tsize.y*4).to_i) { 0 }
+      buffer = Slice(UInt8).new (tsize.x*tsize.y*4).to_i32, 0u8
 
       rendering_context = LibPangoCairo.create(LibPangoCairo.create_surf_for_data(
         buffer,
@@ -52,28 +52,10 @@ module Nya
 
       LibPangoCairo.show_layout(rendering_context, layout)
 
-      texture_id = 0u32
-      LibGL.gen_textures 1, pointerof(texture_id)
-      LibGL.bind_texture(LibGL::TEXTURE_2D, texture_id)
-
-      LibGL.tex_parameteri(LibGL::TEXTURE_2D, LibGL::TEXTURE_MIN_FILTER, LibGL::LINEAR)
-      LibGL.tex_parameteri(LibGL::TEXTURE_2D, LibGL::TEXTURE_MAG_FILTER, LibGL::LINEAR)
-      LibGL.tex_image2d(
-        LibGL::TEXTURE_2D,
-        0,
-        LibGL::RGBA,
-        tsize.x,
-        tsize.y,
-        0,
-        LibGL::BGRA,
-        LibGL::UNSIGNED_BYTE,
-        buffer
-      )
-
       LibPangoCairo.destroy(context)
       LibPangoCairo.destroy(rendering_context)
 
-      new(texture_id, tsize)
+      new(buffer, tsize)
     end
   end
 end
