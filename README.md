@@ -46,6 +46,7 @@ Then run engine test:
 * [ ] Physics (ODE)
 * [ ] Windows support (requires windows support in crystal)
 * [ ] Modular video and audio drivers
+  * [x] Video backends (still WIP) 
   * [ ] DirectX support (requires windows support)
 * [ ] Audio
 * [ ] Scripting
