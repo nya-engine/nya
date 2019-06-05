@@ -1,5 +1,4 @@
 require "obj"
-require "tempfile"
 require "./loader"
 
 module Nya::Render
@@ -29,7 +28,7 @@ module Nya::Render
           end
         end
         {% if flag? :obj_parser_debug %}
-          Tempfile.open("nya_obj_parser") do |f|
+          File.tempfile("nya_obj_parser") do |f|
             parser.debug! f
             Nya.log.info "Parser state has been saved to #{f.path}"
           end
