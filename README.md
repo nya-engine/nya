@@ -1,6 +1,6 @@
 # nya
 
-[![Build Status](https://travis-ci.org/unn4m3d/nya_engine.svg?branch=master)](https://travis-ci.org/unn4m3d/nya_engine)
+[![Build Status](https://travis-ci.org/unn4m3d/nya.svg?branch=master)](https://travis-ci.org/unn4m3d/nya)
 
 NyaEngine : 3D Game Engine written in [crystal](https://crystal-lang.org/) \[**Work in progress**\]
 
@@ -22,7 +22,7 @@ On Gentoo, this can be done using `emerge -a dev-games/ode media-libs/libsdl2 me
 Then run engine test:
 
 ```sh
-  git clone https://github.com/unn4m3d/nya/
+  git clone https://github.com/nya-engine/nya/
   cd nya
   crystal deps
   crystal spec
@@ -46,6 +46,7 @@ Then run engine test:
 * [ ] Physics (ODE)
 * [ ] Windows support (requires windows support in crystal)
 * [ ] Modular video and audio drivers
+  * [x] Video backends (still WIP) 
   * [ ] DirectX support (requires windows support)
 * [ ] Audio
 * [ ] Scripting
@@ -53,3 +54,5 @@ Then run engine test:
   * [ ] Language support
     * [ ] Lua
     * [ ] Ruby
+* [ ] Specify version requirements for dependencies
+* [ ] Packaging tool
