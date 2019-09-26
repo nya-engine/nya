@@ -24,11 +24,7 @@ module Nya
   class Scene < AbsScene
     include Nya::Serializable
     @root = [] of GameObject
-    @world_id = LibODE.world_create
-    @space_id = LibODE.hash_space_create nil
     property root
-    property world_id
-    property space_id
 
     # Initializes scene with `root`
     def initialize(@root)
