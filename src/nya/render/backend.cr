@@ -56,6 +56,9 @@ module Nya::Render
     abstract def project(point : CrystalEdge::Vector3) : CrystalEdge::Vector3
     abstract def unproject(point : CrystalEdge::Vector3) : CrystalEdge::Vector3
 
+    abstract def project(camera : Camera, point : CrystalEdge::Vector3) : CrystalEdge::Vector3
+    abstract def unproject(camera : Camera, point : CrystalEdge::Vector3) : CrystalEdge::Vector3
+
     abstract def resizeable? : Bool
     abstract def size=(size : CrystalEdge::Vector2)
     abstract def size : CrystalEdge::Vector2

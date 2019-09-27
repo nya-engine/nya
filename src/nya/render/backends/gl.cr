@@ -187,6 +187,13 @@ module Nya::Render::Backends::GL
       LibGL.translatef(*(-c.parent.position).to_gl)
       with_matrix(LibGL::MODELVIEW) do
         LibGL.load_identity
+        unless c.metadata.is_a? Nya::Render::Backends::GL::Metadata
+          c.metadata = CameraMetadata.new(0)
+        end
+
+        c.metadata.not_nil!.modelview = get_modelview_matrix
+        c.metadata.not_nil!.projection = get_projection_matrix
+        c.metadata.not_nil!.viewport = get_viewport
         yield
       end
     end
@@ -232,6 +239,48 @@ module Nya::Render::Backends::GL
     oz = uninitialized Float64
 
     LibGLU.un_project(
+      *v.to_gl,
+      mm,
+      pm,
+      vp,
+      pointerof(ox).as(Pointer(Void)),
+      pointerof(oy).as(Pointer(Void)),
+      pointerof(oz).as(Pointer(Void))
+    )
+    CrystalEdge::Vector3.new(ox, oy, oz)
+  end
+
+  def unproject(c : Camera, v)
+    meta = c.metadata.not_nil!.as(CameraMetadata)
+    mm = meta.modelview
+    pm = meta.projection
+    vp = meta.viewport
+    ox = uninitialized Float64
+    oy = uninitialized Float64
+    oz = uninitialized Float64
+
+    LibGLU.un_project(
+      *v.to_gl,
+      mm,
+      pm,
+      vp,
+      pointerof(ox).as(Pointer(Void)),
+      pointerof(oy).as(Pointer(Void)),
+      pointerof(oz).as(Pointer(Void))
+    )
+    CrystalEdge::Vector3.new(ox, oy, oz)
+  end
+
+  def project(c : Camera, v)
+    meta = c.metadata.not_nil!.as(CameraMetadata)
+    mm = meta.modelview
+    pm = meta.projection
+    vp = meta.viewport
+    ox = uninitialized Float64
+    oy = uninitialized Float64
+    oz = uninitialized Float64
+
+    LibGLU.project(
       *v.to_gl,
       mm,
       pm,
