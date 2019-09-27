@@ -188,12 +188,15 @@ module Nya::Render::Backends::GL
       with_matrix(LibGL::MODELVIEW) do
         LibGL.load_identity
         unless c.metadata.is_a? Nya::Render::Backends::GL::Metadata
-          c.metadata = CameraMetadata.new(0)
+          c.metadata = CameraMetadata.new(0u32)
         end
-
-        c.metadata.not_nil!.modelview = get_modelview_matrix
-        c.metadata.not_nil!.projection = get_projection_matrix
-        c.metadata.not_nil!.viewport = get_viewport
+        if md = c.metadata.as?(CameraMetadata)
+          md.not_nil!.modelview = get_modelview_matrix
+          md.not_nil!.projection = get_projection_matrix
+          md.not_nil!.viewport = get_viewport
+        else
+          Nya.log.warn "Camera has invalid metadata : #{c.metadata.class.name}", "GL"
+        end
         yield
       end
     end

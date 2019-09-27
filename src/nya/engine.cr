@@ -58,7 +58,7 @@ module Nya
 
     # :nodoc:
     def finalize
-      @backend.quit
+      backend.quit
     end
   end
 end
