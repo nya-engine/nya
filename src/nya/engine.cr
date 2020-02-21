@@ -18,11 +18,15 @@ module Nya
     end
 
     def initialize(title, w, h)
-      Nya::Event.send(:engine_pre_init, Nya::EngineEvent.new(self))
+      Nya.log.level = Logger::INFO
+      Nya.log.info("Engine is starting")
 
       Fiber.current.name = FIBER_NAME
+      Nya::Event.send(:engine_pre_init, Nya::EngineEvent.new(self))
 
-      Nya.log.level = Logger::INFO
+      
+
+      
 
       # TODO
       @backend = Nya::Render::Backends::GL_SDL.new(CrystalEdge::Vector2.new(w.to_f64, h.to_f64), title)
@@ -42,7 +46,7 @@ module Nya
 
       backend.update
       Nya::SceneManager.update
-      Nya::Event.update
+      #Nya::Event.update
       Nya::Time.update
 
       backend.render do

@@ -20,6 +20,7 @@ module Nya
     end
 
     # Renders current scene with `tag` (Tag is used for selective rendering)
+    @[NoInline]
     def render(tag : String? = nil)
       if @current_scene.nil?
         Nya.log.warn "Scene is nil"

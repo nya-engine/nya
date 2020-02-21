@@ -1,5 +1,5 @@
 {% begin %}
-  @[Link(ldflags: {{ `pkgconf --libs fontconfig`.stringify }} )]
+  @[Link(ldflags: {{ `pkgconf --libs fontconfig`.stringify.chomp }} )]
 {% end %}
 lib LibFontConfig
     type FcBool = LibC::Int

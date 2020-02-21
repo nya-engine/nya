@@ -5,6 +5,12 @@ module Nya::Render::Backends::GL
   include ShaderVars
   include VBOGenerator
 
+  @current_camera : Camera? = nil
+
+  def current_camera
+    @current_camera.not_nil!
+  end
+
   enum DebugSource
     API             = LibGL::DEBUG_SOURCE_API
     WINDOW_SYSTEM   = LibGL::DEBUG_SOURCE_WINDOW_SYSTEM
@@ -173,6 +179,7 @@ module Nya::Render::Backends::GL
   end
 
   def draw_camera(c : Camera, &block)
+    @current_camera = c
     return unless c.enabled?
 
     with_matrix(LibGL::PROJECTION) do
@@ -187,10 +194,10 @@ module Nya::Render::Backends::GL
       LibGL.translatef(*(-c.parent.position).to_gl)
       with_matrix(LibGL::MODELVIEW) do
         LibGL.load_identity
-        unless c.metadata.is_a? Nya::Render::Backends::GL::Metadata
+        unless c.metadata?.is_a? Nya::Render::Backends::GL::Metadata
           c.metadata = CameraMetadata.new(0u32)
         end
-        if md = c.metadata.as?(CameraMetadata)
+        if md = c.metadata?.as?(CameraMetadata)
           md.not_nil!.modelview = get_modelview_matrix
           md.not_nil!.projection = get_projection_matrix
           md.not_nil!.viewport = get_viewport

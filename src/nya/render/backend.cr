@@ -17,6 +17,8 @@ module Nya::Render
     # Wraps the execution of a block with calls required to render a camera
     abstract def draw_camera(camera : Camera, &block)
 
+    abstract def current_camera : Camera
+
     # Draws a game object
     abstract def draw_game_object(object : ::Nya::GameObject, &block)
 

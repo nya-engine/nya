@@ -33,11 +33,11 @@
           <CrystalEdge:Vector3>
             <x>0.0</x>
             <y>0.0</y>
-            <z>0.0</z>
+            <z>-10</z>
           </CrystalEdge:Vector3>
         </position>
         <components>
-          <Nya_Render:Mesh filename="res/models/cornell_box.obj" />
+          <Nya_Render:Mesh filename="res/models/hand2.obj" />
         </components>
       </Nya:GameObject>
       <Nya:GameObject id="light">
