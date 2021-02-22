@@ -1,4 +1,6 @@
-@[Link(ldflags: "-lpangocairo-1.0 -lpango-1.0 -lcairo -lgobject-2.0 -lglib-2.0 -L/usr/lib/x86_64-linux-gnu/")]
+{% begin %}
+  @[Link(ldflags: {{ `pkgconf --libs pangocairo || pkg-config --libs pangocairo`.stringify.chomp }})]
+{% end %}
 lib LibPangoCairo
   type Cairo = Void
   type CairoSurface = Void

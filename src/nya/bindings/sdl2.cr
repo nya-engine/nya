@@ -1,4 +1,6 @@
-@[Link("SDL2")]
+{% begin %}
+  @[Link(ldflags: {{ `pkgconf --libs sdl2 || pkg-config --libs sdl2`.stringify.chomp }})]
+{%end%}
 lib LibSDL2
   ASSERT_LEVEL                            =          2
   LIL_ENDIAN                              =       1234
@@ -1217,13 +1219,13 @@ lib LibSDL2
   end
 
   enum SysWMType
-    UNKNOWN,
-    WINDOWS,
-    X11,
-    DIRECTFB,
-    COCOA,
-    UIKIT,
-    WAYLAND,
+    UNKNOWN
+    WINDOWS
+    X11
+    DIRECTFB
+    COCOA
+    UIKIT
+    WAYLAND
     MIR
   end
 

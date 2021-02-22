@@ -15,7 +15,6 @@ dependencies:
     version: "~> 0.1.1"
   obj:
     github: unn4m3d/obj
-    version: ~> 0.2.1
   stumpy_loader:
     github: unn4m3d/stumpy_loader
     version: "~> 0.1.1"
@@ -27,7 +26,7 @@ dependencies:
     version: "~> 0.5.0"
   models:
     github: unn4m3d/models
-    version: "~> 0.1.2"
+    branch: master
   nya_serializable:
     github: nya-engine/nya_serializable
     version: ~> 0.2.4

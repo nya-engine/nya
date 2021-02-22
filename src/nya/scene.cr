@@ -18,7 +18,7 @@ module Nya
   class Scene < AbsScene
     include Nya::Serializable
     @root = [] of GameObject
-    property root
+    property root : Array(GameObject)
 
     # Initializes scene with `root`
     def initialize(@root)
