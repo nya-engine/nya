@@ -214,28 +214,47 @@ module Nya::Render::Backends::GL
     sh.metadata = Metadata.new(:shader_program, id)
   end
 
+  def delete_shaders(sh : ShaderProgram)
+    meta = sh.metadata
+    if meta.nil?
+      Nya.log.error "Cannot delete shader program #{sh} : metadata is nil", "GL"
+    else
+      if meta.object_type == :shader_program
+        LibGL.delete_program meta.as(GL::Metadata).id
+        sh.metadata = nil
+      else
+        Nya.log.error "Cannot delete shader program #{sh} : probably not a shader program", "GL"
+      end
+    end
+  end
+
   def relink_program(shp : ShaderProgram)
     GL::GLSLCompiler.link_program! sh.metadata.as(Metadata).id
   end
 
-  @shader_stack = Deque(ShaderProgram).new
+  @shader_stack = Deque(ShaderProgram?).new
 
-  def use_shader_program(shp : ShaderProgram)
+  def use_shader_program(shp : ShaderProgram?)
     @shader_stack << shp
-    LibGL.use_program shp.metadata.as(Metadata).id
+    if shp.nil?
+      LibGL.use_program 0
+    else
+      LibGL.use_program shp.metadata.as(Metadata).id
+    end
   end
 
   def unuse_shader_program
     shp = @shader_stack.pop?
+    shp = @shader_stack.last?
     LibGL.use_program(shp.nil? ? 0u32 : shp.not_nil!.metadata.as(Metadata).id)
   end
 
   def with_shader_program(shp : ShaderProgram?, &block)
     begin
-      use_shader_program shp.not_nil! unless shp.nil?
+      use_shader_program shp
       yield
     ensure
-      unuse_shader_program unless shp.nil?
+      unuse_shader_program
     end
   end
 
@@ -386,10 +405,10 @@ module Nya::Render::Backends::GL
   private def get_matrix(mat, type : U.class) : U forall U
     matrix = uninitialized U
     {% if U.type_vars.first <= Int %}
-    LibGL.get_integerv(mat, matrix)
-  {% else %}
-    LibGL.get_doublev(mat, matrix)
-  {% end %}
+      LibGL.get_integerv(mat, matrix)
+    {% else %}
+      LibGL.get_doublev(mat, matrix)
+    {% end %}
     matrix
   end
 

@@ -50,6 +50,7 @@ module Nya::Render
     abstract def use_shader_program(prog : ShaderProgram)
     abstract def unuse_shader_program
     abstract def with_shader_program(shp : ShaderProgram?, &block)
+    abstract def delete_shaders(shp : ShaderProgram)
 
     abstract def relink_program(prog : ShaderProgram)
 

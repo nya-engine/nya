@@ -24,5 +24,10 @@ module Nya::Render
         unuse!
       end
     end
+
+    def finalize
+      backend.delete_shaders self
+    end
+    
   end
 end
