@@ -1,0 +1,68 @@
+<!-- Test scene -->
+<Nya:Scene id="testscene">
+  <name>Test Scene</name>
+  <root>
+    <item>
+      <Nya:GameObject id="text">
+        <position>
+          <CrystalEdge:Vector3>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>500.0</z>
+          </CrystalEdge:Vector3>
+        </position>
+        <components>
+          <Nya_Render:Camera id="cam0">
+            <far>10000.0</far>
+          </Nya_Render:Camera>
+          <Nya_Misc:CameraController velocity="100.0" />
+        </components>
+      </Nya:GameObject>
+    </item>
+    <item>
+      <Nya:GameObject id="mesh">
+        <position>
+          <CrystalEdge:Vector3>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>-10</z>
+          </CrystalEdge:Vector3>
+        </position>
+        <components>
+          <Nya_Render:Mesh filename="res/models/hand2.obj" />
+          <Nya_Render:ShaderProgram>
+            <sets>
+              <Nya_Render:ShaderSet format="glsl">
+                <files>
+                  <item>res/shaders/test.frag</item>
+                  <item>res/shaders/test.vert</item>
+                </files>
+              </Nya_Render:ShaderSet>
+            </sets>
+            <vars>
+              <Nya_Render:Sampler name="baseTexture">
+                <texture>
+                  <Nya_Render:Texture src="res/models/hand2_0.png">
+                  </Nya_Render:Texture>
+                </texture>
+              </Nya_Render:Sampler>
+            </vars>
+          </Nya_Render:ShaderProgram>
+        </components>
+      </Nya:GameObject>
+      <Nya:GameObject id="light">
+        <position>
+          <CrystalEdge:Vector3>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>-10.0</z>
+          </CrystalEdge:Vector3>
+        </position>
+        <components>
+          <Nya_Render:Light mode="POINT">
+          </Nya_Render:Light>
+        </components>
+      </Nya:GameObject>
+    </item>
+  </root>
+</Nya:Scene>

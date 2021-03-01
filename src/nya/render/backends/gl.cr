@@ -78,6 +78,7 @@ module Nya::Render::Backends::GL
   def draw_texture(tex : Nya::Render::Backend::Metadata, pts : Array(CrystalEdge::Vector3))
     raise "#{tex} is not a valid metadata!" unless tex.is_a? Metadata
     raise "#{tex} is not a valid texture!" unless tex.object_type == :texture
+    LibGL.active_texture LibGL::TEXTURE0
     LibGL.enable(LibGL::TEXTURE_2D)
     LibGL.enable(LibGL::ALPHA_TEST)
     LibGL.bind_texture(LibGL::TEXTURE_2D, tex.as(Metadata).id)
@@ -132,8 +133,17 @@ module Nya::Render::Backends::GL
   def draw_shape(shape : Models::Shape)
     meta = shape.metadata.as(VBOMetadata)
     LibGL.enable_client_state LibGL::VERTEX_ARRAY
-    LibGL.enable_client_state LibGL::NORMAL_ARRAY if meta.use_normal
-    LibGL.enable_client_state LibGL::TEXTURE_COORD_ARRAY if meta.use_texcoord
+    if meta.use_normal
+      LibGL.enable_client_state LibGL::NORMAL_ARRAY
+    else
+      LibGL.disable_client_state LibGL::NORMAL_ARRAY
+    end
+    
+    if meta.use_texcoord
+      LibGL.enable_client_state LibGL::TEXTURE_COORD_ARRAY 
+    else
+      LibGL.disable_client_state LibGL::TEXTURE_COORD_ARRAY 
+    end
 
     LibGL.bind_buffer LibGL::ARRAY_BUFFER, meta.id
     LibGL.vertex_pointer 3, LibGL::DOUBLE, meta.raw_stride, Pointer(Void).new(0)
@@ -188,9 +198,9 @@ module Nya::Render::Backends::GL
       LibGL.viewport(vp.x.to_i, vp.y.to_i, vp.width.to_i, vp.height.to_i)
       LibGL.scissor(vp.x.to_i, vp.y.to_i, vp.width.to_i, vp.height.to_i)
       LibGLU.perspective(c.angle_of_view, c.viewport.width/c.viewport.height, c.near, c.far)
-      LibGL.rotatef(-c.parent.rotation.x, 1.0, 0.0, 0.0)
-      LibGL.rotatef(-c.parent.rotation.y, 0.0, 1.0, 0.0)
       LibGL.rotatef(-c.parent.rotation.z, 0.0, 0.0, 1.0)
+      LibGL.rotatef(-c.parent.rotation.y, 1.0, 0.0, 0.0)
+      LibGL.rotatef(-c.parent.rotation.x, 0.0, 0.0, 1.0)
       LibGL.translatef(*(-c.parent.position).to_gl)
       with_matrix(LibGL::MODELVIEW) do
         LibGL.load_identity
@@ -240,6 +250,7 @@ module Nya::Render::Backends::GL
       LibGL.use_program 0
     else
       LibGL.use_program shp.metadata.as(Metadata).id
+      apply_shader_vars shp
     end
   end
 
@@ -343,8 +354,8 @@ module Nya::Render::Backends::GL
 
   def draw_game_object(obj : ::Nya::GameObject, &block)
     with_matrix LibGL::MODELVIEW do
-      LibGL.rotatef(obj.rotation.x, 1.0, 0.0, 0.0)
-      LibGL.rotatef(obj.rotation.y, 0.0, 1.0, 0.0)
+      LibGL.rotatef(obj.rotation.x, 0.0, 0.0, 1.0)
+      LibGL.rotatef(obj.rotation.y, 1.0, 0.0, 0.0)
       LibGL.rotatef(obj.rotation.z, 0.0, 0.0, 1.0)
       LibGL.translatef(*obj.position.to_gl)
       yield
@@ -370,6 +381,12 @@ module Nya::Render::Backends::GL
 
   def shader_extensions
     %w(glsl frag vert tcsh tesh comp geom)
+  end
+
+  def max_textures : Int32
+    LibGL.get_integerv LibGL::MAX_TEXTURE_UNITS, out m
+
+    m
   end
 
   # :nodoc:
@@ -423,4 +440,6 @@ module Nya::Render::Backends::GL
   private def get_viewport
     get_matrix LibGL::VIEWPORT, StaticArray(Int32, 4)
   end
+
+
 end

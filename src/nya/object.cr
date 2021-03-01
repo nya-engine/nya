@@ -164,13 +164,15 @@ module Nya
       pos = @position
       unless @parent.nil?
         pos = pos
-          .rotate(Quaternion.from_euler @parent.not_nil!.rotation) + @parent.not_nil!.absolute_position
+          .rotate(@parent.not_nil!.rotation) + @parent.not_nil!.absolute_position
       end
       pos
     end
 
     def render(tag : String? = nil)
       return unless matches_tag? tag
+
+      # FIXME: inherit shader program if nil
 
       backend.with_shader_program find_component_of?(Render::ShaderProgram) do
         backend.draw_game_object self do

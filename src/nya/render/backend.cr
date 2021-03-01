@@ -54,7 +54,9 @@ module Nya::Render
 
     abstract def relink_program(prog : ShaderProgram)
 
-    abstract def apply_shader_var(prog : ShaderProgram, name : String, value)
+    abstract def apply_shader_vars(prog : ShaderProgram)
+
+    abstract def max_textures : Int32
 
     abstract def project(point : CrystalEdge::Vector3) : CrystalEdge::Vector3
     abstract def unproject(point : CrystalEdge::Vector3) : CrystalEdge::Vector3

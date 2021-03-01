@@ -1,18 +1,19 @@
 require "../object"
 require "./shader_set"
+require "./shader_vars"
 
 module Nya::Render
   class ShaderProgram < Nya::Component
     @sets = [] of ShaderSet
     property sets
     serializable sets : Array(ShaderSet)
+    
+    property vars = [] of ShaderVar
+
+    serializable vars : Array(ShaderVar)
 
     def awake
       backend.compile_shaders self
-
-      #@properties.each do |k, v|
-      #  v.apply(@program, k)
-      #end
     end
 
 
@@ -23,6 +24,10 @@ module Nya::Render
       ensure
         unuse!
       end
+    end
+
+    def apply_variables!
+      backend.apply_shader_vars self
     end
 
     def finalize

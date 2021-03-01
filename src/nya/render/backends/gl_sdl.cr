@@ -50,6 +50,8 @@ module Nya::Render::Backends
       LibGL.enable LibGL::DEBUG_OUTPUT
       LibGL.enable LibGL::DEBUG_OUTPUT_SYNCHRONOUS
       set_debug_callback!
+
+      @max_textures = max_textures
     end
 
     def render(&block)
