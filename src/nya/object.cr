@@ -32,8 +32,12 @@ module Nya
     getter? enabled
     property tag, id
 
+    def engine
+      Engine.instance
+    end
+
     def backend
-      Engine.instance.backend
+      engine.backend
     end
 
     # Post-initializes this object
@@ -93,6 +97,7 @@ module Nya
     #
     # Remember that you MUST call super in overridden method in order to make this work properly
     def render(tag : String? = nil)
+      @children.each &.render(tag)
     end
   end
 
@@ -125,7 +130,9 @@ module Nya
       @metadata
     end
 
-
+    def log
+      Nya.log
+    end
   end
 end
 
@@ -157,13 +164,15 @@ module Nya
       pos = @position
       unless @parent.nil?
         pos = pos
-          .rotate(Quaternion.from_euler @parent.not_nil!.rotation) + @parent.not_nil!.absolute_position
+          .rotate(@parent.not_nil!.rotation) + @parent.not_nil!.absolute_position
       end
       pos
     end
 
     def render(tag : String? = nil)
       return unless matches_tag? tag
+
+      # FIXME: inherit shader program if nil
 
       backend.with_shader_program find_component_of?(Render::ShaderProgram) do
         backend.draw_game_object self do
@@ -189,7 +198,7 @@ module Nya
     # Find all components of given type in this GameObject
     def find_components_of(type : U.class) : Array(U) forall U
       {% unless U < Component %}
-        {% raise "Not a component class"}
+        {% raise "Not a component class" %}
       {% end %}
       @components.compact_map do |x|
         if x.ancestor_or_same? U
@@ -204,7 +213,7 @@ module Nya
     # Returns nil if there's no such component
     def find_component_of?(type : U.class) forall U
       {% unless U < Component %}
-        {% raise "Not a component class"}
+        {% raise "Not a component class" %}
       {% end %}
       @components.find(&.ancestor_or_same?(U)).as?(U)
     end
@@ -219,7 +228,7 @@ module Nya
     # WARNING! This may be slow on big object structures, consider doing it in a separate fiber in that cases
     def find_in_children(type : U.class) : Array(U) forall U
       {% unless U < Component %}
-        {% raise "Not a component class"}
+        {% raise "Not a component class" %}
       {% end %}
       find_components_of(type) + children!.reduce([] of U) do |memo, e|
         memo + e.find_in_children type

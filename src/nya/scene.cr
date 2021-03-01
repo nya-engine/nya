@@ -10,12 +10,6 @@ module Nya
     # Returns root of this scene
     abstract def root : Array(GameObject)
 
-    # Returns world ID of this scene
-    abstract def world_id : LibODE::Worldid
-
-    # Returns space ID of this scene
-    abstract def space_id : LibODE::Spaceid
-
     # Returns array of components found recursively
     abstract def find_components_of(type : U.class) : Array(U) forall U
 
@@ -24,11 +18,7 @@ module Nya
   class Scene < AbsScene
     include Nya::Serializable
     @root = [] of GameObject
-    @world_id = LibODE.world_create
-    @space_id = LibODE.hash_space_create nil
-    property root
-    property world_id
-    property space_id
+    property root : Array(GameObject)
 
     # Initializes scene with `root`
     def initialize(@root)

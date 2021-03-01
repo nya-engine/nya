@@ -17,6 +17,8 @@ module Nya::Render
     # Wraps the execution of a block with calls required to render a camera
     abstract def draw_camera(camera : Camera, &block)
 
+    abstract def current_camera : Camera
+
     # Draws a game object
     abstract def draw_game_object(object : ::Nya::GameObject, &block)
 
@@ -48,13 +50,19 @@ module Nya::Render
     abstract def use_shader_program(prog : ShaderProgram)
     abstract def unuse_shader_program
     abstract def with_shader_program(shp : ShaderProgram?, &block)
+    abstract def delete_shaders(shp : ShaderProgram)
 
     abstract def relink_program(prog : ShaderProgram)
 
-    abstract def apply_shader_var(prog : ShaderProgram, name : String, value)
+    abstract def apply_shader_vars(prog : ShaderProgram)
+
+    abstract def max_textures : Int32
 
     abstract def project(point : CrystalEdge::Vector3) : CrystalEdge::Vector3
     abstract def unproject(point : CrystalEdge::Vector3) : CrystalEdge::Vector3
+
+    abstract def project(camera : Camera, point : CrystalEdge::Vector3) : CrystalEdge::Vector3
+    abstract def unproject(camera : Camera, point : CrystalEdge::Vector3) : CrystalEdge::Vector3
 
     abstract def resizeable? : Bool
     abstract def size=(size : CrystalEdge::Vector2)

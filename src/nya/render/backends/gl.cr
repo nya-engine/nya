@@ -5,6 +5,12 @@ module Nya::Render::Backends::GL
   include ShaderVars
   include VBOGenerator
 
+  @current_camera : Camera? = nil
+
+  def current_camera
+    @current_camera.not_nil!
+  end
+
   enum DebugSource
     API             = LibGL::DEBUG_SOURCE_API
     WINDOW_SYSTEM   = LibGL::DEBUG_SOURCE_WINDOW_SYSTEM
@@ -72,6 +78,7 @@ module Nya::Render::Backends::GL
   def draw_texture(tex : Nya::Render::Backend::Metadata, pts : Array(CrystalEdge::Vector3))
     raise "#{tex} is not a valid metadata!" unless tex.is_a? Metadata
     raise "#{tex} is not a valid texture!" unless tex.object_type == :texture
+    LibGL.active_texture LibGL::TEXTURE0
     LibGL.enable(LibGL::TEXTURE_2D)
     LibGL.enable(LibGL::ALPHA_TEST)
     LibGL.bind_texture(LibGL::TEXTURE_2D, tex.as(Metadata).id)
@@ -126,8 +133,17 @@ module Nya::Render::Backends::GL
   def draw_shape(shape : Models::Shape)
     meta = shape.metadata.as(VBOMetadata)
     LibGL.enable_client_state LibGL::VERTEX_ARRAY
-    LibGL.enable_client_state LibGL::NORMAL_ARRAY if meta.use_normal
-    LibGL.enable_client_state LibGL::TEXTURE_COORD_ARRAY if meta.use_texcoord
+    if meta.use_normal
+      LibGL.enable_client_state LibGL::NORMAL_ARRAY
+    else
+      LibGL.disable_client_state LibGL::NORMAL_ARRAY
+    end
+    
+    if meta.use_texcoord
+      LibGL.enable_client_state LibGL::TEXTURE_COORD_ARRAY 
+    else
+      LibGL.disable_client_state LibGL::TEXTURE_COORD_ARRAY 
+    end
 
     LibGL.bind_buffer LibGL::ARRAY_BUFFER, meta.id
     LibGL.vertex_pointer 3, LibGL::DOUBLE, meta.raw_stride, Pointer(Void).new(0)
@@ -173,6 +189,7 @@ module Nya::Render::Backends::GL
   end
 
   def draw_camera(c : Camera, &block)
+    @current_camera = c
     return unless c.enabled?
 
     with_matrix(LibGL::PROJECTION) do
@@ -181,12 +198,22 @@ module Nya::Render::Backends::GL
       LibGL.viewport(vp.x.to_i, vp.y.to_i, vp.width.to_i, vp.height.to_i)
       LibGL.scissor(vp.x.to_i, vp.y.to_i, vp.width.to_i, vp.height.to_i)
       LibGLU.perspective(c.angle_of_view, c.viewport.width/c.viewport.height, c.near, c.far)
-      LibGL.rotatef(-c.parent.rotation.x, 1.0, 0.0, 0.0)
-      LibGL.rotatef(-c.parent.rotation.y, 0.0, 1.0, 0.0)
       LibGL.rotatef(-c.parent.rotation.z, 0.0, 0.0, 1.0)
+      LibGL.rotatef(-c.parent.rotation.y, 1.0, 0.0, 0.0)
+      LibGL.rotatef(-c.parent.rotation.x, 0.0, 0.0, 1.0)
       LibGL.translatef(*(-c.parent.position).to_gl)
       with_matrix(LibGL::MODELVIEW) do
         LibGL.load_identity
+        unless c.metadata?.is_a? Nya::Render::Backends::GL::Metadata
+          c.metadata = CameraMetadata.new(0u32)
+        end
+        if md = c.metadata?.as?(CameraMetadata)
+          md.not_nil!.modelview = get_modelview_matrix
+          md.not_nil!.projection = get_projection_matrix
+          md.not_nil!.viewport = get_viewport
+        else
+          Nya.log.warn "Camera has invalid metadata : #{c.metadata.class.name}", "GL"
+        end
         yield
       end
     end
@@ -197,28 +224,48 @@ module Nya::Render::Backends::GL
     sh.metadata = Metadata.new(:shader_program, id)
   end
 
+  def delete_shaders(sh : ShaderProgram)
+    meta = sh.metadata
+    if meta.nil?
+      Nya.log.error "Cannot delete shader program #{sh} : metadata is nil", "GL"
+    else
+      if meta.object_type == :shader_program
+        LibGL.delete_program meta.as(GL::Metadata).id
+        sh.metadata = nil
+      else
+        Nya.log.error "Cannot delete shader program #{sh} : probably not a shader program", "GL"
+      end
+    end
+  end
+
   def relink_program(shp : ShaderProgram)
     GL::GLSLCompiler.link_program! sh.metadata.as(Metadata).id
   end
 
-  @shader_stack = Deque(ShaderProgram).new
+  @shader_stack = Deque(ShaderProgram?).new
 
-  def use_shader_program(shp : ShaderProgram)
+  def use_shader_program(shp : ShaderProgram?)
     @shader_stack << shp
-    LibGL.use_program shp.metadata.as(Metadata).id
+    if shp.nil?
+      LibGL.use_program 0
+    else
+      LibGL.use_program shp.metadata.as(Metadata).id
+      apply_shader_vars shp
+    end
   end
 
   def unuse_shader_program
     shp = @shader_stack.pop?
+    shp = @shader_stack.last?
     LibGL.use_program(shp.nil? ? 0u32 : shp.not_nil!.metadata.as(Metadata).id)
   end
 
   def with_shader_program(shp : ShaderProgram?, &block)
     begin
-      use_shader_program shp.not_nil! unless shp.nil?
+      use_shader_program shp
       yield
     ensure
-      unuse_shader_program unless shp.nil?
+      unuse_shader_program
     end
   end
 
@@ -232,6 +279,48 @@ module Nya::Render::Backends::GL
     oz = uninitialized Float64
 
     LibGLU.un_project(
+      *v.to_gl,
+      mm,
+      pm,
+      vp,
+      pointerof(ox).as(Pointer(Void)),
+      pointerof(oy).as(Pointer(Void)),
+      pointerof(oz).as(Pointer(Void))
+    )
+    CrystalEdge::Vector3.new(ox, oy, oz)
+  end
+
+  def unproject(c : Camera, v)
+    meta = c.metadata.not_nil!.as(CameraMetadata)
+    mm = meta.modelview
+    pm = meta.projection
+    vp = meta.viewport
+    ox = uninitialized Float64
+    oy = uninitialized Float64
+    oz = uninitialized Float64
+
+    LibGLU.un_project(
+      *v.to_gl,
+      mm,
+      pm,
+      vp,
+      pointerof(ox).as(Pointer(Void)),
+      pointerof(oy).as(Pointer(Void)),
+      pointerof(oz).as(Pointer(Void))
+    )
+    CrystalEdge::Vector3.new(ox, oy, oz)
+  end
+
+  def project(c : Camera, v)
+    meta = c.metadata.not_nil!.as(CameraMetadata)
+    mm = meta.modelview
+    pm = meta.projection
+    vp = meta.viewport
+    ox = uninitialized Float64
+    oy = uninitialized Float64
+    oz = uninitialized Float64
+
+    LibGLU.project(
       *v.to_gl,
       mm,
       pm,
@@ -265,8 +354,8 @@ module Nya::Render::Backends::GL
 
   def draw_game_object(obj : ::Nya::GameObject, &block)
     with_matrix LibGL::MODELVIEW do
-      LibGL.rotatef(obj.rotation.x, 1.0, 0.0, 0.0)
-      LibGL.rotatef(obj.rotation.y, 0.0, 1.0, 0.0)
+      LibGL.rotatef(obj.rotation.x, 0.0, 0.0, 1.0)
+      LibGL.rotatef(obj.rotation.y, 1.0, 0.0, 0.0)
       LibGL.rotatef(obj.rotation.z, 0.0, 0.0, 1.0)
       LibGL.translatef(*obj.position.to_gl)
       yield
@@ -292,6 +381,12 @@ module Nya::Render::Backends::GL
 
   def shader_extensions
     %w(glsl frag vert tcsh tesh comp geom)
+  end
+
+  def max_textures : Int32
+    LibGL.get_integerv LibGL::MAX_TEXTURE_UNITS, out m
+
+    m
   end
 
   # :nodoc:
@@ -327,10 +422,10 @@ module Nya::Render::Backends::GL
   private def get_matrix(mat, type : U.class) : U forall U
     matrix = uninitialized U
     {% if U.type_vars.first <= Int %}
-    LibGL.get_integerv(mat, matrix)
-  {% else %}
-    LibGL.get_doublev(mat, matrix)
-  {% end %}
+      LibGL.get_integerv(mat, matrix)
+    {% else %}
+      LibGL.get_doublev(mat, matrix)
+    {% end %}
     matrix
   end
 
@@ -345,4 +440,6 @@ module Nya::Render::Backends::GL
   private def get_viewport
     get_matrix LibGL::VIEWPORT, StaticArray(Int32, 4)
   end
+
+
 end

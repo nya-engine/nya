@@ -1,5 +1,4 @@
 require "crystaledge"
-require "./bindings/ode"
 require "nya_serializable"
 
 module CrystalEdge
@@ -29,10 +28,6 @@ module CrystalEdge
       @z = 0.0
     end
 
-    def self.from(ode : LibODE::Vector3)
-      new(ode[0], ode[1], ode[2])
-    end
-
     def to_gl
       {@x, @y, @z}
     end
@@ -48,10 +43,6 @@ module CrystalEdge
       @y = 0.0
       @z = 0.0
       @w = 0.0
-    end
-
-    def self.from(ode : LibODE::Vector4)
-      new(ode[0], ode[1], ode[2], ode[3])
     end
 
     def to_gl
@@ -71,8 +62,5 @@ module CrystalEdge
       @w = 0.0
     end
 
-    def self.from(ode : LibODE::Quaternion)
-      new(ode[0], ode[1], ode[2], ode[3])
-    end
   end
 end

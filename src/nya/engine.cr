@@ -8,7 +8,8 @@ module Nya
     # Main engine fiber name
     FIBER_NAME = "Nya Engine"
 
-    property backend : Render::Backend
+    property! backend : Render::Backend?
+
 
     @@instance : self? = nil
 
@@ -17,15 +18,22 @@ module Nya
     end
 
     def initialize(title, w, h)
+      Nya.log.level = Logger::INFO
+      Nya.log.info("Engine is starting")
 
       Fiber.current.name = FIBER_NAME
+      Nya::Event.send(:engine_pre_init, Nya::EngineEvent.new(self))
 
-      Nya.log.level = Logger::INFO
+      
+
+      
 
       # TODO
       @backend = Nya::Render::Backends::GL_SDL.new(CrystalEdge::Vector2.new(w.to_f64, h.to_f64), title)
       @@instance = self
       print_versions!
+
+      Nya::Event.send(:engine_post_init, Nya::EngineEvent.new(self))
     end
 
     property camera_list = [] of Render::Camera
@@ -34,16 +42,16 @@ module Nya
     #
     # Run this in a loop
     def frame!
-      Nya::Event.send(:update, Nya::Event.new)
+      Nya::Event.send(:update, Nya::EngineEvent.new(self))
 
-      @backend.update
+      backend.update
       Nya::SceneManager.update
-      Nya::Event.update
+      #Nya::Event.update
       Nya::Time.update
 
-      @backend.render do
+      backend.render do
         @camera_list.each do |cam|
-          @backend.draw_camera cam do
+          backend.draw_camera cam do
             SceneManager.render cam.tag
           end
         end
@@ -54,7 +62,7 @@ module Nya
 
     # :nodoc:
     def finalize
-      @backend.quit
+      backend.quit
     end
   end
 end

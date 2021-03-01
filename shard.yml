@@ -12,22 +12,27 @@ dependencies:
     version: "~> 0.2.0"
   chunked:
     github: unn4m3d/chunked
+    version: "~> 0.1.1"
   obj:
     github: unn4m3d/obj
-    version: ~> 0.2.1
   stumpy_loader:
     github: unn4m3d/stumpy_loader
     version: "~> 0.1.1"
   stumpy_png:
     github: stumpycr/stumpy_png
-    version: "~> 4.2.0"
+    version: "~> 4.5.0"
+  stumpy_utils:
+    github: stumpycr/stumpy_utils
+    version: "~> 0.5.0"
   models:
     github: unn4m3d/models
+    branch: master
   nya_serializable:
-    github: unn4m3d/nya_serializable
+    github: nya-engine/nya_serializable
     version: ~> 0.2.4
   version:
     github: unn4m3d/version
+    version: "~> 0.1.0"
 
 libraries:
   libode: "*"

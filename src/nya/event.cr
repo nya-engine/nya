@@ -113,8 +113,7 @@ module Nya
 
     # :nodoc:
     def self.update
-      until @@async_events.empty?
-        evt = @@async_events.receive
+      while evt = @@async_events.receive?
         send evt.name, evt.event
       end
       Fiber.yield

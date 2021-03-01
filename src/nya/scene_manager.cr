@@ -10,12 +10,17 @@ module Nya
       @@current_scene.not_nil!
     end
 
+    def self.current_scene?
+      @@current_scene
+    end
+
     # Sets the current scene
     def self.current_scene=(s)
       @@current_scene = s
     end
 
     # Renders current scene with `tag` (Tag is used for selective rendering)
+    @[NoInline]
     def render(tag : String? = nil)
       if @current_scene.nil?
         Nya.log.warn "Scene is nil"
