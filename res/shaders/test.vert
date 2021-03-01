@@ -1,9 +1,10 @@
 //@type vertex
+#version 130
 
-out vec2 texCoord;
+varying vec4 texCoord;
 
 void main()
 {
   gl_Position = ftransform();
-  texCoord = gl_TexCoord;
+  texCoord = gl_TexCoord[0];
 }

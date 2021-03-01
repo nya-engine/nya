@@ -21,12 +21,12 @@ module Nya::Render::Backends::GL::ShaderVars
         end
         LibGL.active_texture LibGL::TEXTURE0 + current_texture
 
-        is_valid_metadata = var.texture.metadata.is_a? Metadata && var.texture.metadata.as(Metadata).object_type == :texture
+        is_valid_metadata = var.texture.metadata?.is_a? Metadata && var.texture.metadata?.as(Metadata).object_type == :texture
 
         unless is_valid_metadata
           var.texture.prepare_metadata!
         end
-        LibGL.bind_texture LibGL::TEXTURE_2D, var.texture.metadata.as(Metadata).id
+        LibGL.bind_texture LibGL::TEXTURE_2D, var.texture.metadata?.as(Metadata).id
         LibGL.uniform1i location, current_texture
 
         current_texture += 1
