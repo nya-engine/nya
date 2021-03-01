@@ -13,3 +13,4 @@
 *.trace
 *.nya.json
 test
+/.vscode/
