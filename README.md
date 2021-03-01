@@ -30,6 +30,8 @@ Then run engine test:
 
 # Todo list
 
+* [ ] Update code to match modern version of Crystal
+  * [ ] Refactor logging
 * [ ] Move on to modern OpenGL
   * [ ] Move to [CrystalEdge](https://github.com/unn4m3d/crystaledge)-based matrix stack instead of deprecated OpenGL one
   * [ ] Cut out fixed pipeline stuff 
