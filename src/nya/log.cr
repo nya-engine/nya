@@ -1,12 +1,7 @@
-require "logger"
+require "log"
 
 module Nya
-  @@log = Logger.new(STDOUT)
-  @@log.level = Logger::DEBUG
-  class_property log
-
-  # Helper module to shorten logger's method calls
-  module Log
-    delegate debug, log, warn, error, fatal, unknown, to: Nya.log
-  end
+  @@log = Log.for("Nya")
+  @@log.level = ::Log::Severity::Trace
+  class_property log : Log
 end

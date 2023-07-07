@@ -12,7 +12,7 @@ dependencies:
     version: "~> 0.2.0"
   chunked:
     github: unn4m3d/chunked
-    version: "~> 0.1.1"
+    version: "~> 0.2.0"
   obj:
     github: unn4m3d/obj
   stumpy_loader:
@@ -20,7 +20,7 @@ dependencies:
     version: "~> 0.1.1"
   stumpy_png:
     github: stumpycr/stumpy_png
-    version: "~> 4.5.0"
+    version: "~> 5.0.0"
   stumpy_utils:
     github: stumpycr/stumpy_utils
     version: "~> 0.5.0"
@@ -29,7 +29,7 @@ dependencies:
     branch: master
   nya_serializable:
     github: nya-engine/nya_serializable
-    version: ~> 0.2.4
+    version: "~> 0.2.10"
   version:
     github: unn4m3d/version
     version: "~> 0.1.0"

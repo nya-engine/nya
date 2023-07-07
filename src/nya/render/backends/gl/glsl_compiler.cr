@@ -3,6 +3,7 @@ require "../../../log"
 module Nya::Render::Backends::GL
   # GLSL shader compiler
   class GLSLCompiler
+    @@log : Log = Nya.log.for(self)
     @@shader_cache = Hash(String, UInt32).new
     @@program_cache = Hash(String, UInt32).new
     @@preprocessor_cache = Hash(String, String).new
@@ -10,7 +11,7 @@ module Nya::Render::Backends::GL
 
     # Flushes preprocessor, compiler and linker cache
     def self.flush_cache!
-      Nya.log.warn "Flushing shader and shader program cache"
+      @@log.warn {"Flushing shader and shader program cache"}
       [@@shader_cache,
        @@program_cache,
        @@preprocessor_cache].each &.clear
@@ -45,7 +46,7 @@ module Nya::Render::Backends::GL
       when /^vert/
         ShaderType::Vertex
       else
-        Nya.log.warn "Unknown shader type #{str}, assuming vertex shader", "Shader"
+        @@log.warn {"Unknown shader type #{str}, assuming vertex shader"}
         ShaderType::Vertex
       end
     end
@@ -63,7 +64,7 @@ module Nya::Render::Backends::GL
       elsif filename
         type_from_s File.extname(filename.not_nil!).lchop('.')
       else
-        Nya.log.warn "Cannot detect shader type, assuming vertex shader", "Shader"
+        @@log.warn { "Cannot detect shader type, assuming vertex shader" }
         ShaderType::Vertex
       end
     end
@@ -73,10 +74,10 @@ module Nya::Render::Backends::GL
     def self.compile(filename : String, stype : ShaderType? = nil)
       ckey = "#{filename}$#{stype}"
       if @@shader_cache.has_key? ckey
-        Nya.log.debug "Found cached shader for #{filename}"
+        @@log.debug { "Found cached shader for #{filename}" }
         return @@shader_cache[ckey]
       end
-      Nya.log.info "Compiling shader #{filename}", "Shader"
+      @@log.info { "Compiling shader #{filename}" }
       text = Storage::Reader.read_to_end(filename)
       if @@preprocessor_cache.has_key? filename
         text = @@preprocessor_cache[filename]
@@ -85,10 +86,10 @@ module Nya::Render::Backends::GL
       end
       @@preprocessor_cache[filename] = text
       stype ||= detect_type text
-      Nya.log.debug "Type is #{stype}", "Shader"
+      @@log.debug {"Type is #{stype}"}
 
       shid = LibGL.create_shader stype.to_i
-      Nya.log.debug "Allocated ID : 0x#{shid.to_s(16)} (#{shid})", "Shader"
+      @@log.debug {"Allocated ID : 0x#{shid.to_s(16)} (#{shid})"}
 
       utext = text.to_unsafe
 
@@ -103,12 +104,12 @@ module Nya::Render::Backends::GL
 
       if log_l > 0
         String.new(bytes).split("\n").each do |ln|
-          Nya.log.error ln, "GL"
+          @@log.error {ln}
         end
       end
 
       raise "Cannot compile shader. See log for more details" if comp_ok == 0
-      Nya.log.debug "Compiled shader successfully", "Shader"
+      @@log.debug { "Compiled shader successfully" } 
       @@shader_cache[ckey] = shid
       shid
     end
@@ -117,12 +118,12 @@ module Nya::Render::Backends::GL
     def self.link(shaders : Array(UInt32))
       ckey = shaders.join(";")
       if @@program_cache.has_key? ckey
-        Nya.log.debug "Found cached shader for #{ckey}"
+        @@log.debug {"Found cached shader for #{ckey}"}
         return @@program_cache[ckey]
       end
-      Nya.log.debug "Linking shader program", "Shader"
+      @@log.debug {"Linking shader program"}
       pid = LibGL.create_program
-      Nya.log.debug "Allocated ID : 0x#{pid.to_s(16)} (#{pid})", "Shader"
+      @@log.debug {"Allocated ID : 0x#{pid.to_s(16)} (#{pid})"}
       shaders.each { |s| LibGL.attach_shader pid, s }
 
       LibGL.bind_attrib_location pid, 0, "nya_Position"
@@ -145,14 +146,14 @@ module Nya::Render::Backends::GL
       LibGL.get_program_info_log pid, log_l, out len, log
       String.new(log).split("\n").each do |ln|
         if link_ok == 0
-          Nya.log.error ln, "GL"
+          @@log.error {ln}
         elsif log_l > 0 && !silent
-          Nya.log.warn ln, "GL"
+          @@log.warn {ln}
         end
       end
 
       raise "Cannot link shader program. See log for more details" if link_ok == 0
-      Nya.log.debug "Linked successfully", "Shader" unless silent
+      @@log.debug { "Linked successfully"} unless silent
     end
 
     # :nodoc:
@@ -160,7 +161,7 @@ module Nya::Render::Backends::GL
       text = if @@preprocessor_cache.has_key? filename
         @@preprocessor_cache[filename]
       else
-        Nya.log.warn "Preprocessing shader #{filename} as it has been not preprocessed yet", "Shader"
+        @@log.warn { "Preprocessing not preprocessed shader #{filename}"}
         @@preprocessor_cache[filename] = preprocess Storage::Reader.read_to_end(filename)
       end
       text.split("\n").compact_map do |line|

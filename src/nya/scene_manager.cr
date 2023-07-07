@@ -2,7 +2,8 @@ require "./storage"
 
 module Nya
   class SceneManager
-    @@current_scene : AbsScene?
+    @@log : Log = Nya.log.for(self)
+    @@current_scene : Scene?
 
     # Returns current scene object.
     # Raises an exception if current scene is nil
@@ -23,7 +24,7 @@ module Nya
     @[NoInline]
     def render(tag : String? = nil)
       if @current_scene.nil?
-        Nya.log.warn "Scene is nil"
+        @@log.warn { "Scene is nil" }
       else
         @@current_scene.not_nil!.render tag
       end
@@ -42,14 +43,14 @@ module Nya
 
     # Loads current scene from file
     def self.load_from_file(filename : String)
-      Nya.log.debug "Trying to load scene from #{filename}", "SceneManager"
+      @@log.debug { "Trying to load scene from #{filename}" }
       Storage::Reader.read_file filename do |file|
         obj = XML.parse file
         Engine.instance.camera_list = [] of Nya::Render::Camera
         @@current_scene = Scene.deserialize(obj.first_element_child.not_nil!).as(Scene)
         @@current_scene.not_nil!.awake
       end
-      Nya.log.debug "#{Engine.instance.camera_list.select(&.enabled?).size} camera(s) active", "SceneManager"
+      @@log.debug { "#{Engine.instance.camera_list.select(&.enabled?).size} camera(s) active"}
       Nya::Event.print!
     end
   end

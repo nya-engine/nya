@@ -188,7 +188,6 @@ module Nya
     end
 
     def awake
-      Nya.log.debug "Position #{@position.to_s}"
       @children.each &.as(GameObject).parent=(self)
       super
       @components.each &.parent=(self)

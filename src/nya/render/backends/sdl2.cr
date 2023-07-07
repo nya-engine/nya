@@ -2,30 +2,30 @@ module Nya::Render::Backends::SDL2
   # :nodoc:
   WP_CENTERED = 0x2FFF0000
 
-  def resizeable?
+  def resizeable? : Bool
     true
   end
 
-  def size
+  def size : CrystalEdge::Vector2
     LibSDL2.get_window_size @window, out x, out y
     CrystalEdge::Vector2.new(x.to_f64, y.to_f64)
   end
 
-  def size=(v : CrystalEdge::Vector2)
-    LibSDL2.set_window_size(@window, v.x.to_i32, v.y.to_i32)
+  def size=(size : CrystalEdge::Vector2)
+    LibSDL2.set_window_size(@window, size.x.to_i32, size.y.to_i32)
   end
 
-  def has_title?
+  def has_title? : Bool
     true
   end
 
-  def title
+  def title : String
     String.new LibSDL2.get_window_title @window
   end
 
-  def title=(t)
-    LibSDL2.set_window_title @window, t
-    t
+  def title=(title) : String
+    LibSDL2.set_window_title @window, title
+    title
   end
 
   def quit

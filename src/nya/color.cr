@@ -5,6 +5,8 @@ module Nya
   alias RawRGBA = Tuple(Float64, Float64, Float64, Float64)
 
   class Color
+    @@log : Log = Nya.log.for(self)
+
     @@predef = Hash(String, Color).new
 
     include Nya::Serializable
@@ -31,9 +33,9 @@ module Nya
         {% for name in %w(r g b a) %}
           self.{{name.id}} = @@predef[n].{{name.id}}
         {% end %}
-        Nya.log.debug "Found color #{n}", "Color"
+        @@log.debug { "Found color #{n}" }
       else
-        Nya.log.warn "Cannot find color #{n}", "Color"
+        @@log.warn { "Cannot find color #{n}" }
       end
     end
 

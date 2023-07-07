@@ -41,7 +41,6 @@ module Nya
 
       def color=(c)
         refresh_text! @text, @font, c
-        Nya.log.info "Set color : #{c.r} #{c.g} #{c.b} #{c.a}"
         @color = c
       end
 

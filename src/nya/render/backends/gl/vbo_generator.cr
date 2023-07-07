@@ -19,7 +19,7 @@ module Nya::Render::Backends::GL::VBOGenerator
   end
 
   class MeshMetadata < Nya::Render::Backend::Metadata
-    def object_type
+    def object_type : Symbol
       :mesh
     end
 

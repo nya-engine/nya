@@ -10,7 +10,7 @@ module Nya
         @text = parent.find_component_of?(Nya::Render::Text2D)
 
         if @text.nil?
-          Nya.log.warn "Cannot load Text2D for debugging", "DebugInfo"
+          Nya.log.warn {"Cannot load Text2D for debugging"}
         end
       end
 

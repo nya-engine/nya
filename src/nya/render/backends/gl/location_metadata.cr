@@ -7,7 +7,7 @@ module Nya::Render::Backends::GL
         def initialize(@location)
         end
 
-        def object_type
+        def object_type : Symbol
             :shader_var_location
         end
     end

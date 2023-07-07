@@ -1,13 +1,16 @@
 require "./gl/*"
+require "log/entry"
 
 module Nya::Render::Backends::GL
+
+  @@log : Log = Nya.log.for(self)
 
   include ShaderVars
   include VBOGenerator
 
   @current_camera : Camera? = nil
 
-  def current_camera
+  def current_camera : Camera
     @current_camera.not_nil!
   end
 
@@ -36,18 +39,18 @@ module Nya::Render::Backends::GL
     def to_severity
       case self
       when .error?
-        Logger::Severity::ERROR
+        ::Log::Severity::Error
       when .portability?, .performance?, .undefined_behaviour?, .deprecated_behaviour?
-        Logger::Severity::WARN
+        ::Log::Severity::Warn
       when .marker?
-        Logger::Severity::INFO
+        ::Log::Severity::Info
       else
-        Logger::Severity::DEBUG
+        ::Log::Severity::Debug
       end
     end
   end
 
-  def create_object(objtype : Symbol)
+  def create_object(objtype : Symbol) : Render::Backend::Metadata
     id = uninitialized LibGL::GLuint
     Metadata.new(objtype, case objtype
     when :texture
@@ -212,7 +215,7 @@ module Nya::Render::Backends::GL
           md.not_nil!.projection = get_projection_matrix
           md.not_nil!.viewport = get_viewport
         else
-          Nya.log.warn "Camera has invalid metadata : #{c.metadata.class.name}", "GL"
+          @@log.warn { "Camera has invalid metadata : #{c.metadata.class.name}" }
         end
         yield
       end
@@ -227,13 +230,13 @@ module Nya::Render::Backends::GL
   def delete_shaders(sh : ShaderProgram)
     meta = sh.metadata
     if meta.nil?
-      Nya.log.error "Cannot delete shader program #{sh} : metadata is nil", "GL"
+      @@log.error { "Cannot delete shader program #{sh} : metadata is nil" }
     else
       if meta.object_type == :shader_program
         LibGL.delete_program meta.as(GL::Metadata).id
         sh.metadata = nil
       else
-        Nya.log.error "Cannot delete shader program #{sh} : probably not a shader program", "GL"
+        @@log.error { "Cannot delete shader program #{sh} : probably not a shader program" } 
       end
     end
   end
@@ -290,7 +293,7 @@ module Nya::Render::Backends::GL
     CrystalEdge::Vector3.new(ox, oy, oz)
   end
 
-  def unproject(c : Camera, v)
+  def unproject(c : Camera, v) : CrystalEdge::Vector3
     meta = c.metadata.not_nil!.as(CameraMetadata)
     mm = meta.modelview
     pm = meta.projection
@@ -311,7 +314,7 @@ module Nya::Render::Backends::GL
     CrystalEdge::Vector3.new(ox, oy, oz)
   end
 
-  def project(c : Camera, v)
+  def project(c : Camera, v) : CrystalEdge::Vector3
     meta = c.metadata.not_nil!.as(CameraMetadata)
     mm = meta.modelview
     pm = meta.projection
@@ -371,15 +374,15 @@ module Nya::Render::Backends::GL
     end
   end
 
-  def supports_shaders?
+  def supports_shaders? : Bool
     true
   end
 
-  def shader_formats
+  def shader_formats : Array(String)
     %w(glsl)
   end
 
-  def shader_extensions
+  def shader_extensions : Array(String)
     %w(glsl frag vert tcsh tesh comp geom)
   end
 
@@ -395,12 +398,13 @@ module Nya::Render::Backends::GL
   @debug_cb = DebugCallback.new do |source, type, id, severity, length, msg, param|
     this = Box(self).unbox(param)
     this.debug source, type, id, severity, String.new(msg, length)
+    nil
   end
 
   # :nodoc:
   private def set_debug_callback!
     LibGL.debug_message_callback @debug_cb, Box(self).box(self)
-    Nya.log.debug "GL Debug callback set!", "Nya"
+    @@log.debug { "GL Debug callback set!" }
   end
 
   # :nodoc:
@@ -408,7 +412,12 @@ module Nya::Render::Backends::GL
     src = DebugSource.from_value s
     type = DebugType.from_value t
     raise msg if type.error?
-    Nya.log.log type.to_severity, msg, src.to_s
+    {% for level in {:trace, :info, :notice, :debug, :warn, :error, :fatal} %}
+        if type.to_severity.{{ level.id }}?
+          @@log.{{level.id}} { "[#{src}]#{msg}" }
+        end
+    {% end %}
+    
   end
 
   private def with_matrix(mode, &block)

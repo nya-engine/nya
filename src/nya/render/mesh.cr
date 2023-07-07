@@ -69,6 +69,7 @@ module Nya::Render
 
   # Mesh component
   class Mesh < Nya::Component
+    @@log : Log = Nya.log.for(self)
 
     include Nya::Serializable
 
@@ -82,7 +83,7 @@ module Nya::Render
       # return if f.to_s.empty?
       mesh = Loader.load_from f.to_s
       if mesh.nil?
-        Nya.log.error "Cannot load mesh #{f}", "Mesh"
+        @@log.error { "Cannot load mesh #{f}" }
       else
         @shapes = mesh.shapes
       end
@@ -95,8 +96,8 @@ module Nya::Render
 
     def awake
       super
-      Nya.log.unknown "#{@filename} loaded : #{@shapes.values.size} shapes", "Mesh"
-      Nya.log.unknown "First 10 shapes' faces' count : #{@shapes.first(10).map(&.last.faces.size)}", "Mesh"
+      @@log.info { "#{@filename} loaded : #{@shapes.values.size} shapes" }
+      @@log.debug { "First 10 shapes' faces' count : #{@shapes.first(10).map(&.last.faces.size)}" }
 
       GC.collect
     end

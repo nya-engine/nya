@@ -30,9 +30,6 @@ module Nya
       end
 
       def awake
-        Nya::Event.subscribe_typed :key_up, as: Nya::Input::KeyboardEvent do |_|
-          Nya.log.info "rotation #{parent.rotation} (#{delta_h})"
-        end
       end
     end
   end

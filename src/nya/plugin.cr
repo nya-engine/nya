@@ -35,7 +35,7 @@ module Nya
         %plugin.engine_update %e.engine
       end
 
-      ::Nya.log.info "Registered plugin #{%plugin.name} #{%plugin.version}", "Plugin"
+      ::Nya.log.info { "Registered plugin #{%plugin.name} #{%plugin.version}" }
     end
   end
 end

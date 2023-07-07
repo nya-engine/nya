@@ -18,8 +18,8 @@ module Nya
     end
 
     def initialize(title, w, h)
-      Nya.log.level = Logger::INFO
-      Nya.log.info("Engine is starting")
+      Nya.log.level = ::Log::Severity::Trace
+      Nya.log.info { "Engine is starting" }
 
       Fiber.current.name = FIBER_NAME
       Nya::Event.send(:engine_pre_init, Nya::EngineEvent.new(self))

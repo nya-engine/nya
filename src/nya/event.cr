@@ -36,7 +36,7 @@ module Nya
 
     # :nodoc:
     def self.print!
-      Nya.log.debug "Registered handlers for #{@@events.keys.size} event types", "Event"
+      Nya.log.debug { "Registered handlers for #{@@events.keys.size} event types" }
     end
 
     # :nodoc:

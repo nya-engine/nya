@@ -1511,7 +1511,7 @@ lib LibSDL2
   fun iconv = "SDL_iconv"(cd : SDLIconvT*, inbuf : Void**, inbytesleft : Void*, outbuf : Void**, outbytesleft : Void*) : UInt32
   fun iconv_string = "SDL_iconv_string"(tocode : UInt8*, fromcode : UInt8*, inbuf : UInt8*, inbytesleft : UInt32) : UInt8*
   fun set_main_ready = "SDL_SetMainReady" : Void
-  fun report_assertion = "SDL_ReportAssertion"(assertdata : AssertData*, uint8 : UInt8*, uint8 : UInt8*, int16 : Int16) : AssertState
+  fun report_assertion = "SDL_ReportAssertion"(assertdata : AssertData*, uint8 : UInt8*, _uint8 : UInt8*, int16 : Int16) : AssertState
   fun assertion_handler = "SDL_AssertionHandler"(data : AssertData*, userdata : Void*) : AssertState
   fun set_assertion_handler = "SDL_SetAssertionHandler"(handler : Void*, userdata : Void*) : Void
   fun get_default_assertion_handler = "SDL_GetDefaultAssertionHandler" : Void*

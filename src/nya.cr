@@ -13,7 +13,7 @@ macro nya_versions(const)
       {% else %}
         %version = {{const}}::VERSION
       {% end %}
-      ::Nya.log.info "Using {{const.name}} v#{%version}", "Nya"
+      ::Nya.log.info{"Using {{const.name}} v#{%version}"}
     {% end %}
     {% for cst in const.constants %}
       {% if cst.is_a? TypeNode %}

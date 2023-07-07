@@ -1,21 +1,5 @@
 module Nya
-  # Abstract scene class
-  abstract class AbsScene
-    # Updates scene objects
-    abstract def update
-
-    # Renders scene objects with `tag`
-    abstract def render(tag : String? = nil)
-
-    # Returns root of this scene
-    abstract def root : Array(GameObject)
-
-    # Returns array of components found recursively
-    abstract def find_components_of(type : U.class) : Array(U) forall U
-
-  end
-
-  class Scene < AbsScene
+  class Scene
     include Nya::Serializable
     @root = [] of GameObject
     property root : Array(GameObject)
@@ -40,7 +24,6 @@ module Nya
 
     # Post-initializes scene objects
     def awake
-      Nya.log.debug "Scene direct children : #{@root.size}", "SceneManager"
       @root.each &.awake
     end
 

@@ -35,8 +35,8 @@ module Nya::Render::Backends
 
       raise LibSDL2.get_error.as(String) if @gl_ctx.null?
 
-      Nya.log.info "Max GL lights : #{Render::Light.max_lights}"
-
+      Nya.log.info { "Max GL lights : #{Render::Light.max_lights}" }
+ 
       LibGL.clear_color(0.0, 0.0, 0.0, 0.0)
       LibGL.clear_depth(1.0)
       LibGL.depth_func(LibGL::LESS)

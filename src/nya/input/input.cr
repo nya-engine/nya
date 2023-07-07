@@ -4,11 +4,12 @@ require "bit_array"
 module Nya
   # Input helper methods
   module Input
+    @@log : Log = Nya.log.for(self)
     @@keymap = Hash(Keycode, Bool).new
 
     Nya::Event.subscribe_typed :key_up, as: KeyboardEvent do |evt|
       if evt.nil?
-        Nya.log.warn "KeyUp hook received Non-keyboard event", "Input"
+        @@log.warn { "KeyUp hook received Non-keyboard event" }
       else
         @@keymap[evt.keycode] = false if @@keymap.has_key? evt.keycode
       end
@@ -16,7 +17,7 @@ module Nya
 
     Nya::Event.subscribe_typed :key_down, as: KeyboardEvent do |evt|
       if evt.nil?
-        Nya.log.warn "KeyDown received Non-keyboard event", "Input"
+        @@log.warn { "KeyDown received Non-keyboard event" }
       else
         @@keymap[evt.keycode] = true
       end
@@ -37,7 +38,7 @@ module Nya
 
     Nya::Event.subscribe_typed :mouse_button_down, as: MouseButtonEvent do |e|
       if e.nil?
-        Nya.log.warn "MBDown hook received Non-MB event", "Input"
+        @@log.warn { "MBDown hook received Non-MB event" }
       else
         @@mouse[e.button] = true
       end
@@ -45,7 +46,7 @@ module Nya
 
     Nya::Event.subscribe_typed :mouse_button_up, as: MouseButtonEvent do |e|
       if e.nil?
-        Nya.log.warn "MBUp hook received Non-MB event", "Input"
+        @@log.warn { "MBUp hook received Non-MB event" }
       else
         @@mouse[e.button] = false
       end

@@ -2,6 +2,7 @@ require "./light_mode"
 
 module Nya::Render
   class Light < Component
+    @@log : Log = Nya.log.for(self)
     @@lights = {} of Int32 => self
 
     @light_id = -1
@@ -34,7 +35,7 @@ module Nya::Render
       raise "Cannot allocate light" if @light_id < 0
 
 
-      Nya.log.info "Allocated light #{@light_id} (0x#{gl_light.to_s(16)})", "Light"
+      @@log.info { "Allocated light #{@light_id} (0x#{gl_light.to_s(16)})" }
 
     end
 
